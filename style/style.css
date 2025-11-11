@@ -1,0 +1,136 @@
+.contenedor-nav{
+    background-color: #FC4B08;
+}
+.img-fluid{
+    width: 70px;
+    height: 70px;
+}
+.herramientas{
+    display: flex;
+    justify-content: flex-end;
+}
+.position-relative {
+    /* Asegura que el botón se posicione en relación al formulario */
+    position: relative;
+}
+
+.btn-search-icon {
+    /* Posicionamiento del botón dentro del input */
+    position: absolute;
+    top: 50%; /* Centrado vertical */
+    right: 15px; /* Ajusta la distancia desde el borde derecho */
+    transform: translateY(-50%); /* Ajuste fino */
+    
+    /* Estilos para que parezca un icono y no un botón estándar */
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    z-index: 5; /* Asegura que esté por encima del input */
+}
+.img-search{
+    width: 15px;
+    height: 15px;
+}
+.btn-admin-icon{
+    background: transparent;
+    border: none;
+}
+.btn-notiifcacion-icon{
+    background: transparent;
+    border: none;
+}
+.img-user{
+    width: 30px;
+    height: 30px;
+}
+.img-notificacion{
+    width: 30px;
+    height: 30px;
+}
+
+/*SECTION BOTON PUBLICAR*/
+.seccion-publicar{
+    background-color: #fff;
+}
+.btn-publicar{
+    font-family: 'Open Sauce One';
+    font-weight: bold;
+    background-color: #FC4B08;
+    border: none;
+    border-radius: 9px;
+    color: #fff;
+}
+.img-btn-publicar{
+    width: 20px;
+    height: 20px;
+}
+
+.seccion-main{
+    background-color: #F2F2F2;
+}
+/*CARRUSEL SECCION*/
+
+.titulo-carrusel{
+    color: #FC4B08;
+    text-align: center;
+    font-size: 3.5em;
+    font-family: 'League Spartan';
+    font-weight: bold;
+}
+.contenedor-carrusel-completo{
+    width: 1200px !important;
+}
+.carrusel-contenedor{
+    border-radius: 20px;
+    position: relative;
+    height: 450px;
+}
+.carousel-indicators [data-bs-target] {
+    width: 20px !important;
+    height: 20px !important;
+    border-radius: 50%;
+}
+.img-carrusel{
+    width: 100%;
+    height: 450px;
+}
+.contenedor-categoria{
+    background-color: #FFFFFF;
+}
+.btn-seleccion{
+    color: #FFFFFF !important;
+    background-color: #FC4B08 !important;
+}
+.titulo-categoria{
+    font-size: 0.8em !important;
+    text-align: center !important;
+}
+
+@media (min-width: 576px) {
+    .titulo-categoria{
+        font-size: 1em !important;
+    }
+}
+@media (min-width: 576px){
+    .contenedor-tarjetas{
+        
+    }
+}
+/*
+*/
+footer{
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #FC4B08
+}
+/*
+SECCION DESCRIPCION DE PRODUCTO
+*/
+.descripcion-producto{
+    font-family: 'open sauce one' !important;
+    font-weight: bold;
+}
