@@ -3,7 +3,7 @@ body {
   background-color: #fff;  
 }
 
-/* HEADER CORREGIDO */
+
 .contenedor-nav {
   background-color: #fc4b08;
   color: white;
@@ -31,7 +31,7 @@ body {
   filter: brightness(1.2);
 }
 
-/* Imagen principal */  
+
 .upload-section {  
   text-align: center;  
   margin-top: 70px;  
@@ -74,7 +74,7 @@ body {
   display: none;  
 }  
 
-/* Campos */  
+
 .campo-naranja {  
   background-color: #fc4b08;  
   color: white;  
@@ -90,7 +90,7 @@ body {
   opacity: 0.9;  
 }  
 
-/* Botón */  
+
 .boton-publicar {  
   background-color: #fc4b08;  
   color: white;  
@@ -106,7 +106,7 @@ body {
   background-color: #35e060;  
 }  
 
-/* Pie */  
+
 .pie-pagina {  
   background-color: #fc4b08;  
   color: white;  
@@ -119,7 +119,7 @@ body {
   margin: 0 5px;  
 }  
 
-/* Popup estilo Figma */  
+
 .popup {  
   display: none;  
   position: fixed;  
@@ -159,4 +159,36 @@ body {
 @keyframes fadeOut {  
   from { opacity: 1; }  
   to { opacity:0;}
+}
+
+
+.btn-regresar {
+  position: fixed;
+  left: 20px;
+  bottom: 120px;
+  width: 55px;
+  height: 55px;
+  background-color: #ffffff;
+  border: 3px solid #fc4b08;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  z-index: 1500;
+  transition: 0.3s;
+}
+
+.btn-regresar i {
+  font-size: 28px;
+  color: #fc4b08;
+}
+
+.btn-regresar:hover {
+  transform: scale(1.1);
+  background-color: #0e0a08;
+}
+
+.btn-regresar:hover i {
+  color: #ffffff;
 }
