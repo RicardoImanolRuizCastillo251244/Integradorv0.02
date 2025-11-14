@@ -1,0 +1,162 @@
+body {  
+  font-family: "Open Sauce One", sans-serif;  
+  background-color: #fff;  
+}
+
+/* HEADER CORREGIDO */
+.contenedor-nav {
+  background-color: #fc4b08;
+  color: white;
+  padding: 10px 20px;
+}
+
+.navbar-brand-img {
+  height: 70px;
+}
+
+.form-control-search {
+  border-radius: 25px;
+  padding-right: 45px;
+  border: none;
+  box-shadow: 0 0 4px rgba(0,0,0,0.1);
+}
+
+.img-user, .img-notificacion {
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.img-user:hover, .img-notificacion:hover {
+  transform: scale(1.1);
+  filter: brightness(1.2);
+}
+
+/* Imagen principal */  
+.upload-section {  
+  text-align: center;  
+  margin-top: 70px;  
+}  
+.upload-box {  
+  width: 180px;  
+  height: 180px;  
+  border: 3px solid #fc4b08;  
+  border-radius: 10px;  
+  display: inline-flex;  
+  align-items: center;  
+  justify-content: center;  
+  position: relative;  
+  background-color: #fff;  
+  cursor: pointer;  
+  overflow: hidden;  
+}  
+.upload-box i {  
+  font-size: 70px;  
+  color: #fc4b08;  
+  transition: 0.3s;  
+}  
+.upload-box::after {  
+  content: "+";  
+  position: absolute;  
+  right: 8px;  
+  top: 4px;  
+  font-size: 28px;  
+  color: #fc4b08;  
+  font-weight: bold;  
+}  
+.upload-box img {  
+  position: absolute;  
+  top: 50%;  
+  left: 50%;  
+  transform: translate(-50%, -50%);  
+  width: 100%;  
+  height: 100%;  
+  object-fit: cover;  
+  display: none;  
+}  
+
+/* Campos */  
+.campo-naranja {  
+  background-color: #fc4b08;  
+  color: white;  
+  border: none;  
+  border-radius: 8px;  
+  padding: 12px;  
+  width: 100%;  
+  margin-bottom: 15px;  
+  font-weight: bold;  
+}  
+.campo-naranja::placeholder {  
+  color: white;  
+  opacity: 0.9;  
+}  
+
+/* Botón */  
+.boton-publicar {  
+  background-color: #fc4b08;  
+  color: white;  
+  border: none;  
+  width: 100%;  
+  padding: 10px;  
+  border-radius: 8px;  
+  font-weight: bold;  
+  transition: 0.3s;  
+  cursor: pointer;  
+}  
+.boton-publicar:hover {  
+  background-color: #35e060;  
+}  
+
+/* Pie */  
+.pie-pagina {  
+  background-color: #fc4b08;  
+  color: white;  
+  text-align: left;  
+  padding: 20px;  
+  margin-top: 50px;  
+}  
+.pie-pagina img {  
+  width: 35px;  
+  margin: 0 5px;  
+}  
+
+/* Popup estilo Figma */  
+.popup {  
+  display: none;  
+  position: fixed;  
+  top: 0;  
+  left: 0;  
+  width: 100%;  
+  height: 100%;  
+  background-color: rgba(0, 0, 0, 0.6);  
+  justify-content: center;  
+  align-items: center;  
+  z-index: 2000;  
+}  
+.popup-contenido {  
+  background-color: #fff;  
+  padding: 50px 80px;  
+  border-radius: 10px;  
+  text-align: center;  
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);  
+  animation: zoomIn 0.4s ease forwards;  
+}  
+.popup-contenido i {  
+  font-size: 90px;  
+}  
+.popup-contenido p {  
+  font-size: 22px;  
+  font-weight: bold;  
+  color: #000;  
+  margin-top: 15px;  
+}  
+@keyframes zoomIn {  
+  from { transform: scale(0.6); opacity: 0; }  
+  to { transform: scale(1); opacity: 1; }  
+}  
+.desaparecer {  
+  animation: fadeOut 0.5s ease forwards;  
+}  
+@keyframes fadeOut {  
+  from { opacity: 1; }  
+  to { opacity:0;}
+}
