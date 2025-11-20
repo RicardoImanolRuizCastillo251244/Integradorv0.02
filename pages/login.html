@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iniciar Sesión - Upsitos Market</title>
+  
+  <!-- Fuentes -->
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Open Sans', sans-serif;
+      background: linear-gradient(135deg, #e8e8e8 0%, #f5f5f5 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container-login {
+      background: #d97244;
+      border-radius: 30px;
+      padding: 50px 40px;
+      max-width: 450px;
+      width: 100%;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+
+    .avatar-container {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .avatar {
+      width: 120px;
+      height: 120px;
+      background: #e8e8e8;
+      border-radius: 50%;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .avatar i {
+      font-size: 60px;
+      color: #333;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #d97244;
+      font-size: 20px;
+      z-index: 1;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 15px 15px 15px 55px;
+      border: none;
+      border-radius: 25px;
+      font-size: 16px;
+      background: #e8e8e8;
+      color: #333;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    .form-control::placeholder {
+      color: #666;
+    }
+
+    .form-control:focus {
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(217, 114, 68, 0.3);
+    }
+
+    .error-message {
+      background: rgba(255,255,255,0.9);
+      color: #d97244;
+      padding: 10px 15px;
+      border-radius: 15px;
+      margin-top: 15px;
+      display: none;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+    }
+
+    .error-message.show {
+      display: flex;
+    }
+
+    .error-message i {
+      font-size: 18px;
+    }
+
+    .recuperar-link {
+      display: block;
+      text-align: center;
+      color: rgba(255,255,255,0.9);
+      text-decoration: underline;
+      margin-top: 10px;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+
+    .recuperar-link:hover {
+      color: white;
+    }
+
+    .btn-entrar {
+      width: 100%;
+      padding: 15px;
+      background: #e8e8e8;
+      color: #333;
+      border: none;
+      border-radius: 25px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 30px;
+      transition: 0.3s;
+      text-transform: uppercase;
+    }
+
+    .btn-entrar:hover {
+      background: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .btn-entrar:active {
+      transform: translateY(0);
+    }
+
+    .toggle-form {
+      text-align: center;
+      margin-top: 20px;
+      color: white;
+      font-size: 15px;
+    }
+
+    .toggle-form a {
+      color: white;
+      text-decoration: underline;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .toggle-form a:hover {
+      color: #ffe4cc;
+    }
+
+    .divider {
+      text-align: center;
+      margin: 25px 0;
+      position: relative;
+    }
+
+    .divider::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 100%;
+      height: 1px;
+      background: rgba(255,255,255,0.3);
+    }
+
+    .divider span {
+      background: #d97244;
+      padding: 0 15px;
+      color: white;
+      position: relative;
+      z-index: 1;
+    }
+
+    .social-buttons {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .btn-social {
+      flex: 1;
+      padding: 12px;
+      border: 2px solid white;
+      background: transparent;
+      color: white;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: 0.3s;
+    }
+
+    .btn-social:hover {
+      background: white;
+      color: #d97244;
+    }
+
+    .btn-social i {
+      font-size: 20px;
+    }
+
+    /* Animación de entrada */
+    .container-login {
+      animation: slideIn 0.5s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .container-login {
+        padding: 40px 25px;
+      }
+
+      .avatar {
+        width: 100px;
+        height: 100px;
+      }
+
+      .avatar i {
+        font-size: 50px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container-login">
+    
+    <!-- FORMULARIO DE LOGIN -->
+    <form id="loginForm">
+      <div class="avatar-container">
+        <div class="avatar">
+          <i class="fas fa-user"></i>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <i class="fas fa-envelope input-icon"></i>
+        <input type="email" class="form-control" id="loginEmail" placeholder="Gmail" required>
+      </div>
+
+      <div class="form-group">
+        <i class="fas fa-user input-icon"></i>
+        <input type="text" class="form-control" id="loginUsername" placeholder="Nombre de usuario" required>
+      </div>
+
+      <div class="form-group">
+        <i class="fas fa-lock input-icon"></i>
+        <input type="password" class="form-control" id="loginPassword" placeholder="Contraseña" required>
+      </div>
+
+      <div class="error-message" id="errorMessage">
+        <i class="fas fa-exclamation-circle"></i>
+        <span>La dirección de correo electrónico o la contraseña ingresada no son correctas.</span>
+      </div>
+
+      <a href="#" class="recuperar-link">Recuperar contraseña</a>
+
+      <button type="submit" class="btn-entrar">ENTRAR</button>
+
+      <div class="toggle-form">
+        ¿No tienes cuenta? <a id="showRegister">Regístrate aquí</a>
+      </div>
+
+      <div class="divider">
+        <span>O continúa con</span>
+      </div>
+
+      <div class="social-buttons">
+        <button type="button" class="btn-social" onclick="loginWithGoogle()">
+          <i class="fab fa-google"></i>
+          Google
+        </button>
+        
+      </div>
+    </form>
+
+    <!-- FORMULARIO DE REGISTRO (OCULTO INICIALMENTE) -->
+    <form id="registerForm" style="display: none;">
+      <div class="avatar-container">
+        <div class="avatar">
+          <i class="fas fa-user-plus"></i>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <i class="fas fa-envelope input-icon"></i>
+        <input type="email" class="form-control" id="registerEmail" placeholder="Correo universitario" required>
+      </div>
+
+      <div class="form-group">
+        <i class="fas fa-user input-icon"></i>
+        <input type="text" class="form-control" id="registerUsername" placeholder="Nombre de usuario" required>
+      </div>
+
+      <div class="form-group">
+        <i class="fas fa-lock input-icon"></i>
+        <input type="password" class="form-control" id="registerPassword" placeholder="Contraseña" required>
+      </div>
+
+      <div class="form-group">
+        <i class="fas fa-lock input-icon"></i>
+        <input type="password" class="form-control" id="registerConfirmPassword" placeholder="Confirmar contraseña" required>
+      </div>
+
+      <div class="error-message" id="registerErrorMessage">
+        <i class="fas fa-exclamation-circle"></i>
+        <span id="registerErrorText">Las contraseñas no coinciden.</span>
+      </div>
+
+      <button type="submit" class="btn-entrar">REGISTRARSE</button>
+
+      <div class="toggle-form">
+        ¿Ya tienes cuenta? <a id="showLogin">Inicia sesión aquí</a>
+      </div>
+
+      <div class="divider">
+        <span>O regístrate con</span>
+      </div>
+
+      <div class="social-buttons">
+        <button type="button" class="btn-social" onclick="loginWithGoogle()">
+          <i class="fab fa-google"></i>
+          Google
+        </button>
+        
+      </div>
+    </form>
+
+  </div>
+
+  <script>
+    // Elementos del DOM
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+    const showRegisterBtn = document.getElementById('showRegister');
+    const showLoginBtn = document.getElementById('showLogin');
+    const errorMessage = document.getElementById('errorMessage');
+    const registerErrorMessage = document.getElementById('registerErrorMessage');
+
+    // Cambiar entre Login y Registro
+    showRegisterBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      loginForm.style.display = 'none';
+      registerForm.style.display = 'block';
+      errorMessage.classList.remove('show');
+    });
+
+    showLoginBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      registerForm.style.display = 'none';
+      loginForm.style.display = 'block';
+      registerErrorMessage.classList.remove('show');
+    });
+
+    // Validación de Login
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const email = document.getElementById('loginEmail').value;
+      const username = document.getElementById('loginUsername').value;
+      const password = document.getElementById('loginPassword').value;
+
+      // Simulación de validación (aquí conectarías con tu backend)
+      if (email === 'test@upchiapas.edu.mx' && password === '123456') {
+        alert('¡Login exitoso! Redirigiendo...');
+        // Aquí redirigirías a la página principal
+        window.location.href = 'index.html';
+      } else {
+        errorMessage.classList.add('show');
+        setTimeout(() => {
+          errorMessage.classList.remove('show');
+        }, 5000);
+      }
+    });
+
+    // Validación de Registro
+    registerForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const email = document.getElementById('registerEmail').value;
+      const username = document.getElementById('registerUsername').value;
+      const password = document.getElementById('registerPassword').value;
+      const confirmPassword = document.getElementById('registerConfirmPassword').value;
+
+      // Validar correo universitario
+      if (!email.includes('@upchiapas.edu.mx') && !email.includes('@ids.upchiapas.edu.mx')) {
+        document.getElementById('registerErrorText').textContent = 'Debes usar tu correo universitario.';
+        registerErrorMessage.classList.add('show');
+        setTimeout(() => {
+          registerErrorMessage.classList.remove('show');
+        }, 5000);
+        return;
+      }
+
+      // Validar contraseñas coincidan
+      if (password !== confirmPassword) {
+        document.getElementById('registerErrorText').textContent = 'Las contraseñas no coinciden.';
+        registerErrorMessage.classList.add('show');
+        setTimeout(() => {
+          registerErrorMessage.classList.remove('show');
+        }, 5000);
+        return;
+      }
+
+      // Validar longitud de contraseña
+      if (password.length < 6) {
+        document.getElementById('registerErrorText').textContent = 'La contraseña debe tener al menos 6 caracteres.';
+        registerErrorMessage.classList.add('show');
+        setTimeout(() => {
+          registerErrorMessage.classList.remove('show');
+        }, 5000);
+        return;
+      }
+
+      alert('¡Registro exitoso! Por favor verifica tu correo electrónico.');
+      // Aquí enviarías los datos al backend
+      // Cambiar a formulario de login
+      registerForm.style.display = 'none';
+      loginForm.style.display = 'block';
+    });
+
+    // Funciones de login social
+    function loginWithGoogle() {
+      alert('Funcionalidad de Google en desarrollo. Aquí se conectaría con Google OAuth.');
+      // Aquí implementarías Google OAuth
+    }
+
+   
+  </script>
+
+</body>
+</html>

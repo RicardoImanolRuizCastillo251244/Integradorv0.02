@@ -1,0 +1,127 @@
+/* Pestañas superiores */
+.tabs-usuario {
+  display: flex;
+  justify-content: space-around;
+  background: #fc4b08;
+  padding: 10px 0;
+  margin-top: 10px;
+}
+
+.tabs-usuario .tab {
+  background: transparent;
+  border: none;
+  color: white;
+  font-weight: bold;
+  font-size: 15px;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+.tabs-usuario .active {
+  background: white;
+  color: #fc4b08;
+  border-radius: 10px;
+}
+
+/* Perfil */
+.perfil-container {
+  text-align: center;
+  margin-top: 25px;
+}
+
+.circle-iniciales {
+  width: 110px;
+  height: 110px;
+  background: #fc4b08;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  font-size: 40px;
+  font-weight: bold;
+}
+
+#nombreUsuario {
+  font-size: 22px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+#correoUsuario {
+  font-size: 15px;
+  color: gray;
+  margin-bottom: 20px;
+}
+
+/* Campos */
+.info-usuario {
+  max-width: 700px;
+}
+
+.campo-item {
+  background: #fc4b08;
+  color: white;
+  padding: 18px;
+  border-radius: 8px;
+  margin-bottom: 18px;
+  position: relative;
+}
+
+.titulo-campo {
+  font-size: 14px;
+  opacity: .8;
+}
+
+.icono-edit {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 22px;
+  cursor: pointer;
+}
+
+/* Nuevo icono mostrar/ocultar contraseña */
+.icono-ver {
+  position: absolute;
+  right: 45px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 22px;
+  cursor: pointer;
+  color: white;
+}
+
+/* Botón regresar */
+.btn-regresar {
+  position: fixed;
+  left: 20px;
+  bottom: 120px;
+  width: 55px;
+  height: 55px;
+  background-color: #ffffff;
+  border: 3px solid #fc4b08;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  z-index: 1500;
+  transition: 0.3s;
+}
+
+.btn-regresar i {
+  font-size: 28px;
+  color: #fc4b08;
+}
+
+.btn-regresar:hover {
+  transform: scale(1.1);
+  background-color: #0e0a08;
+}
+
+.btn-regresar:hover i {
+  color:#ffffff;
+}

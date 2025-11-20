@@ -1,0 +1,159 @@
+body {
+  font-family: "Open Sauce One", sans-serif;
+  background-color: #fff;
+}
+
+/* NAVBAR */
+.contenedor-nav {
+  background-color: #fc4b08;
+  color: white;
+  padding: 10px 20px;
+}
+
+.navbar-brand-img {
+  height: 70px;
+}
+
+.form-control-search {
+  border-radius: 25px;
+  padding-right: 45px;
+  border: none;
+  box-shadow: 0 0 4px rgba(0,0,0,0.1);
+}
+
+.img-user, .img-notificacion {
+  transition: .3s;
+  cursor: pointer;
+}
+
+.img-user:hover, .img-notificacion:hover {
+  transform: scale(1.1);
+  filter: brightness(1.2);
+}
+
+/* BOTÓN FLOTANTE */
+.boton-regresar {
+  position: fixed;
+  bottom: 120px;
+  left: 20px;
+  background-color: white;
+  border: 3px solid #fc4b08;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: black;
+  z-index: 1500;
+  text-decoration: none;
+  transition: 0.3s;
+  text-decoration: none;
+}
+
+.btn-regresar i{
+  font-size: 28px;
+  color: #fc4b08;
+}
+
+.boton-regresar:hover {
+  transform: scale(1.1);
+  background-color: #f4f0f0;
+}
+.btn-regresar:hover i {
+  color:#181212;
+}
+
+/* PRECIO */
+.precio {
+  color: #fc4b08;
+  font-weight: 900;
+}
+
+/* BOTONES */
+.btn-comprar {
+  background-color: #fc4b08;
+  color: white;
+  font-weight: bold;
+  border-radius: 10px;
+  padding: 10px 25px;
+}
+
+.btn-comprar:hover {
+  background-color: #e04006;
+}
+
+.btn-queja {
+  background-color: #fc4b08;
+  color: white;
+  font-weight: bold;
+  border-radius: 10px;
+  padding: 8px 20px;
+}
+
+.btn-queja:hover {
+  background-color: #e04006;
+}
+
+/* FOOTER */
+.pie-pagina {  
+  background-color: #fc4b08;  
+  color: white;  
+  text-align: left;  
+  padding: 20px;  
+  margin-top: 50px;  
+}  
+
+/* ICONOS DEL FOOTER - AQUÍ CAMBIAS EL TAMAÑO */
+.pie-pagina img {  
+  width: 35px;  
+  margin: 0 5px;  
+} 
+
+/* =============================== */
+/* ESTILOS PARA LA VISTA DE QUEJA */
+/* =============================== */
+
+.contenedor-queja {
+    padding: 15px;
+}
+
+.contenedor-queja h5 {
+    color: #000;
+    font-size: 18px;
+}
+
+textarea {
+    border-radius: 10px;
+    border: 2px solid #fc4b08 !important;
+    padding: 12px;
+    font-size: 15px;
+    resize: none;
+}
+
+.btn-enviar-queja {
+    background-color: #fc4b08;
+    color: white;
+    font-weight: bold;
+    padding: 10px 25px;
+    border-radius: 10px;
+}
+
+.btn-enviar-queja:hover {
+    background-color:#e04006;
+}
+
+
+/* Elimina espacios en el body */
+body {
+    margin: 0;
+    padding: 0;
+}
+
+/* Asegura que la barra naranja ocupe todo */
+header, nav.navbar {
+    background-color: #e95b2a !important;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}

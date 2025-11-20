@@ -1,0 +1,319 @@
+.tabs-usuario {
+      display: flex;
+      justify-content: space-around;
+      background: #fc4b08;
+      padding: 10px 0;
+      margin-top: 10px;
+    }
+
+    .tabs-usuario .tab {
+      background: transparent;
+      border: none;
+      color: white;
+      font-weight: bold;
+      font-size: 15px;
+      padding: 10px 15px;
+      cursor: pointer;
+    }
+
+    .tabs-usuario .active {
+      background: white;
+      color: #fc4b08;
+      border-radius: 10px;
+    }
+
+    /* === SUBPESTAÑAS === */
+    .subtabs {
+      display: flex;
+      justify-content: center;
+      background: #f7f7f7;
+      border-bottom: 2px solid #ddd;
+    }
+
+    .subtab {
+      background: transparent;
+      border: none;
+      font-weight: bold;
+      font-size: 15px;
+      color: #fc4b08;
+      padding: 12px 20px;
+      cursor: pointer;
+    }
+
+    .subtab.active {
+      background: #fc4b08;
+      color: white;
+      border-radius: 8px 8px 0 0;
+    }
+
+    /* === CONTENIDO === */
+    .estadisticas-contenido {
+      text-align: center;
+    }
+
+    .grafico-img {
+      width: 250px;
+      max-width: 90%;
+    }
+
+    .dato-box {
+      background: white;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 0 6px rgba(0,0,0,0.1);
+    }
+
+    .dato-titulo {
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .dato-numero {
+      font-size: 28px;
+      font-weight: bold;
+      margin-top: 5px;
+    }
+
+    .color-ventas {
+      border-left: 8px solid #fc4b08;
+    }
+
+    .color-publicaciones {
+      border-left: 8px solid #0033cc;
+    }
+
+    /* === MONTO TOTAL === */
+    .monto-total {
+      background: #fc4b08;
+      color: white;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 20px auto;
+      width: 70%;
+    }
+
+    .titulo-monto {
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .valor-monto {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    /* === BOTÓN REGRESAR === */
+    .btn-regresar {
+      position: fixed;
+      left: 20px;
+      bottom: 120px;
+      width: 55px;
+      height: 55px;
+      background-color: #ffffff;
+      border: 3px solid #fc4b08;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-decoration: none;
+      z-index: 1500;
+      transition: 0.3s;
+    }
+
+    .btn-regresar i {
+      font-size: 28px;
+      color: #fc4b08;
+    }
+
+    .btn-regresar:hover {
+      transform: scale(1.1);
+      background-color: #0e0a08;
+    }
+
+    .btn-regresar:hover i {
+      color:#ffffff;
+    }
+
+    /* === BOTONES SUPERIORES NUEVOS === */
+    .botones-superiores {
+      display: flex;
+      overflow-x: auto;
+      gap: 10px;
+      padding: 10px;
+      background: #ffffff;
+      border-bottom: 2px solid #fc4b08;
+    }
+
+    .botones-superiores button {
+      background: #fc4b08;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: bold;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .botones-superiores button:hover {
+      background:#d83e05;
+    }
+
+    /* SELECTOR DE DÍAS */
+    .select-dias {
+      padding: 8px 15px;
+      border: 2px solid #fc4b08;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #fc4b08;
+      outline: none;
+      cursor: pointer;
+    }
+
+    /* === TABLA DE MEMBRESÍAS === */
+    .tabla-membresias table {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      font-size: 14px;
+    }
+
+    .tabla-header {
+      background: #f5f5f5;
+      font-weight: bold;
+      color: #a94400;
+    }
+
+    .tabla-membresias th,
+    .tabla-membresias td {
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    /* ESTADOS */
+    .estado-activo {
+      color: green;
+      font-weight: bold;
+    }
+
+    .estado-inactivo {
+      color: #b30000;
+      font-weight: bold;
+    }
+
+    /* BOTONES ACCIONES */
+    .btn-inhabilitar {
+      background: #b02e26;
+      color: white;
+      border: none;
+      padding: 5px 12px;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+
+    .btn-habilitar {
+      background: #4caf50;
+      color: white;
+      border: none;
+      padding: 5px 12px;
+      border-radius: 5px;
+      font-weight:bold;
+    }
+
+    /* === ESTILOS NUEVOS PARA TABLA DE REVISIÓN === */
+    .btn-aceptar {
+      background: #4caf50;
+      color: white;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 5px;
+      font-weight: bold;
+      margin-right: 5px;
+    }
+
+    .btn-declinar {
+      background: #b02e26;
+      color: white;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+
+    .captura-icon {
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+    }
+
+    /* HEADER */
+    .contenedor-nav {
+      background: #fc4b08;
+    }
+
+    
+
+    .form-control-search {
+      padding-right: 45px;
+    }
+
+    /* FOOTER */
+    .pie-pagina {
+      background: #fc4b08;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    .pie-pagina img {
+      width: 40px;
+      height: 40px;
+      margin: 0 10px;
+    }
+
+    body {
+      font-family: 'Open Sauce One', sans-serif;
+      background: #f5f5f5;
+    }
+
+    body {
+    margin: 0;
+    padding: 0;
+}
+
+/* Asegura que la barra naranja ocupe todo */
+header, nav.navbar {
+    background-color: #e95b2a !important;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* === ESTILOS NUEVOS PARA TABLA DE REVISIÓN === */
+.btn-aceptar {
+  background: #4caf50;
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 5px;
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.btn-declinar {
+  background: #b02e26;
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.captura-icon {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}

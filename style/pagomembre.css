@@ -1,0 +1,94 @@
+/* Título */
+h2 {
+  font-weight: bold;
+  margin-bottom: 25px;
+}
+
+/* Tarjeta de membresía */
+.membresia-card {
+  background: #fc4b08;
+  color: white;
+  padding: 18px;
+  border-radius: 10px;
+  width: 85%;
+  margin: 15px auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.precio {
+  font-size: 32px;
+  font-weight: bold;
+  margin-right: 15px;
+}
+
+.membresia-card p {
+  flex: 1;
+  text-align: left;
+  margin: 0;
+}
+
+.membresia-card input {
+  width: 25px;
+  height: 25px;
+}
+
+/* Botón pagar */
+.btn-pagar {
+  margin-top: 20px;
+  background: #fc4b08;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-pagar:hover {
+  background: #d93e06;
+}
+
+/* Botón regresar */
+.btn-regresar {
+  position: fixed;
+  left: 20px;
+  bottom: 120px;
+  width: 55px;
+  height: 55px;
+  background-color: #ffffff;
+  border: 3px solid #fc4b08;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  z-index: 1500;
+  transition: 0.3s;
+}
+
+.btn-regresar i {
+  font-size: 28px;
+  color: #fc4b08;
+}
+
+.btn-regresar:hover {
+  transform: scale(1.1);
+  background-color: #0e0a08;
+}
+
+.btn-regresar:hover i {
+  color:#ffffff;
+}
+
+/* Efecto visual cuando se selecciona una membresía */
+.membresia-card.selected {
+  border: 3px solid white;
+  box-shadow: 0 0 10px rgba(0,0,0,0.4);
+}
+.tabs-usuario a {
+  text-decoration: none;
+  color: inherit;
+}

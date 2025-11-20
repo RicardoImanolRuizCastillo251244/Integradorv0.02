@@ -1,0 +1,136 @@
+/* === PESTAÑAS SUPERIORES === */
+.tabs-usuario {
+  display: flex;
+  justify-content: space-around;
+  background: #fc4b08;
+  padding: 10px 0;
+  margin-top: 10px;
+}
+
+.tabs-usuario .tab {
+  background: transparent;
+  border: none;
+  color: white;
+  font-weight: bold;
+  font-size: 15px;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+.tabs-usuario .active {
+  background: white;
+  color: #fc4b08;
+  border-radius: 10px;
+}
+
+/* === SUBPESTAÑAS === */
+.subtabs {
+  display: flex;
+  justify-content: center;
+  background: #f7f7f7;
+  border-bottom: 2px solid #ddd;
+}
+
+.subtab {
+  background: transparent;
+  border: none;
+  font-weight: bold;
+  font-size: 15px;
+  color: #fc4b08;
+  padding: 12px 20px;
+  cursor: pointer;
+}
+
+.subtab.active {
+  background: #fc4b08;
+  color: white;
+  border-radius: 8px 8px 0 0;
+}
+
+/* === CONTENIDO === */
+.estadisticas-contenido {
+  text-align: center;
+}
+
+.grafico-img {
+  width: 250px;
+  max-width: 90%;
+}
+
+.dato-box {
+  background: white;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 0 6px rgba(0,0,0,0.1);
+}
+
+.dato-titulo {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.dato-numero {
+  font-size: 28px;
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+.color-ventas {
+  border-left: 8px solid #fc4b08;
+}
+
+.color-publicaciones {
+  border-left: 8px solid #0033cc;
+}
+
+/* === MONTO TOTAL === */
+.monto-total {
+  background: #fc4b08;
+  color: white;
+  border-radius: 10px;
+  padding: 15px;
+  margin: 20px auto;
+  width: 70%;
+}
+
+.titulo-monto {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.valor-monto {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* === BOTÓN REGRESAR === */
+.btn-regresar {
+  position: fixed;
+  left: 20px;
+  bottom: 120px;
+  width: 55px;
+  height: 55px;
+  background-color: #ffffff;
+  border: 3px solid #fc4b08;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  z-index: 1500;
+  transition: 0.3s;
+}
+
+.btn-regresar i {
+  font-size: 28px;
+  color: #fc4b08;
+}
+
+.btn-regresar:hover {
+  transform: scale(1.1);
+  background-color: #0e0a08;
+}
+
+.btn-regresar:hover i {
+  color: #ffffff;
+}

@@ -1,0 +1,168 @@
+body {
+  font-family: "Open Sauce One", sans-serif;
+  background-color: #fff;
+  margin: 0;
+  padding: 0;
+}
+
+.contenedor-nav {
+  background-color: #fc4b08;
+  color: white;
+  padding: 10px 20px;
+}
+
+.navbar-brand-img {
+  height: 70px;
+}
+
+.form-control-search {
+  border-radius: 25px;
+  padding-right: 45px;
+  border: none;
+  box-shadow: 0 0 4px rgba(0,0,0,0.1);
+}
+
+.boton-regresar {
+  position: fixed;
+  bottom: 110px;
+  left: 20px;
+  background: white;
+  border: 3px solid #fc4b08;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 25px;
+  color: black;
+  z-index: 999;
+  text-decoration: none;
+}
+
+/* CONTENIDO */
+.contenedor-info {
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  border: 2px solid #ddd;
+  margin-top: 20px;
+}
+
+.titulo-info {
+  font-weight: bold;
+}
+
+.payment-btn {
+  width: 100%;
+  border-radius: 10px;
+  padding: 10px;
+  border: 2px solid #fc4b08;
+  background: #fff;
+  color: #fc4b08;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.payment-selected {
+  background: #fc4b08 !important;
+  color: white !important;
+}
+
+/* OCULTAR CAMPOS INICIALES */
+#seccionTransferencia {
+  display: none;
+}
+
+.upload-box {
+  width: 100%;
+  height: 150px;
+  border: 2px dashed #fc4b08;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  margin-bottom: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+.upload-box i {
+  font-size: 55px;
+  color: #fc4b08;
+}
+
+.upload-box img {
+  max-width: 100%;
+  max-height: 100%;
+  display: none;
+  position: absolute;
+}
+
+.boton-finalizar {
+  background-color: #fc4b08;
+  color: #fff;
+  width: 100%;
+  padding: 12px;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 10px;
+  border: none;
+  margin-top: 15px;
+}
+
+footer {
+  background-color: #fc4b08;
+  color: white;
+  padding: 20px;
+  margin-top: 40px;
+}
+
+footer img {
+  width: 35px;
+  margin-right: 5px;
+}
+
+/* MODAL DE PAGO EXITOSO */
+.modal-exito {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.55);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal-contenido {
+  background: #fff;
+  width: 85%;
+  max-width: 350px;
+  text-align: center;
+  padding: 25px;
+  border-radius: 15px;
+}
+
+.icono-exito {
+  font-size: 60px;
+  color: #28a745;
+}
+
+.boton-cerrar {
+  background: #fc4b08;
+  border: none;
+  color: #fff;
+  padding: 10px 25px;
+  border-radius: 10px;
+  margin-top: 15px;
+}

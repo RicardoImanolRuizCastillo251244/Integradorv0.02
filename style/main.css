@@ -190,5 +190,24 @@ body {
 }
 
 .btn-regresar:hover i {
-  color: #ffffff;
+  color:#ffffff;
 }
+
+/* Elimina espacios en el body */
+body {
+    margin: 0;
+    padding: 0;
+}
+
+/* Asegura que la barra naranja ocupe todo */
+header, nav.navbar {
+    background-color: #e95b2a !important;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+
+
+
+

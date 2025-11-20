@@ -114,7 +114,9 @@
 }
 @media (min-width: 576px){
     .contenedor-tarjetas{
-        
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
     }
 }
 /*

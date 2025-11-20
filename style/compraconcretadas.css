@@ -1,0 +1,124 @@
+/* Pestañas superiores */
+.tabs-usuario {
+  display: flex;
+  justify-content: space-around;
+  background: #fc4b08;
+  padding: 10px 0;
+}
+
+.tabs-usuario .tab {
+  background: transparent;
+  border: none;
+  color: white;
+  font-weight: bold;
+  font-size: 15px;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+.tabs-usuario .active {
+  background: white;
+  color: #fc4b08;
+  border-radius: 10px;
+}
+
+/* Subpestañas */
+.subtabs-container {
+  display: flex;
+  justify-content: space-evenly;
+  background: white;
+  padding: 15px 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.subtab {
+  background: transparent;
+  border: none;
+  font-size: 17px;
+  font-weight: bold;
+  padding: 8px 25px;
+  color: #fc4b08;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.subtab.active {
+  background: #fc4b08;
+  color: white;
+}
+
+/* Tablas */
+.tabla-container {
+  padding: 20px;
+}
+
+.tabla-custom thead {
+  background: #f7f7f7;
+  text-align: center;
+}
+
+.tabla-custom th {
+  color: #fc4b08;
+  font-weight: bold;
+}
+
+.tabla-custom td {
+  text-align: center;
+}
+
+.img-tabla {
+  width: 35px;
+  height: 35px;
+}
+
+.ver-detalles {
+  color: #fc4b08;
+  font-weight: bold;
+  text-decoration: underline;
+  margin-right: 10px;
+}
+
+.btn-cancelar {
+  background: red;
+  border: none;
+  color: white;
+  padding: 5px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Botón regresar */
+.btn-regresar {
+  position: fixed;
+  left: 20px;
+  bottom: 120px;
+  width: 55px;
+  height: 55px;
+  background-color: #ffffff;
+  border: 3px solid #fc4b08;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  z-index: 1500;
+  transition: 0.3s;
+}
+
+.btn-regresar i {
+  font-size: 28px;
+  color: #fc4b08;
+}
+
+.btn-regresar:hover {
+  transform: scale(1.1);
+  background-color: #0e0a08;
+}
+
+.btn-regresar:hover i {
+  color:#ffffff;
+}
+
+
+
+/* Asegura que la barra naranja ocupe todo */

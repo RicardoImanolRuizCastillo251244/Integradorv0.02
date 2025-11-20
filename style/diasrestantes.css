@@ -1,0 +1,210 @@
+ body {
+      font-family: 'Open Sauce One', sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* HEADER */
+    .contenedor-nav {
+      background: #fc4b08;
+    }
+
+    .form-control-search {
+      padding-right: 45px;
+    }
+
+    /* TABS USUARIO */
+    .tabs-usuario {
+      display: flex;
+      justify-content: space-around;
+      background: #fc4b08;
+      padding: 10px 0;
+      margin-top: 10px;
+    }
+
+    .tabs-usuario .tab {
+      background: transparent;
+      border: none;
+      color: white;
+      font-weight: bold;
+      font-size: 15px;
+      padding: 10px 15px;
+      cursor: pointer;
+    }
+
+    .tabs-usuario .active {
+      background: white;
+      color: #fc4b08;
+      border-radius: 10px;
+    }
+
+    /* BOTONES SUPERIORES NUEVOS */
+    .botones-superiores {
+      display: flex;
+      overflow-x: auto;
+      gap: 10px;
+      padding: 10px;
+      background: #ffffff;
+      border-bottom: 2px solid #fc4b08;
+    }
+
+    .botones-superiores button {
+      background: #fc4b08;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: bold;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .botones-superiores button:hover {
+      background: #d83e05;
+    }
+
+    /* BOTÓN REGRESAR */
+    .btn-regresar {
+      position: fixed;
+      left: 20px;
+      bottom: 120px;
+      width: 55px;
+      height: 55px;
+      background-color: #ffffff;
+      border: 3px solid #fc4b08;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-decoration: none;
+      z-index: 1500;
+      transition: 0.3s;
+    }
+
+    .btn-regresar i {
+      font-size: 28px;
+      color: #fc4b08;
+    }
+
+    .btn-regresar:hover {
+      transform: scale(1.1);
+      background-color: #0e0a08;
+    }
+
+    .btn-regresar:hover i {
+      color: #ffffff;
+    }
+
+    /* TABLA DE PUBLICACIONES */
+    .tabla-publicaciones {
+      margin-top: 20px;
+    }
+
+    .tabla-publicaciones table {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      font-size: 14px;
+    }
+
+    .tabla-header {
+      background: #f5f5f5;
+      font-weight: bold;
+      color: #a94400;
+    }
+
+    .tabla-publicaciones th,
+    .tabla-publicaciones td {
+      text-align: center;
+      vertical-align: middle;
+      padding: 15px;
+    }
+
+    /* BOTONES ACCIONES */
+    .btn-aceptar {
+      background: #4caf50;
+      color: white;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 5px;
+      font-weight: bold;
+      margin-right: 5px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn-aceptar:hover {
+      background: #45a049;
+    }
+
+    .btn-declinar {
+      background: #b02e26;
+      color: white;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn-declinar:hover {
+      background: #8b1e19;
+    }
+
+    /* IMAGEN PRODUCTO */
+    .producto-icon {
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      border-radius: 5px;
+      object-fit: cover;
+      transition: 0.3s;
+    }
+
+    .producto-icon:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 10px rgba(252, 75, 8, 0.5);
+    }
+
+    /* MODAL */
+    .modal-content {
+      border-radius: 15px;
+    }
+
+    .modal-header {
+      background: #fc4b08;
+      color: white;
+      border-radius: 15px 15px 0 0;
+    }
+
+    .modal-header .btn-close {
+      filter: brightness(0) invert(1);
+    }
+
+    /* FOOTER */
+    .pie-pagina {  
+  background-color: #fc4b08;  
+  color: white;  
+  text-align: left;  
+  padding: 20px;  
+  margin-top: 50px;  
+}  
+.pie-pagina img {  
+  width: 35px;  
+  margin: 0 5px;  
+}  
+    
+
+    /* TÍTULO ZONA DE CUARENTENA */
+    .titulo-zona {
+      background: white;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 20px;
+      color: #333;
+    }
