@@ -1,0 +1,251 @@
+ body {
+      font-family: 'Open Sauce One', sans-serif;
+      background: #f5f5f5;
+    }
+
+    /* HEADER */
+    .contenedor-nav {
+      background: #fc4b08;
+    }
+
+    .navbar-brand-img {
+      max-width: 150px;
+    }
+
+    .form-control-search {
+      padding-right: 45px;
+    }
+
+    /* === PESTAÑAS SUPERIORES === */
+    .tabs-usuario {
+      display: flex;
+      justify-content: space-around;
+      background: #fc4b08;
+      padding: 10px 0;
+      margin-top: 10px;
+    }
+
+    .tabs-usuario .tab {
+      background: transparent;
+      border: none;
+      color: white;
+      font-weight: bold;
+      font-size: 15px;
+      padding: 10px 15px;
+      cursor: pointer;
+    }
+
+    .tabs-usuario .active {
+      background: white;
+      color: #fc4b08;
+      border-radius: 10px;
+    }
+
+    /* === BOTONES SUPERIORES === */
+    .botones-superiores {
+      display: flex;
+      overflow-x: auto;
+      gap: 10px;
+      padding: 10px;
+      background: #ffffff;
+      border-bottom: 2px solid #fc4b08;
+    }
+
+    .botones-superiores button {
+      background: #fc4b08;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: bold;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .botones-superiores button:hover {
+      background:#d83e05;
+    }
+
+    /* === BOTÓN REGRESAR === */
+    .btn-regresar {
+      position: fixed;
+      left: 20px;
+      bottom: 120px;
+      width: 55px;
+      height: 55px;
+      background-color: #ffffff;
+      border: 3px solid #fc4b08;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-decoration: none;
+      z-index: 1500;
+      transition: 0.3s;
+    }
+
+    .btn-regresar i {
+      font-size: 28px;
+      color: #fc4b08;
+    }
+
+    .btn-regresar:hover {
+      transform: scale(1.1);
+      background-color: #0e0a08;
+    }
+
+    .btn-regresar:hover i {
+      color:#ffffff;
+    }
+
+    /* CONTENEDOR CALIFICACIÓN */
+    .contenedor-calificacion {
+      max-width: 700px;
+      margin: 40px auto;
+      background: white;
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .titulo-calificacion {
+      color: #fc4b08;
+      font-weight: bold;
+      font-size: 24px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    /* INFO PRODUCTO */
+    .info-producto {
+      background: #f9f9f9;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 25px;
+      border-left: 5px solid #fc4b08;
+    }
+
+    .info-producto img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    .nombre-producto {
+      font-weight: bold;
+      font-size: 18px;
+      color: #333;
+    }
+
+    .fecha-compra {
+      color: #666;
+      font-size: 14px;
+    }
+
+    /* ESTRELLAS */
+    .calificacion-estrellas {
+      text-align: center;
+      margin: 30px 0;
+    }
+
+    .estrellas {
+      font-size: 50px;
+      cursor: pointer;
+      color: #ddd;
+    }
+
+    .estrellas i {
+      margin: 0 5px;
+      transition: 0.2s;
+    }
+
+    .estrellas i:hover,
+    .estrellas i.active {
+      color: #ffc107;
+    }
+
+    /* COMENTARIO */
+    .comentario-label {
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .form-control-comentario {
+      border: 2px solid #fc4b08;
+      border-radius: 10px;
+      padding: 15px;
+      font-size: 15px;
+      resize: none;
+    }
+
+    .form-control-comentario:focus {
+      outline: none;
+      border-color: #d83e05;
+      box-shadow: 0 0 0 0.2rem rgba(252, 75, 8, 0.25);
+    }
+
+    /* BOTÓN ENVIAR */
+    .btn-enviar-calificacion {
+      background: #fc4b08;
+      color: white;
+      border: none;
+      padding: 12px 40px;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 16px;
+      width: 100%;
+      margin-top: 20px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn-enviar-calificacion:hover {
+      background: #d83e05;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(252, 75, 8, 0.3);
+    }
+
+    /* FOOTER */
+  .pie-pagina {  
+  background-color: #fc4b08;  
+  color: white;  
+  text-align: left;  
+  padding: 20px;  
+  margin-top: 50px;  
+ }  
+ .pie-pagina img {  
+  width: 35px;  
+  margin: 0 5px;  
+ } 
+
+    /* MODAL CONFIRMACIÓN */
+    .modal-content {
+      border-radius: 15px;
+      border: 3px solid #fc4b08;
+    }
+
+    .modal-header {
+      background: #fc4b08;
+      color: white;
+      border-radius: 15px 15px 0 0;
+    }
+
+    .modal-body {
+      padding: 30px;
+      text-align: center;
+    }
+
+    .icono-exito {
+      font-size: 60px;
+      color: #4caf50;
+      margin-bottom: 15px;
+    }
+
+    .mensaje-exito {
+      font-size: 20px;
+      font-weight: bold;
+      color: #333;
+    }

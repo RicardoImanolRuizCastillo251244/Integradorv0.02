@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calificar Compra</title>
+
+  <!-- Fuente -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sauce+One&display=swap" rel="stylesheet" />
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+  <link rel="stylesheet" href="../style/main.css"/>
+  <link rel="stylesheet" href="../style/calificacion.css" />
+
+  <style>
+    
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <nav>
+      <div class="container-fluid pt-3 contenedor-nav">
+        <div class="row">
+
+          <!-- LOGO -->
+          <div class="col-2">
+            <a href="#">
+              <img class="navbar-brand-img" src="../images/LogoUpsitos.png" alt="Logo">
+            </a>
+          </div>
+
+          <!-- BUSCADOR -->
+          <div class="col-6 col-md-6 mx-auto">
+            <form class="position-relative d-flex align-items-center" role="search">
+              <input class="form-control form-control-search rounded-5"
+                     type="search" placeholder="Buscar..." aria-label="Buscar" />
+              <button type="submit"
+                      class="btn position-absolute end-0 me-2 p-0 border-0 bg-transparent">
+                <img src="../images/lupa.png" alt="Buscar" style="width:25px; height:25px;">
+              </button>
+            </form>
+          </div>
+
+          <!-- ICONOS DERECHA -->
+          <div class="col-2 text-end herramientas d-flex justify-content-end">
+
+            <!-- BOTÓN USUARIO -->
+            <button type="button"
+                    class="btn border-0 bg-transparent me-3"
+                    onclick="window.location.href='infousuario.html'">
+              <img class="img-user" src="../images/usuario.png" alt="Usuario"
+                   style="width:35px; height:35px;">
+            </button>
+
+            <!-- BOTÓN CAMPANA -->
+            <button type="button"
+                    class="btn border-0 bg-transparent me-2"
+                    onclick="window.location.href='notificacion.html'">
+              <img class="img-notificacion" src="../images/campana (2).png"
+                   alt="Notificaciones" style="width:30px; height:30px;">
+            </button>
+
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- BOTÓN REGRESAR -->
+  <a href="infousuario.html" class="btn-regresar">
+    <i class="fa-solid fa-arrow-left"></i>
+  </a>
+
+ 
+  
+
+  
+  
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <section class="container">
+    <div class="contenedor-calificacion">
+      
+      <h2 class="titulo-calificacion">Califica tu compra</h2>
+
+      <!-- INFO DEL PRODUCTO -->
+      <div class="info-producto">
+        <div class="row align-items-center">
+          <div class="col-md-3 text-center">
+            <img src="../images/comida1.webp" alt="Producto">
+          </div>
+          <div class="col-md-9">
+            <p class="nombre-producto mb-2">Nombre del Producto</p>
+            <p class="fecha-compra mb-0">Fecha de compra: 27/09/2025</p>
+            <p class="fecha-compra mb-0">Vendedor: Ricardo Ima</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- CALIFICACIÓN CON ESTRELLAS -->
+      <div class="calificacion-estrellas">
+        <p class="comentario-label">¿Cómo calificarías tu experiencia?</p>
+        <div class="estrellas" id="estrellas">
+          <i class="fa-solid fa-star" data-valor="1"></i>
+          <i class="fa-solid fa-star" data-valor="2"></i>
+          <i class="fa-solid fa-star" data-valor="3"></i>
+          <i class="fa-solid fa-star" data-valor="4"></i>
+          <i class="fa-solid fa-star" data-valor="5"></i>
+        </div>
+      </div>
+
+      <!-- COMENTARIO -->
+      <div class="mb-3">
+        <label class="comentario-label">Cuéntanos tu experiencia (opcional)</label>
+        <textarea 
+          class="form-control form-control-comentario" 
+          id="comentario"
+          rows="5" 
+          placeholder="Escribe tu opinión sobre el producto o servicio..."></textarea>
+      </div>
+
+      <!-- BOTÓN ENVIAR -->
+      <button class="btn-enviar-calificacion" onclick="enviarCalificacion()">
+        Enviar calificación
+      </button>
+
+    </div>
+  </section>
+
+  <!-- MODAL DE CONFIRMACIÓN -->
+  <div class="modal fade" id="modalExito" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">¡Calificación enviada!</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="icono-exito">
+            <i class="fa-solid fa-circle-check"></i>
+          </div>
+          <p class="mensaje-exito">Tu calificación ha sido enviada exitosamente</p>
+          <p style="color: #666;">¡Gracias por tu opinión!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="pie-pagina">
+  <div class="d-flex justify-content-end mb-2">
+    <img src="../images/X.png">
+    <img src="../images/instragram.png">
+    <img src="../images/facebook.png">
+  </div>
+  <p><strong>Contactos:</strong></p>
+  <p>📞 9613064346</p>
+  <p>✉ 251243@ids.upchiapas.edu.mx</p>
+</footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Sistema de calificación con estrellas
+    let calificacionSeleccionada = 0;
+    const estrellas = document.querySelectorAll('.estrellas i');
+
+    estrellas.forEach((estrella, index) => {
+      // Al hacer hover
+      estrella.addEventListener('mouseenter', () => {
+        pintarEstrellas(index + 1);
+      });
+
+      // Al hacer click
+      estrella.addEventListener('click', () => {
+        calificacionSeleccionada = index + 1;
+        pintarEstrellas(calificacionSeleccionada);
+      });
+    });
+
+    // Al salir del área de estrellas, mantener la selección
+    document.getElementById('estrellas').addEventListener('mouseleave', () => {
+      pintarEstrellas(calificacionSeleccionada);
+    });
+
+    function pintarEstrellas(cantidad) {
+      estrellas.forEach((estrella, index) => {
+        if (index < cantidad) {
+          estrella.classList.add('active');
+        } else {
+          estrella.classList.remove('active');
+        }
+      });
+    }
+
+    // Enviar calificación
+    function enviarCalificacion() {
+      if (calificacionSeleccionada === 0) {
+        alert('Por favor selecciona una calificación con estrellas');
+        return;
+      }
+
+      const comentario = document.getElementById('comentario').value;
+
+      // Aquí puedes hacer una petición al servidor para guardar la calificación
+      console.log('Calificación:', calificacionSeleccionada);
+      console.log('Comentario:', comentario);
+
+      // Mostrar modal de éxito
+      const modal = new bootstrap.Modal(document.getElementById('modalExito'));
+      modal.show();
+
+      // Opcional: resetear el formulario después de 3 segundos
+      setTimeout(() => {
+        calificacionSeleccionada = 0;
+        pintarEstrellas(0);
+        document.getElementById('comentario').value = '';
+      }, 3000);
+    }
+  </script>
+
+</body>
+</html>
