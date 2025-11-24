@@ -52,7 +52,8 @@
             </button>
 
             <!-- BOTÓN CAMPANA -->
-            <button type="button" class="btn border-0 bg-transparent me-2" onclick="window.location.href='#'">
+            <button type="button" class="btn border-0 bg-transparent me-2"
+              onclick="window.location.href='notificacion.html'">
               <img class="img-notificacion" src="../images/campana (2).png" alt="Notificaciones"
                 style="width:30px; height:30px;">
             </button>
@@ -64,28 +65,53 @@
   </header>
 
   <!-- Botón regresar -->
-  <a href="comprar.html" class="boton-regresar">
+  <a href="javascript:history.back()" class="boton-regresar">
     <i class="fa-solid fa-chevron-left"></i>
   </a>
 
   <!-- Contenido principal -->
   <div class="container contenedor-queja mt-4">
 
-    <!-- Botón de traducción -->
-
-
     <h5 id="txtTitulo" class="fw-bold mb-3">
       Si tienes alguna queja o sugerencia puedes escribirlo en el siguiente apartado
     </h5>
 
-    <label id="txtDescripcion" class="fw-semibold">Describe el problema...</label>
+    <!-- Información del contexto (Usuario a reportar o Venta) -->
+    <div id="infoContexto" class="mb-3 text-muted"></div>
 
-    <textarea id="txtArea" class="form-control mt-2 area-queja" rows="8"
-      placeholder="Escribe tu problema aquí..."></textarea>
+    <form id="formQueja">
+      <!-- Campos Ocultos -->
+      <input type="hidden" id="idReceptor">
+      <input type="hidden" id="idVenta">
+      <input type="hidden" id="tipoQueja" value="usuario"> <!-- usuario o venta -->
 
-    <button id="btnEnviar" class="btn btn-enviar mt-3">
-      Enviar <i class="fa-solid fa-paper-plane ms-1"></i>
-    </button>
+      <!-- Motivo / Tipo Problema -->
+      <div class="mb-3">
+        <label for="txtMotivo" class="form-label fw-semibold" id="lblMotivo">Motivo</label>
+        <input type="text" class="form-control" id="txtMotivo" placeholder="Ej: Comportamiento ofensivo">
+      </div>
+
+      <!-- Descripción -->
+      <div class="mb-3">
+        <label for="txtArea" class="form-label fw-semibold">Describe el problema (mín. 20 caracteres)</label>
+        <textarea id="txtArea" class="form-control area-queja" rows="8" placeholder="Escribe tu problema aquí..."
+          required minlength="20"></textarea>
+        <div class="form-text text-end" id="charCount">0 caracteres</div>
+      </div>
+
+      <!-- Imagen -->
+      <div class="mb-3">
+        <label for="imagenInput" class="form-label fw-semibold">Evidencia (Opcional, máx 5MB)</label>
+        <input class="form-control" type="file" id="imagenInput" accept="image/*">
+        <div class="mt-2">
+          <img id="preview" src="#" alt="Vista previa" style="max-width: 200px; display: none;" class="img-thumbnail">
+        </div>
+      </div>
+
+      <button type="submit" id="btnEnviar" class="btn btn-enviar mt-3">
+        Enviar <i class="fa-solid fa-paper-plane ms-1"></i>
+      </button>
+    </form>
 
   </div>
 
@@ -96,113 +122,14 @@
       <img src="../images/instragram.png" alt="Instagram">
       <img src="../images/facebook.png" alt="Facebook">
     </div>
-    <!DOCTYPE html>
-    <html lang="es">
+    <p><strong>Contactos:</strong></p>
+    <p class="mb-0">📞 9613064346</p>
+    <p>✉ 251243@ids.upchiapas.edu.mx</p>
+  </footer>
 
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <title>Responder Queja</title>
+  <!-- SCRIPT AÑADIDO -->
+  <script src="../js/Queja.js"></script>
 
-      <!-- Bootstrap -->
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+</body>
 
-      <!-- Icons -->
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-      <!-- TU CSS -->
-      <link rel="stylesheet" href="../style/Queja.css">
-
-    </head>
-
-    <body>
-
-      <!-- NAVBAR -->
-      <header>
-        <nav>
-          <div class="container-fluid pt-3 contenedor-nav">
-            <div class="row">
-
-              <!-- LOGO -->
-              <div class="col-2">
-                <a href="#">
-                  <img class="navbar-brand-img" src="../images/LogoUpsitos.png" alt="Logo">
-                </a>
-              </div>
-
-              <!-- BUSCADOR -->
-              <div class="col-6 col-md-6 mx-auto">
-                <form class="position-relative d-flex align-items-center" role="search">
-                  <input class="form-control form-control-search rounded-5" type="search" placeholder="Buscar..."
-                    aria-label="Buscar" />
-                  <button type="submit" class="btn position-absolute end-0 me-2 p-0 border-0 bg-transparent">
-                    <img src="../images/lupa.png" alt="Buscar" style="width:25px; height:25px;">
-                  </button>
-                </form>
-              </div>
-
-              <!-- ICONOS DERECHA -->
-              <div class="col-2 text-end herramientas d-flex justify-content-end">
-
-                <!-- BOTÓN USUARIO -->
-                <button type="button" class="btn border-0 bg-transparent me-3"
-                  onclick="window.location.href='ventas.html'">
-                  <img class="img-user" src="../images/usuario.png" alt="Usuario" style="width:35px; height:35px;">
-                </button>
-
-                <!-- BOTÓN CAMPANA -->
-                <button type="button" class="btn border-0 bg-transparent me-2" onclick="window.location.href='#'">
-                  <img class="img-notificacion" src="../images/campana (2).png" alt="Notificaciones"
-                    style="width:30px; height:30px;">
-                </button>
-
-              </div>
-            </div>
-          </div>
-        </nav>
-      </header>
-
-      <!-- Botón regresar -->
-      <a href="comprar.html" class="boton-regresar">
-        <i class="fa-solid fa-chevron-left"></i>
-      </a>
-
-      <!-- Contenido principal -->
-      <div class="container contenedor-queja mt-4">
-
-        <!-- Botón de traducción -->
-
-
-        <h5 id="txtTitulo" class="fw-bold mb-3">
-          Si tienes alguna queja o sugerencia puedes escribirlo en el siguiente apartado
-        </h5>
-
-        <label id="txtDescripcion" class="fw-semibold">Describe el problema...</label>
-
-        <textarea id="txtArea" class="form-control mt-2 area-queja" rows="8"
-          placeholder="Escribe tu problema aquí..."></textarea>
-
-        <button id="btnEnviar" class="btn btn-enviar mt-3">
-          Enviar <i class="fa-solid fa-paper-plane ms-1"></i>
-        </button>
-
-      </div>
-
-      <!-- Footer -->
-      <footer class="pie-pagina mt-5">
-        <div class="d-flex justify-content-end mb-2 redes-footer">
-          <img src="../images/X.png" alt="X">
-          <img src="../images/instragram.png" alt="Instagram">
-          <img src="../images/facebook.png" alt="Facebook">
-        </div>
-        <p><strong>Contactos:</strong></p>
-        <p class="mb-0">📞 9613064346</p>
-        <p>✉ 251243@ids.upchiapas.edu.mx</p>
-      </footer>
-
-      <!-- SCRIPT AÑADIDO -->
-      <script src="../js/Queja.js"></script>
-
-    </body>
-
-    </html>
+</html>

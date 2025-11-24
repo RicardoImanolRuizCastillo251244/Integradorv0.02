@@ -1,56 +1,68 @@
-// INICIALES AUTOMÁTICAS
-document.addEventListener("DOMContentLoaded", () => {
-    actualizarIniciales();
-});
+document.addEventListener('DOMContentLoaded', async () => {
+    const userId = localStorage.getItem('userId');
+    const authToken = localStorage.getItem('authToken');
 
-function actualizarIniciales() {
-    const nombre = document.getElementById("nombreUsuario").innerText;
-    const iniciales = nombre.split(" ").map(n => n[0]).join("").toUpperCase();
-    document.getElementById("circleIniciales").innerText = iniciales;
-}
+    if (!userId || !authToken) {
+        // Si no hay sesión, redirigir al login
+        window.location.href = 'login.html';
+        return;
+    }
 
-// FUNCIÓN PARA EDITAR NOMBRE Y CONTRASEÑA
-function editarCampo(idCampo, titulo) {
-    const campo = document.getElementById(idCampo);
-    const valorActual = campo.innerText.replace(/●/g, "");
-    const nuevoValor = prompt(``, valorActual);
+    // Elementos del DOM
+    const circleIniciales = document.getElementById('circleIniciales');
+    const nombreUsuario = document.getElementById('nombreUsuario');
+    const correoUsuario = document.getElementById('correoUsuario');
+    const campoNombre = document.getElementById('campoNombre');
+    const campoPass = document.getElementById('campoPass');
 
-    if (nuevoValor !== null && nuevoValor.trim() !== "") {
+    try {
+        // Fetch datos del usuario
+        // Asumimos que el endpoint es /usuario/{id}
+        const response = await fetch(`http://localhost:7000/usuario/${userId}`, {
+            headers: {
+                'Authorization': authToken // Enviar token si es necesario
+            }
+        });
 
-        if (idCampo === "campoPass") {
-            campo.innerText = "●".repeat(nuevoValor.length);
+        if (response.ok) {
+            const userData = await response.json();
+            console.log('Datos de usuario:', userData);
+
+            // Poblar datos
+            // Ajustar nombres de propiedades según respuesta real de la API
+            const nombre = userData.nombre_usuario || userData.username || 'Usuario';
+            const correo = userData.correo_electronico || userData.email || userData.correo_usuario || userData.correo || 'correo@ejemplo.com';
+
+            // Actualizar DOM
+            nombreUsuario.textContent = nombre;
+            campoNombre.textContent = nombre;
+            correoUsuario.textContent = correo;
+
+            // Iniciales
+            const iniciales = nombre.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+            circleIniciales.textContent = iniciales;
+
         } else {
-            campo.innerText = nuevoValor;
-            document.getElementById("nombreUsuario").innerText = nuevoValor;
-            actualizarIniciales();
+            console.error('Error al obtener datos del usuario:', response.status);
+            alert('No se pudo cargar la información del usuario.');
         }
-
-        alert("$usuario actualizado correctamente");
+    } catch (error) {
+        console.error('Error de red:', error);
+        alert('Error de conexión al cargar perfil.');
     }
-}
-
-// MOSTRAR / OCULTAR CONTRASEÑA
-let passVisible = false;
-
-function togglePass() {
-    const campo = document.getElementById("campoPass");
-
-    if (!passVisible) {
-        campo.innerText = "contraseña_real";
-        passVisible = true;
-    } else {
-        campo.innerText = "●".repeat(campo.innerText.length);
-        passVisible = false;
-    }
-}
-
-// NAVEGACIÓN ENTRE PESTAÑAS
-document.querySelectorAll(".tabs-usuario .tab").forEach((tab, index) => {
-    tab.addEventListener("click", () => {
-        if (index === 0) window.location.href = "infousuario.html";
-        if (index === 1) window.location.href = "pagomenbre.html";
-        if (index === 2) window.location.href = "compraconcretadas.html";
-        if (index === 3) window.location.href = "estadistica.html";
-        if (index === 4) window.location.href = "calificacion.html";
-    });
 });
+
+// Funciones globales para los onlick del HTML
+window.editarCampo = function (idCampo, nombreCampo) {
+    // Lógica para editar campo (por implementar)
+    alert(`Editar ${nombreCampo} (Funcionalidad en desarrollo)`);
+};
+
+window.togglePass = function () {
+    const campoPass = document.getElementById('campoPass');
+    if (campoPass.textContent === '●●●●●●') {
+        campoPass.textContent = '********'; // O mostrar contraseña real si la tuviéramos
+    } else {
+        campoPass.textContent = '●●●●●●';
+    }
+};

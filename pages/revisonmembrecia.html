@@ -97,125 +97,36 @@
 
   <!-- CONTENIDO PRINCIPAL -->
   <section class="container mt-4 estadisticas-contenido">
-    <div class="selector-dias text-center mb-3">
-      <select class="select-dias">
-        <option value="7">Últimos 7 días</option>
-        <option value="15">Últimos 15 días</option>
-        <option value="30">Últimos 30 días</option>
-        <option value="90">Últimos 3 meses</option>
-      </select>
-    </div>
-
-    <!-- TABLA DE REVISIÓN DE MEMBRESÍAS -->
-    <div class="tabla-membresias container mt-4">
-      <table class="table table-bordered">
-        <thead class="tabla-header">
-          <tr>
-            <th>Usuario</th>
-            <th>Correo</th>
-            <th>Tipo de membresía</th>
-            <th>Captura transferencia</th>
-            <th>Fecha de inicio</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Ricardo Iman...</td>
-            <td>251244@ids.upch...</td>
-            <td>Premium</td>
-            <td>
-              <img src="https://via.placeholder.com/30x30/000000/FFFFFF?text=QR" alt="Captura" class="captura-icon"
-                onclick="abrirModal(this.src)">
-            </td>
-            <td>27/09/2025</td>
-            <td>
-              <button class="btn-aceptar">Aceptar</button>
-              <button class="btn-declinar">Declinar</button>
-            </td>
-          </tr>
-
-          <tr>
-            <td>Ricardo Iman...</td>
-            <td>251244@ids.upch...</td>
-            <td>Premium</td>
-            <td>
-              <img src="https://via.placeholder.com/30x30/000000/FFFFFF?text=QR" alt="Captura" class="captura-icon"
-                onclick="abrirModal(this.src)">
-            </td>
-            <td>27/09/2025</td>
-            <td>
-              <button class="btn-aceptar">Aceptar</button>
-              <button class="btn-declinar">Declinar</button>
-            </td>
-          </tr>
-
-          <tr>
-            <td>Ricardo Iman...</td>
-            <td>251244@ids.upch...</td>
-            <td>Premium</td>
-            <td>
-              <img src="https://via.placeholder.com/30x30/000000/FFFFFF?text=QR" alt="Captura" class="captura-icon"
-                onclick="abrirModal(this.src)">
-            </td>
-            <td>27/08/2025</td>
-            <td>
-              <button class="btn-aceptar">Aceptar</button>
-              <button class="btn-declinar">Declinar</button>
-            </td>
-          </tr>
-
-          <tr>
-            <td>Ricardo Iman...</td>
-            <td>251244@ids.upch...</td>
-            <td>Premium</td>
-            <td>
-              <img src="https://via.placeholder.com/30x30/000000/FFFFFF?text=QR" alt="Captura" class="captura-icon"
-                onclick="abrirModal(this.src)">
-            </td>
-            <td>27/09/2025</td>
-            <td>
-              <button class="btn-aceptar">Aceptar</button>
-              <button class="btn-declinar">Declinar</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-  </section>
-
-  <!-- MODAL PARA VISUALIZAR IMAGEN -->
-  <div class="modal fade" id="modalImagen" tabindex="-1" aria-labelledby="modalImagenLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalImagenLabel">Captura de Transferencia</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body text-center">
-          <img id="imagenAmpliada" src="" alt="Captura ampliada" style="max-width: 100%; height: auto;">
+    <div class="modal fade" id="modalImagen" tabindex="-1" aria-labelledby="modalImagenLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalImagenLabel">Captura de Transferencia</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body text-center">
+            <img id="imagenAmpliada" src="" alt="Captura ampliada" style="max-width: 100%; height: auto;">
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- FOOTER -->
-  <footer class="pie-pagina">
-    <div class="d-flex justify-content-end mb-2">
-      <img src="../images/X.png" />
-      <img src="../images/instragram.png" />
-      <img src="../images/facebook.png" />
-    </div>
+    <!-- FOOTER -->
+    <footer class="pie-pagina">
+      <div class="d-flex justify-content-end mb-2">
+        <img src="../images/X.png" />
+        <img src="../images/instragram.png" />
+        <img src="../images/facebook.png" />
+      </div>
 
-    <p><strong>Contactos:</strong></p>
-    <p class="mb-0">📞 9613064346</p>
-    <p>✉ 251243@ids.upchiapas.edu.mx</p>
-  </footer>
+      <p><strong>Contactos:</strong></p>
+      <p class="mb-0">📞 9613064346</p>
+      <p>✉ 251243@ids.upchiapas.edu.mx</p>
+    </footer>
 
-  <!-- SCRIPT NAVEGACIÓN -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="../js/revisonmembrecia.js"></script>
+    <!-- SCRIPT NAVEGACIÓN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/revisonmembrecia.js"></script>
 
 </body>
 
