@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // Realizar petición
-            const response = await fetch('http://localhost:7000/publicacion', {
+            const response = await fetch('http://3.217.116.105:7000/publicacion', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,

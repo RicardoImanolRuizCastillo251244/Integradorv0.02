@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     try {
-        const response = await fetch('http://localhost:7000/usuario-membresia', {
+        const response = await fetch('http://3.217.116.105:7000/usuario-membresia', {
             headers: {
                 'Authorization': authToken
             }
@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (accion === 'declinar') {
             try {
-                const response = await fetch(`http://localhost:7000/usuario-membresia/${id}`, {
+                const response = await fetch(`http://3.217.116.105:7000/usuario-membresia/${id}`, {
                     method: 'DELETE',
                     headers: { 'Authorization': authToken }
                 });

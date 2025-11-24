@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
             btnEnviar.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Enviando...';
 
             // 4. Fetch
-            const response = await fetch('http://localhost:7000/queja-usuario', {
+            const response = await fetch('http://3.217.116.105:7000/queja-usuario', {
                 method: 'POST',
                 headers: {
                     'Authorization': authToken
@@ -205,7 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
             btnEnviar.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Enviando...';
 
             // 4. Fetch
-            const response = await fetch('http://localhost:7000/queja-venta', {
+            const response = await fetch('http://3.217.116.105:7000/queja-venta', {
                 method: 'POST',
                 headers: {
                     'Authorization': authToken

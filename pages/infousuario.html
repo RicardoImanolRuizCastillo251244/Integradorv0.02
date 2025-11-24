@@ -2,253 +2,124 @@
 <html lang="es">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Información de Usuario</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Información de Usuario</title>
 
-  <!-- Fuente -->
-  <link href="https://fonts.googleapis.com/css?family=Open+Sauce+One&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sauce+One&display=swap" rel="stylesheet" />
 
-  <!-- Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
 
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="../style/infousuario.css" />
-  <link rel="stylesheet" href="../style/main.css" />
+    <link rel="stylesheet" href="../style/infousuario.css" />
+    <link rel="stylesheet" href="../style/main.css" />
 </head>
 
 <body>
 
-  <header>
-    <nav>
-      <div class="container-fluid pt-3 contenedor-nav">
-        <div class="row">
-
-          <!-- LOGO -->
-          <div class="col-2">
-            <a href="#">
-              <img class="navbar-brand-img" src="../images/LogoUpsitos.png" alt="Logo">
-            </a>
-          </div>
-
-          <!-- BUSCADOR -->
-          <div class="col-6 col-md-6 mx-auto">
-            <form class="position-relative d-flex align-items-center" role="search">
-              <input class="form-control form-control-search rounded-5" type="search" placeholder="Buscar..."
-                aria-label="Buscar" />
-              <button type="submit" class="btn position-absolute end-0 me-2 p-0 border-0 bg-transparent">
-                <img src="../images/lupa.png" alt="Buscar" style="width:25px; height:25px;">
-              </button>
-            </form>
-          </div>
-
-          <!-- ICONOS DERECHA -->
-          <div class="col-2 text-end herramientas d-flex justify-content-end">
-
-            <!-- BOTÓN USUARIO -->
-            <button type="button" class="btn border-0 bg-transparent me-3" onclick="window.location.href='ventas.html'">
-              <img class="img-user" src="../images/usuario.png" alt="Usuario" style="width:35px; height:35px;">
-            </button>
-
-            <!-- BOTÓN CAMPANA -->
-            <button type="button" class="btn border-0 bg-transparent me-2"
-              onclick="window.location.href='notificacion.html'">
-              <img class="img-notificacion" src="../images/campana (2).png" alt="Notificaciones"
-                style="width:30px; height:30px;">
-            </button>
-
-          </div>
-        </div>
-      </div>
-    </nav>
-  </header>
-
-  <!-- Botón regresar -->
-  <a href="ventas.html" class="btn-regresar">
-    <i class="fa-solid fa-arrow-left"></i>
-  </a>
-
-  <!-- Pestañas superiores -->
-  <div class="tabs-usuario">
-    <button class="tab active">Información de usuario</button>
-    <button class="tab">Membresía</button>
-    <button class="tab">Compras</button>
-    <button class="tab">Estadísticas</button>
-    <button class="tab">Calificación producto</button>
-
-  </div>
-
-  <!-- Perfil -->
-  <section class="perfil-container">
-
-    <!-- Círculo iniciales -->
-    <div class="circle-iniciales" id="circleIniciales">IR</div>
-
-    <h3 id="nombreUsuario">Imanol Ruiz</h3>
-    <p id="correoUsuario">251244@ids.upchiapas.edu.mx</p>
-
-  </section>
-
-  <!-- Campos -->
-  <section class="container mt-3 info-usuario">
-
-    <div class="campo-item">
-      <p class="titulo-campo">Nombre de usuario</p>
-      <p id="campoNombre">Imanol Ruiz</p>
-      <i class="fa-solid fa-pen-to-square icono-edit" onclick="editarCampo('campoNombre', 'Nombre de usuario')"></i>
-    </div>
-
-    <div class="campo-item">
-      <p class="titulo-campo">Cambiar contraseña</p>
-      <p id="campoPass">●●●●●●</p>
-
-      <!-- Ícono editar -->
-      <i class="fa-solid fa-pen-to-square icono-edit" onclick="editarCampo('campoPass', 'Contraseña')"></i>
-
-      <!-- Ícono mostrar/ocultar contraseña (AGREGADO) -->
-      <i class="fa-solid fa-eye icono-ver" onclick="togglePass()"></i>
-    </div>
-
-  </section>
-
-  <!-- Footer -->
-  <footer class="pie-pagina">
-    <!DOCTYPE html>
-    <html lang="es">
-
-    <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Información de Usuario</title>
-
-      <!-- Fuente -->
-      <link href="https://fonts.googleapis.com/css?family=Open+Sauce+One&display=swap" rel="stylesheet" />
-
-      <!-- Bootstrap -->
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-
-      <!-- Font Awesome -->
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
-
-      <!-- CSS -->
-      <link rel="stylesheet" href="../style/infousuario.css" />
-      <link rel="stylesheet" href="../style/main.css" />
-    </head>
-
-    <body>
-
-      <header>
+    <header>
         <nav>
-          <div class="container-fluid pt-3 contenedor-nav">
-            <div class="row">
+            <div class="container-fluid pt-3 contenedor-nav">
+                <div class="row">
 
-              <!-- LOGO -->
-              <div class="col-2">
-                <a href="#">
-                  <img class="navbar-brand-img" src="../images/LogoUpsitos.png" alt="Logo">
-                </a>
-              </div>
+                    <div class="col-2">
+                        <a href="/index.html">
+                            <img class="navbar-brand-img" src="../images/LogoUpsitos.png" alt="Logo">
+                        </a>
+                    </div>
 
-              <!-- BUSCADOR -->
-              <div class="col-6 col-md-6 mx-auto">
-                <form class="position-relative d-flex align-items-center" role="search">
-                  <input class="form-control form-control-search rounded-5" type="search" placeholder="Buscar..."
-                    aria-label="Buscar" />
-                  <button type="submit" class="btn position-absolute end-0 me-2 p-0 border-0 bg-transparent">
-                    <img src="../images/lupa.png" alt="Buscar" style="width:25px; height:25px;">
-                  </button>
-                </form>
-              </div>
+                    <div class="col-6 col-md-6 mx-auto">
+                        <form class="position-relative d-flex align-items-center" role="search">
+                            <input class="form-control form-control-search rounded-5" type="search"
+                                placeholder="Buscar..." aria-label="Buscar" />
+                            <button type="submit" class="btn position-absolute end-0 me-2 p-0 border-0 bg-transparent">
+                                <img src="../images/lupa.png" alt="Buscar" style="width:25px; height:25px;">
+                            </button>
+                        </form>
+                    </div>
 
-              <!-- ICONOS DERECHA -->
-              <div class="col-2 text-end herramientas d-flex justify-content-end">
+                    <div class="col-2 text-end herramientas d-flex justify-content-end">
 
-                <!-- BOTÓN USUARIO -->
-                <button type="button" class="btn border-0 bg-transparent me-3"
-                  onclick="window.location.href='ventas.html'">
-                  <img class="img-user" src="../images/usuario.png" alt="Usuario" style="width:35px; height:35px;">
-                </button>
+                        <button type="button" class="btn border-0 bg-transparent me-3"
+                            onclick="window.location.href='ventas.html'">
+                            <img class="img-user" src="../images/usuario.png" alt="Usuario"
+                                style="width:35px; height:35px;">
+                        </button>
 
-                <!-- BOTÓN CAMPANA -->
-                <button type="button" class="btn border-0 bg-transparent me-2"
-                  onclick="window.location.href='notificacion.html'">
-                  <img class="img-notificacion" src="../images/campana (2).png" alt="Notificaciones"
-                    style="width:30px; height:30px;">
-                </button>
+                        <button type="button" class="btn border-0 bg-transparent me-2"
+                            onclick="window.location.href='notificacion.html'">
+                            <img class="img-notificacion" src="../images/campana (2).png" alt="Notificaciones"
+                                style="width:30px; height:30px;">
+                        </button>
 
-              </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </nav>
-      </header>
+    </header>
 
-      <!-- Botón regresar -->
-      <a href="ventas.html" class="btn-regresar">
+    <a href="ventas.html" class="btn-regresar">
         <i class="fa-solid fa-arrow-left"></i>
-      </a>
+    </a>
 
-      <!-- Pestañas superiores -->
-      <div class="tabs-usuario">
+    <div class="tabs-usuario">
         <button class="tab active">Información de usuario</button>
         <button class="tab">Membresía</button>
         <button class="tab">Compras</button>
         <button class="tab">Estadísticas</button>
         <button class="tab">Calificación producto</button>
+    </div>
 
-      </div>
+    <section class="perfil-container">
 
-      <!-- Perfil -->
-      <section class="perfil-container">
-
-        <!-- Círculo iniciales -->
         <div class="circle-iniciales" id="circleIniciales">IR</div>
 
         <h3 id="nombreUsuario">Imanol Ruiz</h3>
         <p id="correoUsuario">251244@ids.upchiapas.edu.mx</p>
 
-      </section>
+    </section>
 
-      <!-- Campos -->
-      <section class="container mt-3 info-usuario">
+    <section class="container mt-3 info-usuario">
 
         <div class="campo-item">
-          <p class="titulo-campo">Nombre de usuario</p>
-          <p id="campoNombre">Imanol Ruiz</p>
-          <i class="fa-solid fa-pen-to-square icono-edit" onclick="editarCampo('campoNombre', 'Nombre de usuario')"></i>
+            <p class="titulo-campo">Nombre de usuario</p>
+            <p id="campoNombre">Imanol Ruiz</p>
+            <i class="fa-solid fa-pen-to-square icono-edit" onclick="editarCampo('campoNombre', 'Nombre de usuario')"></i>
         </div>
 
         <div class="campo-item">
-          <p class="titulo-campo">Cambiar contraseña</p>
-          <p id="campoPass">●●●●●●</p>
+            <p class="titulo-campo">Cambiar contraseña</p>
+            <p id="campoPass">●●●●●●</p>
 
-          <!-- Ícono editar -->
-          <i class="fa-solid fa-pen-to-square icono-edit" onclick="editarCampo('campoPass', 'Contraseña')"></i>
+            <i class="fa-solid fa-pen-to-square icono-edit" onclick="editarCampo('campoPass', 'Contraseña')"></i>
 
-          <!-- Ícono mostrar/ocultar contraseña (AGREGADO) -->
-          <i class="fa-solid fa-eye icono-ver" onclick="togglePass()"></i>
+            <i class="fa-solid fa-eye icono-ver" onclick="togglePass()"></i>
         </div>
 
-      </section>
+    </section>
 
-      <!-- Footer -->
-      <footer class="pie-pagina">
+    <div class="container my-5">
+        <button id="logoutButton" class="btn btn-danger w-100" onclick="logout()">
+            <i class="fa-solid fa-right-from-bracket me-2"></i> Cerrar Sesión
+        </button>
+    </div>
+
+    <footer class="pie-pagina">
         <div class="d-flex justify-content-end mb-2">
-          <img src="../images/X.png" />
-          <img src="../images/instragram.png" />
-          <img src="../images/facebook.png" />
+            <img src="../images/X.png" alt="Twitter/X" />
+            <img src="../images/instragram.png" alt="Instagram" />
+            <img src="../images/facebook.png" alt="Facebook" />
         </div>
 
         <p><strong>Contactos:</strong></p>
         <p class="mb-0">📞 9613064346</p>
         <p>✉ 251243@ids.upchiapas.edu.mx</p>
-      </footer>
+    </footer>
 
-      <!-- Scripts -->
-      <script src="../js/infousuario.js"></script>
+    <script src="../js/infousuario.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    </body>
+</body>
 
-    </html>
+</html>

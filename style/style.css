@@ -136,3 +136,10 @@ SECCION DESCRIPCION DE PRODUCTO
     font-family: 'open sauce one' !important;
     font-weight: bold;
 }
+
+#precio{
+    font-family: 'open sauce one' !important;
+    font-weight: bold;
+    color: #FC4B08;
+    font-size: 2em;
+}

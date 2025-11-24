@@ -1,6 +1,17 @@
 // Toggle mostrar/ocultar contraseña
 const togglePassword = document.getElementById('togglePassword');
 const passwordInput = document.getElementById('password');
+const btn_infoUs = document.getElementById('btn_infoUs')
+
+btn_infoUs.addEventListener('click',()=>{
+  const userId = localStorage.getItem('userId');
+            if(userId){
+                window.location.href = '/pages/publicacion.html';
+            }
+            else{
+                window.location.href = '/pages/login.html';
+            }
+})
 
 togglePassword.addEventListener('click', function () {
   const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
@@ -62,7 +73,7 @@ loginForm.addEventListener('submit', async function (e) {
     submitBtn.disabled = true;
     submitBtn.textContent = 'Iniciando sesión...';
 
-    const url = 'http://localhost:7000/auth/login';
+    const url = 'http://3.217.116.105:7000/auth/login';
     const credentials = {
       correo_usuario: emailValue,
       contrasena: passwordValue

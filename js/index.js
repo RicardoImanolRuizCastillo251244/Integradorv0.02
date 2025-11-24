@@ -16,7 +16,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2. Event Listeners para navegación
     if (btnPublicar) {
         btnPublicar.addEventListener('click', () => {
-            window.location.href = '/pages/publicacion.html';
+            const userId = localStorage.getItem('userId');
+            if(userId){
+                window.location.href = '/pages/publicacion.html';
+            }
+            else{
+                window.location.href = '/pages/login.html';
+            }
         });
     }
 
@@ -69,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function fetchPublications() {
         try {
             console.log('Iniciando fetch de publicaciones...');
-            const response = await fetch('http://localhost:7000/publicacion');
+            const response = await fetch('http://3.217.116.105:7000/publicacion');
             console.log('Respuesta status:', response.status);
 
             if (response.ok) {
@@ -140,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
             cardCol.className = 'col-12 col-sm-6 col-md-4 col-lg-3 mb-4'; // Responsive grid
 
             cardCol.innerHTML = `
-                <a href="/pages/verPublicacion.html?id=${pub.id_publicacion}" class="text-decoration-none text-dark">
+                <a href="/pages/comprar.html?id=${pub.id_publicacion}" class="text-decoration-none text-dark">
                     <div class="card h-100 shadow-sm">
                         <div style="height: 200px; overflow: hidden; display: flex; align-items: center; justify-content: center; background-color: #f8f9fa;">
                             <img src="${imageSrc}" class="card-img-top" alt="${pub.titulo_publicacion}" style="object-fit: cover; height: 100%; width: 100%;">

@@ -85,7 +85,7 @@ registroForm.addEventListener('submit', async function (e) {
         const idRol = tipoUsuarioValue === 'consumidor' ? 1 : 2;
 
         // Construir URL con password como query param
-        const url = `http://localhost:7000/auth/register?password=${encodeURIComponent(passwordValue)}`;
+        const url = `http://3.217.116.105:7000/auth/register?password=${encodeURIComponent(passwordValue)}`;
 
         // Datos del body
         const userData = {
