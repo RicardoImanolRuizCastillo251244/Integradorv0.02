@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,64 +15,59 @@
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
   <link rel="stylesheet" href="../style/notificacion.css" />
-  <link rel="stylesheet" href="../style/main.css"/>
+  <link rel="stylesheet" href="../style/main.css" />
 
   <style>
-   
+
   </style>
 </head>
 
 <body>
 
   <!-- HEADER -->
- <header>
-  <nav>
-    <div class="container-fluid pt-3 contenedor-nav">
-      <div class="row">
+  <header>
+    <nav>
+      <div class="container-fluid pt-3 contenedor-nav">
+        <div class="row">
 
-        <!-- LOGO -->
-        <div class="col-2">
-          <a href="#">
-            <img class="navbar-brand-img" src="../images/LogoUpsitos.png" alt="Logo">
-          </a>
-        </div>
+          <!-- LOGO -->
+          <div class="col-2">
+            <a href="#">
+              <img class="navbar-brand-img" src="../images/LogoUpsitos.png" alt="Logo">
+            </a>
+          </div>
 
-        <!-- BUSCADOR -->
-        <div class="col-6 col-md-6 mx-auto">
-          <form class="position-relative d-flex align-items-center" role="search">
-            <input class="form-control form-control-search rounded-5"
-                   type="search" placeholder="Buscar..." aria-label="Buscar" />
-            <button type="submit"
-                    class="btn position-absolute end-0 me-2 p-0 border-0 bg-transparent">
-              <img src="../images/lupa.png" alt="Buscar" style="width:25px; height:25px;">
+          <!-- BUSCADOR -->
+          <div class="col-6 col-md-6 mx-auto">
+            <form class="position-relative d-flex align-items-center" role="search">
+              <input class="form-control form-control-search rounded-5" type="search" placeholder="Buscar..."
+                aria-label="Buscar" />
+              <button type="submit" class="btn position-absolute end-0 me-2 p-0 border-0 bg-transparent">
+                <img src="../images/lupa.png" alt="Buscar" style="width:25px; height:25px;">
+              </button>
+            </form>
+          </div>
+
+          <!-- ICONOS DERECHA -->
+          <div class="col-2 text-end herramientas d-flex justify-content-end">
+
+            <!-- BOTÓN USUARIO -->
+            <button type="button" class="btn border-0 bg-transparent me-3" onclick="window.location.href='ventas.html'">
+              <img class="img-user" src="../images/usuario.png" alt="Usuario" style="width:35px; height:35px;">
             </button>
-          </form>
-        </div>
 
-        <!-- ICONOS DERECHA -->
-        <div class="col-2 text-end herramientas d-flex justify-content-end">
+            <!-- BOTÓN CAMPANA -->
+            <button type="button" class="btn border-0 bg-transparent me-2"
+              onclick="window.location.href='notificacion.html'">
+              <img class="img-notificacion" src="../images/campana (2).png" alt="Notificaciones"
+                style="width:30px; height:30px;">
+            </button>
 
-          <!-- BOTÓN USUARIO -->
-          <button type="button"
-                  class="btn border-0 bg-transparent me-3"
-                  onclick="window.location.href='ventas.html'">
-            <img class="img-user" src="../images/usuario.png" alt="Usuario"
-                 style="width:35px; height:35px;">
-          </button>
-
-          <!-- BOTÓN CAMPANA -->
-          <button type="button"
-                  class="btn border-0 bg-transparent me-2"
-                  onclick="window.location.href='notificacion.html'">
-            <img class="img-notificacion" src="../images/campana (2).png"
-                 alt="Notificaciones" style="width:30px; height:30px;">
-          </button>
-
+          </div>
         </div>
       </div>
-    </div>
-  </nav>
-</header>
+    </nav>
+  </header>
 
   <!-- BOTÓN REGRESAR -->
   <a href="infousuario.html" class="btn-regresar">
@@ -83,11 +79,11 @@
 
   <!-- CONTENEDOR NOTIFICACIONES -->
   <section class="contenedor-notificaciones">
-    
+
     <!-- NOTIFICACIÓN 1 -->
     <div class="notificacion-card">
       <h2 class="notificacion-titulo">Título de la notificación</h2>
-      
+
       <div class="notificacion-avatar">
         <div class="avatar-notif">
           <i class="fa-solid fa-user"></i>
@@ -95,7 +91,7 @@
       </div>
 
       <p class="notificacion-descripcion">Descripción de la notificación</p>
-      
+
       <div class="notificacion-fecha">
         Hace 2 horas
       </div>
@@ -104,7 +100,7 @@
     <!-- NOTIFICACIÓN 2 -->
     <div class="notificacion-card">
       <h2 class="notificacion-titulo">Nueva orden recibida</h2>
-      
+
       <div class="notificacion-avatar">
         <div class="avatar-notif">
           <i class="fa-solid fa-shopping-cart"></i>
@@ -112,7 +108,7 @@
       </div>
 
       <p class="notificacion-descripcion">Tienes una nueva orden de compra pendiente</p>
-      
+
       <div class="notificacion-fecha">
         Hace 5 horas
       </div>
@@ -121,7 +117,7 @@
     <!-- NOTIFICACIÓN 3 -->
     <div class="notificacion-card">
       <h2 class="notificacion-titulo">Mensaje del vendedor</h2>
-      
+
       <div class="notificacion-avatar">
         <div class="avatar-notif">
           <i class="fa-solid fa-envelope"></i>
@@ -129,7 +125,7 @@
       </div>
 
       <p class="notificacion-descripcion">El vendedor te ha enviado un mensaje sobre tu pedido</p>
-      
+
       <div class="notificacion-fecha">
         Ayer
       </div>
@@ -139,19 +135,20 @@
 
   <!-- FOOTER -->
   <footer class="pie-pagina">
-  <div class="d-flex justify-content-end mb-2">
-    <img src="../images/X.png" />
-    <img src="../images/instragram.png" />
-    <img src="../images/facebook.png" />
-  </div>
+    <div class="d-flex justify-content-end mb-2">
+      <img src="../images/X.png" />
+      <img src="../images/instragram.png" />
+      <img src="../images/facebook.png" />
+    </div>
 
-  <p><strong>Contactos:</strong></p>
-  <p class="mb-0">📞 9613064346</p>
-  <p>✉ 251243@ids.upchiapas.edu.mx</p>
-</footer>
+    <p><strong>Contactos:</strong></p>
+    <p class="mb-0">📞 9613064346</p>
+    <p>✉ 251243@ids.upchiapas.edu.mx</p>
+  </footer>
 
   <!-- SCRIPTS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
+
 </html>

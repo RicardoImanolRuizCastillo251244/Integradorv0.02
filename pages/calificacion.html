@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -13,11 +14,11 @@
 
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
-  <link rel="stylesheet" href="../style/main.css"/>
+  <link rel="stylesheet" href="../style/main.css" />
   <link rel="stylesheet" href="../style/calificacion.css" />
 
   <style>
-    
+
   </style>
 </head>
 
@@ -39,10 +40,9 @@
           <!-- BUSCADOR -->
           <div class="col-6 col-md-6 mx-auto">
             <form class="position-relative d-flex align-items-center" role="search">
-              <input class="form-control form-control-search rounded-5"
-                     type="search" placeholder="Buscar..." aria-label="Buscar" />
-              <button type="submit"
-                      class="btn position-absolute end-0 me-2 p-0 border-0 bg-transparent">
+              <input class="form-control form-control-search rounded-5" type="search" placeholder="Buscar..."
+                aria-label="Buscar" />
+              <button type="submit" class="btn position-absolute end-0 me-2 p-0 border-0 bg-transparent">
                 <img src="../images/lupa.png" alt="Buscar" style="width:25px; height:25px;">
               </button>
             </form>
@@ -52,19 +52,16 @@
           <div class="col-2 text-end herramientas d-flex justify-content-end">
 
             <!-- BOTÓN USUARIO -->
-            <button type="button"
-                    class="btn border-0 bg-transparent me-3"
-                    onclick="window.location.href='infousuario.html'">
-              <img class="img-user" src="../images/usuario.png" alt="Usuario"
-                   style="width:35px; height:35px;">
+            <button type="button" class="btn border-0 bg-transparent me-3"
+              onclick="window.location.href='infousuario.html'">
+              <img class="img-user" src="../images/usuario.png" alt="Usuario" style="width:35px; height:35px;">
             </button>
 
             <!-- BOTÓN CAMPANA -->
-            <button type="button"
-                    class="btn border-0 bg-transparent me-2"
-                    onclick="window.location.href='notificacion.html'">
-              <img class="img-notificacion" src="../images/campana (2).png"
-                   alt="Notificaciones" style="width:30px; height:30px;">
+            <button type="button" class="btn border-0 bg-transparent me-2"
+              onclick="window.location.href='notificacion.html'">
+              <img class="img-notificacion" src="../images/campana (2).png" alt="Notificaciones"
+                style="width:30px; height:30px;">
             </button>
 
           </div>
@@ -78,16 +75,16 @@
     <i class="fa-solid fa-arrow-left"></i>
   </a>
 
- 
-  
 
-  
-  
+
+
+
+
 
   <!-- CONTENIDO PRINCIPAL -->
   <section class="container">
     <div class="contenedor-calificacion">
-      
+
       <h2 class="titulo-calificacion">Califica tu compra</h2>
 
       <!-- INFO DEL PRODUCTO -->
@@ -119,10 +116,7 @@
       <!-- COMENTARIO -->
       <div class="mb-3">
         <label class="comentario-label">Cuéntanos tu experiencia (opcional)</label>
-        <textarea 
-          class="form-control form-control-comentario" 
-          id="comentario"
-          rows="5" 
+        <textarea class="form-control form-control-comentario" id="comentario" rows="5"
           placeholder="Escribe tu opinión sobre el producto o servicio..."></textarea>
       </div>
 
@@ -155,76 +149,20 @@
 
   <!-- FOOTER -->
   <footer class="pie-pagina">
-  <div class="d-flex justify-content-end mb-2">
-    <img src="../images/X.png">
-    <img src="../images/instragram.png">
-    <img src="../images/facebook.png">
-  </div>
-  <p><strong>Contactos:</strong></p>
-  <p>📞 9613064346</p>
-  <p>✉ 251243@ids.upchiapas.edu.mx</p>
-</footer>
+    <div class="d-flex justify-content-end mb-2">
+      <img src="../images/X.png">
+      <img src="../images/instragram.png">
+      <img src="../images/facebook.png">
+    </div>
+    <p><strong>Contactos:</strong></p>
+    <p>📞 9613064346</p>
+    <p>✉ 251243@ids.upchiapas.edu.mx</p>
+  </footer>
 
   <!-- SCRIPTS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    // Sistema de calificación con estrellas
-    let calificacionSeleccionada = 0;
-    const estrellas = document.querySelectorAll('.estrellas i');
-
-    estrellas.forEach((estrella, index) => {
-      // Al hacer hover
-      estrella.addEventListener('mouseenter', () => {
-        pintarEstrellas(index + 1);
-      });
-
-      // Al hacer click
-      estrella.addEventListener('click', () => {
-        calificacionSeleccionada = index + 1;
-        pintarEstrellas(calificacionSeleccionada);
-      });
-    });
-
-    // Al salir del área de estrellas, mantener la selección
-    document.getElementById('estrellas').addEventListener('mouseleave', () => {
-      pintarEstrellas(calificacionSeleccionada);
-    });
-
-    function pintarEstrellas(cantidad) {
-      estrellas.forEach((estrella, index) => {
-        if (index < cantidad) {
-          estrella.classList.add('active');
-        } else {
-          estrella.classList.remove('active');
-        }
-      });
-    }
-
-    // Enviar calificación
-    function enviarCalificacion() {
-      if (calificacionSeleccionada === 0) {
-        alert('Por favor selecciona una calificación con estrellas');
-        return;
-      }
-
-      const comentario = document.getElementById('comentario').value;
-
-      // Aquí puedes hacer una petición al servidor para guardar la calificación
-      console.log('Calificación:', calificacionSeleccionada);
-      console.log('Comentario:', comentario);
-
-      // Mostrar modal de éxito
-      const modal = new bootstrap.Modal(document.getElementById('modalExito'));
-      modal.show();
-
-      // Opcional: resetear el formulario después de 3 segundos
-      setTimeout(() => {
-        calificacionSeleccionada = 0;
-        pintarEstrellas(0);
-        document.getElementById('comentario').value = '';
-      }, 3000);
-    }
-  </script>
+  <script src="../js/calificacion.js"></script>
 
 </body>
+
 </html>

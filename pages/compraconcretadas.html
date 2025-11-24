@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -16,202 +17,170 @@
 
   <!-- CSS -->
   <link rel="stylesheet" href="../style/compraconcretadas.css" />
-  <link rel="stylesheet" href="../style/main.css"/>
+  <link rel="stylesheet" href="../style/main.css" />
 </head>
 
 <body>
 
-<!-- ---------------- HEADER (A) EXACTO ---------------- -->
-<header>
-  <nav>
-    <div class="container-fluid pt-3 contenedor-nav">
-      <div class="row">
+  <!-- ---------------- HEADER (A) EXACTO ---------------- -->
+  <header>
+    <nav>
+      <div class="container-fluid pt-3 contenedor-nav">
+        <div class="row">
 
-        <!-- LOGO -->
-        <div class="col-2">
-          <a href="#">
-            <img class="navbar-brand-img" src="../images/LogoUpsitos.png" alt="Logo">
-          </a>
-        </div>
+          <!-- LOGO -->
+          <div class="col-2">
+            <a href="#">
+              <img class="navbar-brand-img" src="../images/LogoUpsitos.png" alt="Logo">
+            </a>
+          </div>
 
-        <!-- BUSCADOR -->
-        <div class="col-6 col-md-6 mx-auto">
-          <form class="position-relative d-flex align-items-center" role="search">
-            <input class="form-control form-control-search rounded-5"
-                   type="search" placeholder="Buscar..." aria-label="Buscar" />
-            <button type="submit"
-                    class="btn position-absolute end-0 me-2 p-0 border-0 bg-transparent">
-              <img src="../images/lupa.png" alt="Buscar" style="width:25px; height:25px;">
+          <!-- BUSCADOR -->
+          <div class="col-6 col-md-6 mx-auto">
+            <form class="position-relative d-flex align-items-center" role="search">
+              <input class="form-control form-control-search rounded-5" type="search" placeholder="Buscar..."
+                aria-label="Buscar" />
+              <button type="submit" class="btn position-absolute end-0 me-2 p-0 border-0 bg-transparent">
+                <img src="../images/lupa.png" alt="Buscar" style="width:25px; height:25px;">
+              </button>
+            </form>
+          </div>
+
+          <!-- ICONOS DERECHA -->
+          <div class="col-2 text-end herramientas d-flex justify-content-end">
+
+            <!-- BOTÓN USUARIO -->
+            <button type="button" class="btn border-0 bg-transparent me-3" onclick="window.location.href='ventas.html'">
+              <img class="img-user" src="../images/usuario.png" alt="Usuario" style="width:35px; height:35px;">
             </button>
-          </form>
-        </div>
 
-        <!-- ICONOS DERECHA -->
-        <div class="col-2 text-end herramientas d-flex justify-content-end">
+            <!-- BOTÓN CAMPANA -->
+            <button type="button" class="btn border-0 bg-transparent me-2" onclick="window.location.href='#'">
+              <img class="img-notificacion" src="../images/campana (2).png" alt="Notificaciones"
+                style="width:30px; height:30px;">
+            </button>
 
-          <!-- BOTÓN USUARIO -->
-          <button type="button"
-                  class="btn border-0 bg-transparent me-3"
-                  onclick="window.location.href='ventas.html'">
-            <img class="img-user" src="../images/usuario.png" alt="Usuario"
-                 style="width:35px; height:35px;">
-          </button>
-
-          <!-- BOTÓN CAMPANA -->
-          <button type="button"
-                  class="btn border-0 bg-transparent me-2"
-                  onclick="window.location.href='#'">
-            <img class="img-notificacion" src="../images/campana (2).png"
-                 alt="Notificaciones" style="width:30px; height:30px;">
-          </button>
-
+          </div>
         </div>
       </div>
+    </nav>
+  </header>
+  <!-- ---------------- FIN HEADER ---------------- -->
+
+  <!-- Botón regresar -->
+  <a href="pagomenbre.html" class="btn-regresar">
+    <i class="fa-solid fa-arrow-left"></i>
+  </a>
+
+  <!-- Pestañas -->
+  <div class="tabs-usuario">
+    <button class="tab">Información de usuario</button>
+    <button class="tab">Membresía</button>
+    <button class="tab active">Compras</button>
+    <button class="tab">Estadísticas</button>
+  </div>
+
+  <!-- Subpestañas -->
+  <div class="subtabs-container">
+    <button class="subtab active" onclick="mostrarTabla('proceso')">Compras en proceso</button>
+    <button class="subtab" onclick="mostrarTabla('concretadas')">Compras concretadas</button>
+  </div>
+
+  <!-- TABLA DE COMPRAS EN PROCESO -->
+  <div id="tabla-proceso" class="tabla-container">
+
+    <div class="table-responsive">
+      <table class="table table-bordered align-middle tabla-custom">
+        <thead>
+          <tr>
+            <th>Usuario</th>
+            <th>Título de publicación</th>
+            <th>Monto total</th>
+            <th>Fotos de publicación</th>
+            <th>Fecha de compra</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>Ricardo Iman…</td>
+            <td>Título del producto</td>
+            <td>$00</td>
+            <td><img src="../images/imagen.png" class="img-tabla"></td>
+            <td>27/09/2025</td>
+            <td>
+              <a href="#" class="ver-detalles">Ver detalles</a>
+              <button class="btn-cancelar">Cancelar</button>
+            </td>
+          </tr>
+
+          <tr>
+            <td>Ricardo Iman…</td>
+            <td>Título del producto</td>
+            <td>$00</td>
+            <td><img src="../images/imagen.png" class="img-tabla"></td>
+            <td>27/09/2025</td>
+            <td>
+              <a href="#" class="ver-detalles">Ver detalles</a>
+              <button class="btn-cancelar">Cancelar</button>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
     </div>
-  </nav>
-</header>
-<!-- ---------------- FIN HEADER ---------------- -->
 
-<!-- Botón regresar -->
-<a href="pagomenbre.html" class="btn-regresar">
-  <i class="fa-solid fa-arrow-left"></i>
-</a>
-
-<!-- Pestañas -->
-<div class="tabs-usuario">
-  <button class="tab">Información de usuario</button>
-  <button class="tab">Membresía</button>
-  <button class="tab active">Compras</button>
-  <button class="tab">Estadísticas</button>
-</div>
-
-<!-- Subpestañas -->
-<div class="subtabs-container">
-  <button class="subtab active" onclick="mostrarTabla('proceso')">Compras en proceso</button>
-  <button class="subtab" onclick="mostrarTabla('concretadas')">Compras concretadas</button>
-</div>
-
-<!-- TABLA DE COMPRAS EN PROCESO -->
-<div id="tabla-proceso" class="tabla-container">
-
-  <div class="table-responsive">
-    <table class="table table-bordered align-middle tabla-custom">
-      <thead>
-        <tr>
-          <th>Usuario</th>
-          <th>Título de publicación</th>
-          <th>Monto total</th>
-          <th>Fotos de publicación</th>
-          <th>Fecha de compra</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr>
-          <td>Ricardo Iman…</td>
-          <td>Título del producto</td>
-          <td>$00</td>
-          <td><img src="../images/imagen.png" class="img-tabla"></td>
-          <td>27/09/2025</td>
-          <td>
-            <a href="#" class="ver-detalles">Ver detalles</a>
-            <button class="btn-cancelar">Cancelar</button>
-          </td>
-        </tr>
-
-        <tr>
-          <td>Ricardo Iman…</td>
-          <td>Título del producto</td>
-          <td>$00</td>
-          <td><img src="../images/imagen.png" class="img-tabla"></td>
-          <td>27/09/2025</td>
-          <td>
-            <a href="#" class="ver-detalles">Ver detalles</a>
-            <button class="btn-cancelar">Cancelar</button>
-          </td>
-        </tr>
-
-      </tbody>
-    </table>
   </div>
 
-</div>
+  <!-- TABLA DE COMPRAS CONCRETADAS -->
+  <div id="tabla-concretadas" class="tabla-container d-none">
 
-<!-- TABLA DE COMPRAS CONCRETADAS -->
-<div id="tabla-concretadas" class="tabla-container d-none">
+    <div class="table-responsive">
+      <table class="table table-bordered align-middle tabla-custom">
+        <thead>
+          <tr>
+            <th>Usuario</th>
+            <th>Título de publicación</th>
+            <th>Monto total</th>
+            <th>Fotos de publicación</th>
+            <th>Fecha de compra</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
 
-  <div class="table-responsive">
-    <table class="table table-bordered align-middle tabla-custom">
-      <thead>
-        <tr>
-          <th>Usuario</th>
-          <th>Título de publicación</th>
-          <th>Monto total</th>
-          <th>Fotos de publicación</th>
-          <th>Fecha de compra</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
+        <tbody>
+          <tr>
+            <td>Ricardo Iman…</td>
+            <td>Título del producto</td>
+            <td>$120</td>
+            <td><img src="../images/imagen.png" class="img-tabla"></td>
+            <td>15/08/2025</td>
+            <td>
+              <a href="#" class="ver-detalles">Ver detalles</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-      <tbody>
-        <tr>
-          <td>Ricardo Iman…</td>
-          <td>Título del producto</td>
-          <td>$120</td>
-          <td><img src="../images/imagen.png" class="img-tabla"></td>
-          <td>15/08/2025</td>
-          <td>
-            <a href="#" class="ver-detalles">Ver detalles</a>
-          </td>
-        </tr>
-      </tbody>
-    </table>
   </div>
 
-</div>
+  <!-- Footer -->
+  <footer class="pie-pagina">
+    <div class="d-flex justify-content-end mb-2">
+      <img src="../images/X.png" />
+      <img src="../images/instragram.png" />
+      <img src="../images/facebook.png" />
+    </div>
 
-<!-- Footer -->
-<footer class="pie-pagina">
-  <div class="d-flex justify-content-end mb-2">
-    <img src="../images/X.png" />
-    <img src="../images/instragram.png" />
-    <img src="../images/facebook.png" />
-  </div>
+    <p><strong>Contactos:</strong></p>
+    <p class="mb-0">📞 9613064346</p>
+    <p>✉ 251243@ids.upchiapas.edu.mx</p>
+  </footer>
 
-  <p><strong>Contactos:</strong></p>
-  <p class="mb-0">📞 9613064346</p>
-  <p>✉ 251243@ids.upchiapas.edu.mx</p>
-</footer>
-
-<script>
-  function mostrarTabla(tipo) {
-    document.getElementById("tabla-proceso").classList.toggle("d-none", tipo !== "proceso");
-    document.getElementById("tabla-concretadas").classList.toggle("d-none", tipo !== "concretadas");
-
-    const subtabs = document.querySelectorAll(".subtab");
-    subtabs.forEach(btn => btn.classList.remove("active"));
-
-    if (tipo === "proceso") {
-      subtabs[0].classList.add("active");
-    } else {
-      subtabs[1].classList.add("active");
-    }
-
-    document.querySelectorAll(".tabs-usuario .tab").forEach((tab, index) => {
-    tab.addEventListener("click", () => {
-      if(index === 0) window.location.href = "infousuario.html";
-      if(index === 1) window.location.href = "pagomenbre.html";
-      if(index === 2) window.location.href = "compraconcretadas.html";
-      if(index === 2) window.location.href = "revisonmembrecia.html";
-
-
-      if(index === 3) window.location.href = "estadistica.html";
-    });
-  });
-  
-  }
-</script>
+  <script src="../js/compraconcretadas.js"></script>
 
 </body>
+
 </html>

@@ -1,145 +1,208 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Responder Queja</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Responder Queja</title>
 
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 
-    <!-- Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    <!-- TU CSS -->
-    <link rel="stylesheet" href="../style/Queja.css">
+  <!-- TU CSS -->
+  <link rel="stylesheet" href="../style/Queja.css">
 
 </head>
+
 <body>
 
-<!-- NAVBAR -->
-<header>
-  <nav>
-    <div class="container-fluid pt-3 contenedor-nav">
-      <div class="row">
+  <!-- NAVBAR -->
+  <header>
+    <nav>
+      <div class="container-fluid pt-3 contenedor-nav">
+        <div class="row">
 
-        <!-- LOGO -->
-        <div class="col-2">
-          <a href="#">
-            <img class="navbar-brand-img" src="../images/LogoUpsitos.png" alt="Logo">
-          </a>
-        </div>
+          <!-- LOGO -->
+          <div class="col-2">
+            <a href="#">
+              <img class="navbar-brand-img" src="../images/LogoUpsitos.png" alt="Logo">
+            </a>
+          </div>
 
-        <!-- BUSCADOR -->
-        <div class="col-6 col-md-6 mx-auto">
-          <form class="position-relative d-flex align-items-center" role="search">
-            <input class="form-control form-control-search rounded-5"
-                   type="search" placeholder="Buscar..." aria-label="Buscar" />
-            <button type="submit"
-                    class="btn position-absolute end-0 me-2 p-0 border-0 bg-transparent">
-              <img src="../images/lupa.png" alt="Buscar" style="width:25px; height:25px;">
+          <!-- BUSCADOR -->
+          <div class="col-6 col-md-6 mx-auto">
+            <form class="position-relative d-flex align-items-center" role="search">
+              <input class="form-control form-control-search rounded-5" type="search" placeholder="Buscar..."
+                aria-label="Buscar" />
+              <button type="submit" class="btn position-absolute end-0 me-2 p-0 border-0 bg-transparent">
+                <img src="../images/lupa.png" alt="Buscar" style="width:25px; height:25px;">
+              </button>
+            </form>
+          </div>
+
+          <!-- ICONOS DERECHA -->
+          <div class="col-2 text-end herramientas d-flex justify-content-end">
+
+            <!-- BOTÓN USUARIO -->
+            <button type="button" class="btn border-0 bg-transparent me-3" onclick="window.location.href='ventas.html'">
+              <img class="img-user" src="../images/usuario.png" alt="Usuario" style="width:35px; height:35px;">
             </button>
-          </form>
-        </div>
 
-        <!-- ICONOS DERECHA -->
-        <div class="col-2 text-end herramientas d-flex justify-content-end">
+            <!-- BOTÓN CAMPANA -->
+            <button type="button" class="btn border-0 bg-transparent me-2" onclick="window.location.href='#'">
+              <img class="img-notificacion" src="../images/campana (2).png" alt="Notificaciones"
+                style="width:30px; height:30px;">
+            </button>
 
-          <!-- BOTÓN USUARIO -->
-          <button type="button"
-                  class="btn border-0 bg-transparent me-3"
-                  onclick="window.location.href='ventas.html'">
-            <img class="img-user" src="../images/usuario.png" alt="Usuario"
-                 style="width:35px; height:35px;">
-          </button>
-
-          <!-- BOTÓN CAMPANA -->
-          <button type="button"
-                  class="btn border-0 bg-transparent me-2"
-                  onclick="window.location.href='#'">
-            <img class="img-notificacion" src="../images/campana (2).png"
-                 alt="Notificaciones" style="width:30px; height:30px;">
-          </button>
-
+          </div>
         </div>
       </div>
-    </div>
-  </nav>
-</header>
+    </nav>
+  </header>
 
-<!-- Botón regresar -->
-<a href="comprar.html" class="boton-regresar">
+  <!-- Botón regresar -->
+  <a href="comprar.html" class="boton-regresar">
     <i class="fa-solid fa-chevron-left"></i>
-</a>
+  </a>
 
-<!-- Contenido principal -->
-<div class="container contenedor-queja mt-4">
+  <!-- Contenido principal -->
+  <div class="container contenedor-queja mt-4">
 
     <!-- Botón de traducción -->
-   
+
 
     <h5 id="txtTitulo" class="fw-bold mb-3">
-        Si tienes alguna queja o sugerencia puedes escribirlo en el siguiente apartado
+      Si tienes alguna queja o sugerencia puedes escribirlo en el siguiente apartado
     </h5>
 
     <label id="txtDescripcion" class="fw-semibold">Describe el problema...</label>
 
-    <textarea id="txtArea" class="form-control mt-2 area-queja" rows="8" placeholder="Escribe tu problema aquí..."></textarea>
+    <textarea id="txtArea" class="form-control mt-2 area-queja" rows="8"
+      placeholder="Escribe tu problema aquí..."></textarea>
 
     <button id="btnEnviar" class="btn btn-enviar mt-3">
-        Enviar <i class="fa-solid fa-paper-plane ms-1"></i>
+      Enviar <i class="fa-solid fa-paper-plane ms-1"></i>
     </button>
 
-</div>
+  </div>
 
-<!-- Footer -->
-<footer class="pie-pagina mt-5">  
-    <div class="d-flex justify-content-end mb-2 redes-footer">  
-      <img src="../images/X.png" alt="X">  
-      <img src="../images/instragram.png" alt="Instagram">  
-      <img src="../images/facebook.png" alt="Facebook">  
-    </div>  
-    <p><strong>Contactos:</strong></p>  
-    <p class="mb-0">📞 9613064346</p>  
-    <p>✉ 251243@ids.upchiapas.edu.mx</p>  
-</footer>
+  <!-- Footer -->
+  <footer class="pie-pagina mt-5">
+    <div class="d-flex justify-content-end mb-2 redes-footer">
+      <img src="../images/X.png" alt="X">
+      <img src="../images/instragram.png" alt="Instagram">
+      <img src="../images/facebook.png" alt="Facebook">
+    </div>
+    <!DOCTYPE html>
+    <html lang="es">
 
-<!-- SCRIPT AÑADIDO -->
-<script>
-    let idioma = "es";
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>Responder Queja</title>
 
-    const textos = {
-        es: {
-            titulo: "Si tienes alguna queja o sugerencia puedes escribirlo en el siguiente apartado",
-            descripcion: "Describe el problema...",
-            placeholder: "Escribe tu problema aquí...",
-            enviar: "Enviar",
-            traducir: "Traducir a Inglés"
-        },
-        en: {
-            titulo: "If you have any complaint or suggestion you can write it in the following section",
-            descripcion: "Describe the issue...",
-            placeholder: "Write your issue here...",
-            enviar: "Send",
-            traducir: "Translate to Spanish"
-        }
-    };
+      <!-- Bootstrap -->
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 
-    document.getElementById("btnTranslate").addEventListener("click", () => {
-        idioma = idioma === "es" ? "en" : "es";
+      <!-- Icons -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-        document.getElementById("txtTitulo").innerText = textos[idioma].titulo;
-        document.getElementById("txtDescripcion").innerText = textos[idioma].descripcion;
-        document.getElementById("txtArea").placeholder = textos[idioma].placeholder;
-        document.getElementById("btnEnviar").innerHTML = textos[idioma].enviar + ' <i class="fa-solid fa-paper-plane ms-1"></i>';
-        document.getElementById("btnTranslate").innerText = textos[idioma].traducir;
-    });
+      <!-- TU CSS -->
+      <link rel="stylesheet" href="../style/Queja.css">
 
-    // MENSAJE EMERGENTE AL ENVIAR
-    document.getElementById("btnEnviar").addEventListener("click", () => {
-        alert(idioma === "es" ? "¡Tu queja ha sido enviada correctamente!" : "Your complaint has been successfully sent!");
-    });
-</script>
+    </head>
 
-</body>
-</html>
+    <body>
+
+      <!-- NAVBAR -->
+      <header>
+        <nav>
+          <div class="container-fluid pt-3 contenedor-nav">
+            <div class="row">
+
+              <!-- LOGO -->
+              <div class="col-2">
+                <a href="#">
+                  <img class="navbar-brand-img" src="../images/LogoUpsitos.png" alt="Logo">
+                </a>
+              </div>
+
+              <!-- BUSCADOR -->
+              <div class="col-6 col-md-6 mx-auto">
+                <form class="position-relative d-flex align-items-center" role="search">
+                  <input class="form-control form-control-search rounded-5" type="search" placeholder="Buscar..."
+                    aria-label="Buscar" />
+                  <button type="submit" class="btn position-absolute end-0 me-2 p-0 border-0 bg-transparent">
+                    <img src="../images/lupa.png" alt="Buscar" style="width:25px; height:25px;">
+                  </button>
+                </form>
+              </div>
+
+              <!-- ICONOS DERECHA -->
+              <div class="col-2 text-end herramientas d-flex justify-content-end">
+
+                <!-- BOTÓN USUARIO -->
+                <button type="button" class="btn border-0 bg-transparent me-3"
+                  onclick="window.location.href='ventas.html'">
+                  <img class="img-user" src="../images/usuario.png" alt="Usuario" style="width:35px; height:35px;">
+                </button>
+
+                <!-- BOTÓN CAMPANA -->
+                <button type="button" class="btn border-0 bg-transparent me-2" onclick="window.location.href='#'">
+                  <img class="img-notificacion" src="../images/campana (2).png" alt="Notificaciones"
+                    style="width:30px; height:30px;">
+                </button>
+
+              </div>
+            </div>
+          </div>
+        </nav>
+      </header>
+
+      <!-- Botón regresar -->
+      <a href="comprar.html" class="boton-regresar">
+        <i class="fa-solid fa-chevron-left"></i>
+      </a>
+
+      <!-- Contenido principal -->
+      <div class="container contenedor-queja mt-4">
+
+        <!-- Botón de traducción -->
+
+
+        <h5 id="txtTitulo" class="fw-bold mb-3">
+          Si tienes alguna queja o sugerencia puedes escribirlo en el siguiente apartado
+        </h5>
+
+        <label id="txtDescripcion" class="fw-semibold">Describe el problema...</label>
+
+        <textarea id="txtArea" class="form-control mt-2 area-queja" rows="8"
+          placeholder="Escribe tu problema aquí..."></textarea>
+
+        <button id="btnEnviar" class="btn btn-enviar mt-3">
+          Enviar <i class="fa-solid fa-paper-plane ms-1"></i>
+        </button>
+
+      </div>
+
+      <!-- Footer -->
+      <footer class="pie-pagina mt-5">
+        <div class="d-flex justify-content-end mb-2 redes-footer">
+          <img src="../images/X.png" alt="X">
+          <img src="../images/instragram.png" alt="Instagram">
+          <img src="../images/facebook.png" alt="Facebook">
+        </div>
+        <p><strong>Contactos:</strong></p>
+        <p class="mb-0">📞 9613064346</p>
+        <p>✉ 251243@ids.upchiapas.edu.mx</p>
+      </footer>
+
+      <!-- SCRIPT AÑADIDO -->
+      <script src="../js/Queja.js"></script>
+
+    </body>
+
+    </html>
