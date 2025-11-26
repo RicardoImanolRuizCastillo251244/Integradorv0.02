@@ -121,14 +121,36 @@
 }
 /*
 */
-footer{
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    background-color: #FC4B08
-}
+/* FOOTER */
+    .pie-pagina {  
+      background-color: #fc4b08;  
+      color: white;  
+      text-align: left;  
+      padding: 20px;  
+      margin-top: 50px;  
+    }  
+    
+    .pie-pagina img {  
+      width: 35px;  
+      margin: 0 5px;  
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 576px) {
+      .contenedor-login {
+        margin: 20px;
+        padding: 30px 20px;
+      }
+
+      .avatar-circle {
+        width: 100px;
+        height: 100px;
+      }
+
+      .avatar-circle i {
+        font-size: 50px;
+      }
+    }
 /*
 SECCION DESCRIPCION DE PRODUCTO
 */
@@ -142,4 +164,8 @@ SECCION DESCRIPCION DE PRODUCTO
     font-weight: bold;
     color: #FC4B08;
     font-size: 2em;
+}
+
+#lista-productos{
+    text-align: center;
 }

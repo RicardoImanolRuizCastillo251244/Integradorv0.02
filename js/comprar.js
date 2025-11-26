@@ -1,3 +1,4 @@
+import { BASE_URL } from "./api_url.js";
 const btncomprar = document.getElementById('btn_comprar');
 const btnQueja = document.getElementById('btn_queja')
 btncomprar.addEventListener('click', (e) => {
@@ -48,7 +49,7 @@ select.addEventListener("change", () => {
     const idObtenido = urlParams.get('id');
 
     try {
-        const response = await fetch('http://3.217.116.105:7000/publicacion/'+idObtenido);
+        const response = await fetch(BASE_URL+'publicacion/'+idObtenido);
         const producto = await response.json()
         console.log(await producto)
         renderProducto(producto)

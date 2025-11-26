@@ -1,3 +1,9 @@
+import { BASE_URL } from "./api_url.js";
+
+document.getElementById('main')
+
+
+
 document.addEventListener('DOMContentLoaded', () => {
     const listaProductos = document.getElementById('lista-productos');
     const searchForm = document.getElementById('searchForm');
@@ -40,7 +46,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (btnNoti) {
         btnNoti.addEventListener('click', () => {
-            window.location.href = '/pages/notificacion.html';
+            const userId = localStorage.getItem('userId');
+            if (userId) {
+                window.location.href = '/pages/infousuario.html';
+            } else {
+                window.location.href = '/pages/login.html';
+            }
         });
     }
 
@@ -75,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function fetchPublications() {
         try {
             console.log('Iniciando fetch de publicaciones...');
-            const response = await fetch('http://3.217.116.105:7000/publicacion');
+            const response = await fetch(BASE_URL+'publicacion');
             console.log('Respuesta status:', response.status);
 
             if (response.ok) {
@@ -143,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const cardCol = document.createElement('div');
-            cardCol.className = 'col-12 col-sm-6 col-md-4 col-lg-3 mb-4'; // Responsive grid
+            cardCol.className = 'col-12 col-sm-6 col-md-4 col-lg-3 mb-4 mx-auto'; // Responsive grid
 
             cardCol.innerHTML = `
                 <a href="/pages/comprar.html?id=${pub.id_publicacion}" class="text-decoration-none text-dark">
