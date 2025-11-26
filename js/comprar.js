@@ -49,10 +49,14 @@ select.addEventListener("change", () => {
     const idObtenido = urlParams.get('id');
 
     try {
-        const response = await fetch(BASE_URL+'publicacion/'+idObtenido);
+        const response = await fetch(BASE_URL+'publicacion/'+idObtenido)
         const producto = await response.json()
+        const responseUser = await fetch(BASE_URL+'usuario/'+producto.id_vendedor)
+        const vendedor = await responseUser.json()
         console.log(await producto)
+        console.log(vendedor)
         renderProducto(producto)
+        renderDetallesVendedor(vendedor)
 
     } catch (error) {
         console.error('Error de red:', error);
@@ -62,7 +66,6 @@ select.addEventListener("change", () => {
         const descripcion = document.getElementById('card-text')
         const titulo = document.getElementById('card-title')
         const precio = document.getElementById('precio')
-        console.log(precio)
         let img = document.getElementById('productoPublicado')
         let imageSrc = " "
 
@@ -89,6 +92,22 @@ select.addEventListener("change", () => {
             
         img.src = imageSrc
 
+    }
+
+    function renderDetallesVendedor(vendedor){
+        const infor = document.getElementById('vendedor')
+
+        const info = document.createElement('div') 
+        info.innerHTML=
+                `<h2 id="card-title"></h2>
+                <h1 id="precio" class="precio"></h1>
+
+                <p><i id="horario" class="fa-solid fa-clock"></i> Horario de entrega: <strong>00:00</strong></p>
+                <p><i class="fa-solid fa-user"></i> ${vendedor.nombre_usuario} </p>
+                <p><i id="calificacion" class="fa-solid fa-star"></i> </p>`
+        console.log(info)
+
+        infor.appendChild(info)
     }
 
 });

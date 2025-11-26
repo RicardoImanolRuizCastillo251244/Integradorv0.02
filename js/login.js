@@ -1,3 +1,4 @@
+import { BASE_URL } from "./api_url.js";
 // Toggle mostrar/ocultar contraseña
 const togglePassword = document.getElementById('togglePassword');
 const passwordInput = document.getElementById('password');
@@ -73,7 +74,7 @@ loginForm.addEventListener('submit', async function (e) {
     submitBtn.disabled = true;
     submitBtn.textContent = 'Iniciando sesión...';
 
-    const url = 'http://3.217.116.105:7000/auth/login';
+    const url = BASE_URL+'auth/login';
     const credentials = {
       correo_usuario: emailValue,
       contrasena: passwordValue
@@ -92,7 +93,7 @@ loginForm.addEventListener('submit', async function (e) {
     if (response.ok) { // 200 OK
       // Login exitoso
       console.log('Login exitoso');
-
+      console.log(response)
       // Guardar token y userId en localStorage
       localStorage.setItem('authToken', data.token);
       localStorage.setItem('userId', data.userId);

@@ -1,3 +1,4 @@
+import { BASE_URL } from "./api_url.js";
 document.addEventListener('DOMContentLoaded', () => {
     // Elementos del DOM
     const formQueja = document.getElementById('formQueja');
@@ -134,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
             btnEnviar.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Enviando...';
 
             // 4. Fetch
-            const response = await fetch('http://3.217.116.105:7000/queja-usuario', {
+            const response = await fetch(BASE_URL+'queja-usuario', {
                 method: 'POST',
                 headers: {
                     'Authorization': authToken
@@ -205,7 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
             btnEnviar.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Enviando...';
 
             // 4. Fetch
-            const response = await fetch('http://3.217.116.105:7000/queja-venta', {
+            const response = await fetch(BASE_URL+'queja-venta', {
                 method: 'POST',
                 headers: {
                     'Authorization': authToken

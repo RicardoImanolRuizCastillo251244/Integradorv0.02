@@ -1,3 +1,4 @@
+import { BASE_URL} from "./api_url.js";
 document.addEventListener('DOMContentLoaded', async () => {
     const tablaBody = document.getElementById('tablaBody');
     const authToken = localStorage.getItem('authToken');
@@ -8,7 +9,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     try {
-        const response = await fetch('http://3.217.116.105:7000/usuario-membresia', {
+        const response = await fetch(BASE_URL+'usuario-membresia', {
             headers: {
                 'Authorization': authToken
             }
@@ -66,7 +67,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (accion === 'declinar') {
             try {
-                const response = await fetch(`http://3.217.116.105:7000/usuario-membresia/${id}`, {
+                const response = await fetch(`${BASE_URL}usuario-membresia/${id}`, {
                     method: 'DELETE',
                     headers: { 'Authorization': authToken }
                 });

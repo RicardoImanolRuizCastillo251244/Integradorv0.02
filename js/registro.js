@@ -1,3 +1,4 @@
+import { BASE_URL } from "./api_url.js";
 // Toggle mostrar/ocultar contraseña
 const togglePassword = document.getElementById('togglePassword');
 const passwordInput = document.getElementById('password');
@@ -85,7 +86,7 @@ registroForm.addEventListener('submit', async function (e) {
         const idRol = tipoUsuarioValue === 'consumidor' ? 1 : 2;
 
         // Construir URL con password como query param
-        const url = `http://3.217.116.105:7000/auth/register?password=${encodeURIComponent(passwordValue)}`;
+        const url = `${BASE_URL}auth/register?password=${encodeURIComponent(passwordValue)}`;
 
         // Datos del body
         const userData = {

@@ -2,7 +2,7 @@ import { BASE_URL } from "./api_url.js";
 
 document.getElementById('main')
 
-
+const contenedor = document.getElementsByClassName('carrusel-contenedor')
 
 document.addEventListener('DOMContentLoaded', () => {
     const listaProductos = document.getElementById('lista-productos');
@@ -88,11 +88,11 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('Iniciando fetch de publicaciones...');
             const response = await fetch(BASE_URL+'publicacion');
             console.log('Respuesta status:', response.status);
-
             if (response.ok) {
                 allPublications = await response.json();
                 console.log('Publicaciones recibidas:', allPublications);
                 renderPublications(allPublications);
+                
             } else {
                 console.error('Error al obtener publicaciones. Status:', response.status);
                 listaProductos.innerHTML = '<p class="text-center">No se pudieron cargar los productos.</p>';
@@ -174,3 +174,30 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+
+const search = document.getElementById("search")
+
+search.addEventListener("click", () => {
+    alert("Buscando")
+    e.preventDefault();
+    const searchTerm = searchInput.value.trim().toLowerCase();
+
+        let filtered = allPublications;
+
+        // Filtrar por categoría
+        if (currentCategory !== 'todo') {
+            // Asumimos que id_categoria es número en la BD y data-categoria es string
+            filtered = filtered.filter(p => p.id_categoria == currentCategory);
+        }
+
+        // Filtrar por búsqueda
+        if (searchTerm) {
+            filtered = filtered.filter(p =>
+                p.titulo_publicacion.toLowerCase().includes(searchTerm)
+            );
+        }
+
+        renderPublications(filtered);
+    
+})

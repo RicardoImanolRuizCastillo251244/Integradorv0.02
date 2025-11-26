@@ -1,3 +1,4 @@
+import { BASE_URL} from "./api_url.js";
 document.addEventListener('DOMContentLoaded', async function (){
 
     const queryString = window.location.search;
@@ -7,7 +8,7 @@ document.addEventListener('DOMContentLoaded', async function (){
     const idObtenido = urlParams.get('id');
 
     try {
-        const response = await fetch('http://3.217.116.105:7000/publicacion/'+idObtenido);
+        const response = await fetch(BASE_URL+'publicacion/'+idObtenido);
         const producto = await response.json()
         console.log(await producto)
         renderProducto(producto)

@@ -172,3 +172,7 @@ header, nav.navbar {
   color: #FC4B08;
   font-size: 2.8em;
 }
+
+#productoPublicado{
+  height: 400px;
+}

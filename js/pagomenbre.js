@@ -1,3 +1,4 @@
+import { BASE_URL } from "./api_url.js";
 document.addEventListener('DOMContentLoaded', async () => {
     const contenedorMembresias = document.querySelector('.contenido');
     const btnPagar = document.querySelector('.btn-pagar');
@@ -14,7 +15,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Cargar planes
     try {
-        const response = await fetch('http://3.217.116.105:7000/membresia-tipo');
+        const response = await fetch(BASE_URL+'membresia-tipo');
         if (response.ok) {
             const planes = await response.json();
             renderPlanes(planes);
@@ -75,7 +76,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 id_membresia_tipo: parseInt(idMembresiaTipo)
             };
 
-            const response = await fetch('http://3.217.116.105:7000/usuario-membresia', {
+            const response = await fetch(BASE_URL+'usuario-membresia', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

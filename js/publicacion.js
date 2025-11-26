@@ -1,3 +1,4 @@
+import { BASE_URL} from "./api_url.js";
 document.addEventListener('DOMContentLoaded', () => {
     // Referencias a elementos del DOM
     const form = document.getElementById('form-publicar');
@@ -113,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // Realizar petición
-            const response = await fetch('http://3.217.116.105:7000/publicacion', {
+            const response = await fetch(BASE_URL+'publicacion', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,

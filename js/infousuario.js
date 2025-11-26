@@ -1,3 +1,4 @@
+import { BASE_URL } from "./api_url.js";
 document.addEventListener('DOMContentLoaded', async () => {
     const userId = localStorage.getItem('userId');
     const authToken = localStorage.getItem('authToken');
@@ -10,7 +11,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.log("Sesión cerrada. Token y UserId eliminados.");
 
     // 2. Redirigir al login
-    window.location.href = 'login.html'; 
+    window.location.href = './pages/login.html'; 
     }
 
     //función accesible globalmente (si el botón usa onclick="logout()")
@@ -32,7 +33,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         // Fetch datos del usuario
         // Asumimos que el endpoint es /usuario/{id}
-        const response = await fetch(`http://3.217.116.105:7000/usuario/${userId}`, {
+        const response = await fetch(`${BASE_URL}usuario/${userId}`, {
             headers: {
                 'Authorization': authToken // Enviar token si es necesario
             }
@@ -80,3 +81,11 @@ window.togglePass = function () {
         campoPass.textContent = '●●●●●●';
     }
 };
+
+const logout = document.getElementById("logoutButton")
+
+logout.addEventListener("click", () => {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('userId');
+    window.location.href = "./login.html"
+})

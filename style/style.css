@@ -169,3 +169,7 @@ SECCION DESCRIPCION DE PRODUCTO
 #lista-productos{
     text-align: center;
 }
+
+*{
+    font-display: swap;
+}
