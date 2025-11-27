@@ -95,16 +95,14 @@ select.addEventListener("change", () => {
     }
 
     function renderDetallesVendedor(vendedor){
-        const infor = document.getElementById('vendedor')
+        const infor = document.getElementById('contenedorDetalles')
 
         const info = document.createElement('div') 
         info.innerHTML=
-                `<h2 id="card-title"></h2>
-                <h1 id="precio" class="precio"></h1>
-
-                <p><i id="horario" class="fa-solid fa-clock"></i> Horario de entrega: <strong>00:00</strong></p>
+                `<p><i id="horario" class="fa-solid fa-clock"></i> Horario de entrega: <strong>00:00</strong></p>
                 <p><i class="fa-solid fa-user"></i> ${vendedor.nombre_usuario} </p>
-                <p><i id="calificacion" class="fa-solid fa-star"></i> </p>`
+                <p><i id="calificacion" class="fa-solid fa-star"></i> </p>
+                <p><i id="cantidad" class="fa-solid fa-box"></i> Cantidad: <strong>1 Unidad</strong> (10+ disp.)</p>`
         console.log(info)
 
         infor.appendChild(info)
