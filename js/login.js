@@ -93,10 +93,14 @@ loginForm.addEventListener('submit', async function (e) {
     if (response.ok) { // 200 OK
       // Login exitoso
       console.log('Login exitoso');
-      console.log(response)
+      console.log(" json", response)
+      console.log(data);
+      
       // Guardar token y userId en localStorage
       localStorage.setItem('authToken', data.token);
       localStorage.setItem('userId', data.userId);
+      localStorage.setItem("rol", data.rol)
+
 
       // Redirigir a la página principal o dashboard
       // Ajusta esta ruta según tu estructura (ej. index.html o infousuario.html)

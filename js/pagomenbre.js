@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const response = await fetch(BASE_URL+'membresia-tipo');
         if (response.ok) {
             const planes = await response.json();
+            console.log(planes)
             renderPlanes(planes);
         } else {
             contenedorMembresias.innerHTML = '<p>Error al cargar planes de membresía.</p>';

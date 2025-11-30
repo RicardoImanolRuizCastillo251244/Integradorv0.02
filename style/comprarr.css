@@ -1,178 +1,405 @@
-body {
-  font-family: "Open Sauce One", sans-serif;
-  background-color: #fff;
-}
+/* ============================================ */
+/* ESTILOS PARA LA SECCIÓN MAIN - COMPRA */
+/* ============================================ */
 
-/* NAVBAR */
-.contenedor-nav {
-  background-color: #fc4b08;
-  color: white;
-  padding: 10px 20px;
-}
-
-.navbar-brand-img {
-  height: 70px;
-}
-
-.form-control-search {
-  border-radius: 25px;
-  padding-right: 45px;
-  border: none;
-  box-shadow: 0 0 4px rgba(0,0,0,0.1);
-}
-
-.img-user, .img-notificacion {
-  transition: .3s;
-  cursor: pointer;
-}
-
-.img-user:hover, .img-notificacion:hover {
-  transform: scale(1.1);
-  filter: brightness(1.2);
-}
-
-/* BOTÓN FLOTANTE */
+/* BOTÓN REGRESAR FLOTANTE */
 .boton-regresar {
-  position: fixed;
-  bottom: 120px;
-  left: 20px;
-  background-color: white;
-  border: 3px solid #fc4b08;
-  width: 55px;
-  height: 55px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: black;
-  z-index: 1500;
-  text-decoration: none;
-  transition: 0.3s;
-  text-decoration: none;
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    background: white;
+    border: 3px solid #fc4b08;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1500;
+    text-decoration: none;
+    box-shadow: 0 4px 15px rgba(252, 75, 8, 0.3);
+    transition: all 0.3s;
 }
 
-.btn-regresar i{
-  font-size: 28px;
-  color: #fc4b08;
+.boton-regresar i {
+    font-size: 24px;
+    color: #fc4b08;
 }
 
 .boton-regresar:hover {
-  transform: scale(1.1);
-  background-color: #f4f0f0;
-}
-.btn-regresar:hover i {
-  color:#181212;
+    transform: scale(1.15) rotate(-5deg);
+    background: #fc4b08;
+    box-shadow: 0 6px 20px rgba(252, 75, 8, 0.4);
 }
 
-/* PRECIO */
-.precio {
-  color: #fc4b08;
-  font-weight: 900;
+.boton-regresar:hover i {
+    color: white;
 }
 
-/* BOTONES */
+/* BREADCRUMB */
+.breadcrumb-custom {
+    background: transparent;
+    padding: 15px 0;
+    margin-bottom: 20px;
+}
+
+.breadcrumb-custom a {
+    color: #fc4b08;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.breadcrumb-custom a:hover {
+    text-decoration: underline;
+}
+
+.breadcrumb-custom .active {
+    color: #666;
+}
+
+/* CONTENEDOR PRINCIPAL DEL PRODUCTO */
+.producto-container {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    padding: 40px;
+    margin-top: 30px;
+    margin-bottom: 50px;
+}
+
+/* TÍTULOS */
+.titulo-principal {
+    font-family: 'open sauce one', sans-serif;
+    font-weight: 900;
+    color: #fc4b08;
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    line-height: 1.2;
+}
+
+.subtitulo-descripcion {
+    color: #666;
+    font-size: 1.1em;
+    margin-bottom: 30px;
+    line-height: 1.5;
+}
+
+/* IMAGEN DEL PRODUCTO */
+.imagen-producto-wrapper {
+    position: relative;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.12);
+    background: #f8f9fa;
+}
+
+#productoPublicado {
+    width: 100%;
+    height: 450px;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+    display: block;
+}
+
+.imagen-producto-wrapper:hover #productoPublicado {
+    transform: scale(1.05);
+}
+
+.badge-nuevo {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: #fc4b08;
+    color: white;
+    padding: 8px 20px;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 0.9em;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(252, 75, 8, 0.4);
+}
+
+/* PRECIO DESTACADO */
+.precio-wrapper {
+    background: linear-gradient(135deg, #fc4b08 0%, #e04006 100%);
+    color: white;
+    padding: 25px;
+    border-radius: 15px;
+    margin-bottom: 25px;
+    box-shadow: 0 6px 20px rgba(252, 75, 8, 0.3);
+}
+
+.precio-label {
+    font-size: 0.9em;
+    opacity: 0.9;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.precio-valor {
+    font-size: 3em;
+    font-weight: 900;
+    line-height: 1;
+}
+
+/* INFORMACIÓN DEL VENDEDOR */
+.info-vendedor {
+    background: linear-gradient(135deg, #fff5f2 0%, #fff 100%);
+    border-left: 4px solid #fc4b08;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+}
+
+.info-vendedor h5 {
+    color: #fc4b08;
+    font-weight: 700;
+    margin-bottom: 15px;
+    font-size: 1.1em;
+}
+
+.info-vendedor p {
+    margin-bottom: 10px;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.95em;
+}
+
+.info-vendedor i {
+    color: #fc4b08;
+    width: 20px;
+    text-align: center;
+}
+
+/* SELECTOR DE CANTIDAD */
+.cantidad-selector {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #e9ecef;
+}
+
+.cantidad-selector label {
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 12px;
+    display: block;
+    font-size: 1em;
+}
+
+.cantidad-controls {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+#cantidadInput {
+    border: 2px solid #fc4b08;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+    transition: all 0.3s;
+}
+
+#cantidadInput:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(252, 75, 8, 0.1);
+    border-color: #e04006;
+}
+
+#cantidadSelect {
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    padding: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    background-color: white;
+}
+
+#cantidadSelect:focus {
+    border-color: #fc4b08;
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(252, 75, 8, 0.1);
+}
+
+#cantidadSelect:hover {
+    border-color: #fc4b08;
+}
+
+/* BOTONES DE ACCIÓN */
+.btn-action {
+    width: 100%;
+    padding: 15px 20px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1.1em;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
 .btn-comprar {
-  background-color: #fc4b08;
-  color: white;
-  font-weight: bold;
-  border-radius: 10px;
-  padding: 10px 25px;
+    background: linear-gradient(135deg, #fc4b08 0%, #e04006 100%);
+    color: white;
+    box-shadow: 0 6px 20px rgba(252, 75, 8, 0.3);
 }
 
 .btn-comprar:hover {
-  background-color: #e04006;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(252, 75, 8, 0.4);
+    color: white;
+}
+
+.btn-comprar:active {
+    transform: translateY(-1px);
 }
 
 .btn-queja {
-  background-color: #fc4b08;
-  color: white;
-  font-weight: bold;
-  border-radius: 10px;
-  padding: 8px 20px;
+    background: white;
+    color: #fc4b08;
+    border: 2px solid #fc4b08;
 }
 
 .btn-queja:hover {
-  background-color: #e04006;
-}
-
-/* FOOTER */
-.pie-pagina {  
-  background-color: #fc4b08;  
-  color: white;  
-  text-align: left;  
-  padding: 20px;  
-  margin-top: 50px;  
-}  
-
-/* ICONOS DEL FOOTER - AQUÍ CAMBIAS EL TAMAÑO */
-.pie-pagina img {  
-  width: 35px;  
-  margin: 0 5px;  
-} 
-
-/* =============================== */
-/* ESTILOS PARA LA VISTA DE QUEJA */
-/* =============================== */
-
-.contenedor-queja {
-    padding: 15px;
-}
-
-.contenedor-queja h5 {
-    color: #000;
-    font-size: 18px;
-}
-
-textarea {
-    border-radius: 10px;
-    border: 2px solid #fc4b08 !important;
-    padding: 12px;
-    font-size: 15px;
-    resize: none;
-}
-
-.btn-enviar-queja {
-    background-color: #fc4b08;
+    background: #fc4b08;
     color: white;
-    font-weight: bold;
-    padding: 10px 25px;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(252, 75, 8, 0.2);
+}
+
+.btn-queja:active {
+    transform: translateY(0);
+}
+
+/* GRID DE CARACTERÍSTICAS */
+.caracteristicas-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.caracteristica-item {
+    background: #f8f9fa;
+    padding: 20px 15px;
     border-radius: 10px;
+    text-align: center;
+    transition: all 0.3s;
+    border: 1px solid #e9ecef;
 }
 
-.btn-enviar-queja:hover {
-    background-color:#e04006;
+.caracteristica-item:hover {
+    background: #fff5f2;
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(252, 75, 8, 0.15);
 }
 
-
-/* Elimina espacios en el body */
-body {
-    margin: 0;
-    padding: 0;
+.caracteristica-item i {
+    font-size: 2em;
+    color: #fc4b08;
+    margin-bottom: 10px;
+    display: block;
 }
 
-/* Asegura que la barra naranja ocupe todo */
-header, nav.navbar {
-    background-color: #e95b2a !important;
-    width: 100%;
-    margin: 0;
-    padding: 0;
+.caracteristica-item strong {
+    display: block;
+    color: #333;
+    font-size: 0.9em;
+    font-weight: 600;
 }
 
-#card-title{
-
-  font-family: 'open sauce one' !important;
-  font-weight: bold;
-  color: #FC4B08;
-  font-size: 2em;
+/* LOADER */
+.loader-wrapper {
+    text-align: center;
+    padding: 100px 20px;
 }
 
-#card-text{
-  font-family: 'open sauce one' !important;
-  font-weight: bold;
-  color: #FC4B08;
-  font-size: 2.8em;
+.spinner-border {
+    width: 4rem;
+    height: 4rem;
+    border-width: 0.4em;
 }
 
-#productoPublicado{
-  height: 400px;
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .boton-regresar {
+        bottom: 20px;
+        left: 20px;
+        width: 50px;
+        height: 50px;
+    }
+
+    .boton-regresar i {
+        font-size: 20px;
+    }
+
+    .producto-container {
+        padding: 20px;
+    }
+
+    .titulo-principal {
+        font-size: 1.8em;
+    }
+
+    .subtitulo-descripcion {
+        font-size: 1em;
+    }
+
+    .precio-valor {
+        font-size: 2.2em;
+    }
+
+    #productoPublicado {
+        height: 300px;
+    }
+
+    .caracteristicas-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .cantidad-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #cantidadInput, 
+    #cantidadSelect {
+        width: 100% !important;
+    }
+
+    .btn-action {
+        font-size: 1em;
+        padding: 12px 15px;
+    }
+}
+
+@media (max-width: 576px) {
+    .breadcrumb-custom {
+        font-size: 0.85em;
+    }
+
+    .precio-wrapper {
+        padding: 20px;
+    }
+
+    .info-vendedor {
+        padding: 15px;
+    }
+
+    .cantidad-selector {
+        padding: 15px;
+    }
 }

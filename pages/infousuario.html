@@ -42,7 +42,7 @@
                     <div class="col-2 text-end herramientas d-flex justify-content-end">
 
                         <button type="button" class="btn border-0 bg-transparent me-3"
-                            onclick="window.location.href='ventas.html'">
+                            onclick="window.location.href='infousuario.html'">
                             <img class="img-user" src="../images/usuario.png" alt="Usuario"
                                 style="width:35px; height:35px;">
                         </button>
@@ -59,16 +59,16 @@
         </nav>
     </header>
 
-    <a href="ventas.html" class="btn-regresar">
+    <a id="return" class="btn-regresar">
         <i class="fa-solid fa-arrow-left"></i>
     </a>
 
     <div class="tabs-usuario">
-        <button class="tab active">Información de usuario</button>
-        <button class="tab">Membresía</button>
-        <button class="tab">Compras</button>
-        <button class="tab">Estadísticas</button>
-        <button class="tab">Calificación producto</button>
+        <button onclick="window.location.href='infousuario.html'" id="infouser" class="tab active">Información de usuario</button>
+        <button onclick="window.location.href='pagomenbre.html'" id="membresia" class="tab">Membresía</button>
+        <button onclick="window.location.href='compraconcretadas.html'" id="compras" class="tab">Compras</button>
+        <button onclick="window.location.href='estadistica.html'" id="estadisticas" class="tab">Estadísticas</button>
+        <button id="evaluacion" class="tab">Calificación producto</button>
     </div>
 
     <section class="perfil-container">

@@ -2,16 +2,22 @@ import { BASE_URL } from "./api_url.js";
 document.addEventListener('DOMContentLoaded', async () => {
     const userId = localStorage.getItem('userId');
     const authToken = localStorage.getItem('authToken');
+    const rol = localStorage.getItem("rol")
+    const calificacion = document.getElementById("evaluacion")
+
+    if(rol == 2){
+        calificacion.hidden = true
+    }
+
 
     function logout() {
-    // 1. Eliminar los datos de la sesión
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('userId');
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('userId');
+        localStorage.removeItem("rol")
 
-    console.log("Sesión cerrada. Token y UserId eliminados.");
+        console.log("Sesión cerrada. Token, rol y UserId eliminados.");
 
-    // 2. Redirigir al login
-    window.location.href = './pages/login.html'; 
+        window.location.href = './pages/login.html'; 
     }
 
     //función accesible globalmente (si el botón usa onclick="logout()")
@@ -87,5 +93,11 @@ const logout = document.getElementById("logoutButton")
 logout.addEventListener("click", () => {
     localStorage.removeItem('authToken');
     localStorage.removeItem('userId');
+    localStorage.removeItem("rol")
     window.location.href = "./login.html"
+})
+
+const returnFunction = document.getElementById("return")
+returnFunction.addEventListener("click", ()=>{
+    window.location.href = '../index.html'; 
 })

@@ -66,21 +66,20 @@ document.addEventListener('DOMContentLoaded', () => {
         const precio = document.getElementById('precio').value.trim();
         const categoria = document.getElementById('categoria').value;
         const descripcion = document.getElementById('descripcion').value.trim();
+        const existencia = document.getElementById('existencia').value.trim();
         const archivoImagen = imagenInput.files[0];
 
+        console.log(precio>=0)
+            console.log(precio<50000)
         // Validaciones básicas
-        if (!titulo || !precio || !categoria || !descripcion) {
+        if (!titulo || !precio || !categoria || !descripcion || !existencia) {
             mostrarError('Por favor completa todos los campos obligatorios.');
             return;
         }
 
-        // Validar precio numérico
-        // Remover símbolos de moneda si el usuario los puso
-        const precioLimpio = precio.replace(/[^0-9.]/g, '');
-        const precioNum = parseFloat(precioLimpio);
-
-        if (isNaN(precioNum) || precioNum <= 0) {
-            mostrarError('Por favor ingresa un precio válido mayor a 0.');
+        if (precio <= 0 || precio>50000) {
+            
+            mostrarError('Por favor ingresa un precio válido.');
             return;
         }
 
@@ -93,26 +92,25 @@ document.addEventListener('DOMContentLoaded', () => {
             const formData = new FormData();
             formData.append('titulo_publicacion', titulo);
             formData.append('descripcion_publicacion', descripcion);
-            formData.append('precio_producto', precioNum);
+            formData.append('precio_producto', precio);
             formData.append('id_vendedor', idVendedor);
+            formData.append('existencia', existencia);
 
-            // Mapear categoría a ID (si es necesario, o enviar el string si el backend lo maneja así)
-            // Asumiremos que el value del select es lo que espera el backend o necesitamos mapearlo a ID
-            // Según el prompt: "id_categoria (Number)"
-            // Mapeo simple basado en los values del HTML
+            //MAP CATEGORIAS
             const categoriasMap = {
                 'alimentos': 1,
                 'prendas': 2,
                 'materiales': 3,
                 'servicios': 4
             };
-            const idCategoria = categoriasMap[categoria] || 1; // Default a 1 si no coincide
+            const idCategoria = categoriasMap[categoria] || 1;
             formData.append('id_categoria', idCategoria);
 
             if (archivoImagen) {
                 formData.append('foto_publicacion', archivoImagen);
             }
 
+            console.log(formData)
             // Realizar petición
             const response = await fetch(BASE_URL+'publicacion', {
                 method: 'POST',
@@ -189,3 +187,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 3600);
     }
 });
+
+
+const returnFunction = document.getElementById("return")
+
+returnFunction.addEventListener("click", ()=>{
+    window.history.go(-1)
+})

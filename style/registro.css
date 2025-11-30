@@ -1,0 +1,34 @@
+.horario-list-container {
+    background-color:#fff;
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Espacio entre horarios */
+}
+
+.horario-item {
+    display: flex;
+    align-items: center;
+}
+
+.horario-item .form-control-login {
+    flex-grow: 1;
+}
+
+.horario-item .remove-btn {
+    margin-left: 10px;
+    padding: 0 5px;
+    background: none;
+    border: none;
+    color: var(--color-danger, #dc3545); /* Usar un color rojo */
+    cursor: pointer;
+}
+#addHorarioBtn{
+    background-color: #fff;
+}
+
+#addHorarioBtn:hover {
+    background-color: #292828 !important; /* Mantiene el fondo blanco */
+    color: #ffffff; /* Mantiene el color del texto secundario (o el que sea tu color normal) */
+    border-color: #6c757d; /* Mantiene el color del borde */
+    box-shadow: none; /* Evita cualquier sombra o efecto de enfoque */
+}
