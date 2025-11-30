@@ -19,6 +19,7 @@
   <link rel="stylesheet" href="../style/estadistica.css" />
   <link rel="stylesheet" href="../style/main.css" />
   <link rel="stylesheet" href="../style/infousuario.css" />
+  <link rel="stylesheet" href="/style/btnBack.css">
 
 </head>
 
@@ -71,27 +72,34 @@
 
 
   <!-- BOTÓN REGRESAR -->
-  <a href="compraconcretadas.html" class="btn-regresar">
-    <i class="fa-solid fa-arrow-left"></i>
-  </a>
+  <a id="return" class="btn-regresar">
+        <i class="fa-solid fa-arrow-left"></i>
+    </a>
 
   <!-- PESTAÑAS SUPERIORES -->
   <div class="tabs-usuario">
-    <button class="tab">Información de usuario</button>
-    <button class="tab">Membresía</button>
-    <button class="tab">Compras</button>
-    <button class="tab active">Estadísticas</button>
-  </div>
+        <button onclick="window.location.href='infousuario.html'" id="infouser" class="tab">Información de usuario</button>
+        <button onclick="window.location.href='pagomenbre.html'" id="membresia" class="tab">Membresía</button>
+        <button onclick="window.location.href='compraconcretadas.html'" id="compras" class="tab">Compras</button>
+        <button onclick="window.location.href='estadistica.html'" id="estadisticas" class="tab active">Estadísticas</button>
+    </div>
 
   <!-- SUBPESTAÑAS -->
   <div class="subtabs">
-    <button class="subtab active">Informe</button>
-    <button class="subtab">Ventas en proceso</button>
+    <button class="subtab active mt-1 mb-1">Informe</button>
   </div>
 
   <!-- CONTENIDO PRINCIPAL -->
   <section class="container mt-4 estadisticas-contenido">
-    <h3 class="text-center mb-3">Últimos 7 días</h3>
+    <div id="div-select">
+        <select class="campo-dias-select" id="categoria" required>
+          <option value="" disabled selected>Periodo</option>
+          <option value="Dia">Hoy</option>
+          <option value="Semana">Últimos 7 días</option>
+          <option value="Mes">Este mes</option>
+          <option value="tresMeses">3 meses</option>
+        </select>
+      </div>
 
     <!-- Gráfico circular -->
     <div class="text-center">

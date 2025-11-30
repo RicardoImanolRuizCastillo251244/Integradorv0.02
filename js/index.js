@@ -111,8 +111,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (response.ok) {
                 allPublications = await response.json();
                 console.log('Publicaciones recibidas:', allPublications);
-                renderPublications(allPublications);
                 renderCarrusel(allPublications);
+                renderPublications(allPublications);
+                
             } else {
                 console.error('Error al obtener publicaciones. Status:', response.status);
                 mostrarError();
@@ -209,8 +210,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderCarrusel(productos) {
         const contenedor = document.getElementById('carrusel-contenedor')
         if (productos.length < 3) {
+            console.log("ESTOY AQUI TRUE")
             productos.forEach(pub=>{
-                let imageSrc = '/images/productos/4-razones-por-las-que-la-comida-mexicana-es-tan-unica.jpg';
+                let imageSrc = '';
 
                 if (pub.foto_publicacion) {
                     if (Array.isArray(pub.foto_publicacion)) {
@@ -229,14 +231,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 carouselItem.className = 'carousel-item active'
                 
                 carouselItem.innerHTML = ` 
-
-                        <img src="${imageSrc}" class="d-block img-carrusel" alt="FOTO DE producto">`
+                <a href="pages/comprar.html?id=${pub.id_publicacion}">
+                <img src="${imageSrc}" class="d-block img-carrusel" alt="FOTO DE producto">
+                </a>`
                 contenedor.appendChild(carouselItem)
             })
         }
         else {
+            console.log("ESTOY AQUI")
             for (let i = 0; i < 3; i++) {
-                let imageSrc = '/images/productos/4-razones-por-las-que-la-comida-mexicana-es-tan-unica.jpg';
+                let imageSrc = '';
 
                 if (productos[i].foto_publicacion) {
                     if (Array.isArray(productos[i].foto_publicacion)) {

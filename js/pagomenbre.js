@@ -99,4 +99,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             alert('Error de conexión al procesar el pago.');
         }
     });
+
+    const returnFunction = document.getElementById("return")
+    returnFunction.addEventListener("click", ()=>{
+    window.location.href = '../index.html'; 
+    })
 });

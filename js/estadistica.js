@@ -6,3 +6,8 @@ document.querySelectorAll(".tabs-usuario .tab").forEach((tab, index) => {
         if (index === 3) window.location.href = "estadisticas.html";
     });
 });
+
+const returnFunction = document.getElementById("return")
+    returnFunction.addEventListener("click", ()=>{
+    window.location.href = '../index.html'; 
+    })
