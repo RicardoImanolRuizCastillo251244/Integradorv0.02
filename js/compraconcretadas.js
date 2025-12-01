@@ -1,5 +1,6 @@
 import { BASE_URL } from "./api_url.js";
 
+const userId = localStorage.getItem('userId');
 let ventas = [];
 let cargando = false; // Prevenir múltiples cargas
 
@@ -18,7 +19,7 @@ async function fetchVenta() {
     
     try {
         console.log('Iniciando fetch de ventas...');
-        const response = await fetch(BASE_URL + 'venta');
+        const response = await fetch(BASE_URL + 'compras/'+userId);
         console.log('Respuesta status:', response.status);
 
         if (response.ok) {
@@ -37,7 +38,7 @@ async function fetchVenta() {
     }
 }
 
-function mostrarTabla(ventas) {
+function mostrarTabla(compras) {
     const tablaContainer = document.getElementById("tabla-concretadas");
     
     if (!tablaContainer) {
@@ -46,7 +47,7 @@ function mostrarTabla(ventas) {
     }
     
     // Verificar si hay ventas
-    if (!ventas || ventas.length === 0) {
+    if (!compras || compras.length === 0) {
         console.log('No hay compras para mostrar');
         tablaContainer.classList.remove('d-none');
         tablaContainer.innerHTML = `
@@ -70,45 +71,74 @@ function mostrarTabla(ventas) {
     // Limpiar contenido existente
     tbody.innerHTML = '';
 
+    let str = ""
+    let dia=""
+    let mes=""
+    let anio=""
+    let hrs=""
+    let min=""
+
     // Construir las filas de la tabla
-    ventas.forEach((venta, index) => {
-        console.log(`Procesando venta ${index + 1}:`, venta);
+    compras.forEach((compra, index) => {
+        
+        console.log(`Procesando venta ${index + 1}:`, compra);
         
         const fila = document.createElement('tr');
         
-        // Formatear la fecha de manera segura
-        let fechaFormateada = 'Fecha no disponible';
+        let fechaFormateada = compra.fechaVenta;
         try {
-            if (venta.fecha_compra) {
-                const fecha = new Date(venta.fecha_compra);
-                if (!isNaN(fecha.getTime())) {
-                    fechaFormateada = fecha.toLocaleDateString('es-MX', {
-                        day: '2-digit',
-                        month: '2-digit',
-                        year: 'numeric'
-                    });
+            if (fechaFormateada) {
+                anio=fechaFormateada[0]
+                mes=fechaFormateada[1]
+                dia=fechaFormateada[2]
+                hrs=fechaFormateada[3]
+                min=fechaFormateada[4]
+                if(min<10){
+                    console.log("HOLA")
+                    min="0"+fechaFormateada[4]
                 }
             }
         } catch (e) {
             console.error('Error al formatear fecha:', e);
         }
 
-        // Usar una imagen por defecto válida o placeholder
-        const imagenUrl = venta.foto_url || 'https://via.placeholder.com/50x50?text=Sin+Imagen';
+        
+        let imageSrc = 'https://via.placeholder.com/50x50?text=Sin+Imagen';
+
+        if (compra.fotoPublicacion) {
+                // Verificar si es un array de bytes (común en Java BLOB -> JSON)
+                if (Array.isArray(compra.fotoPublicacion)) {
+                    // Convertir array de bytes a base64
+                    const base64String = btoa(String.fromCharCode.apply(null, compra.fotoPublicacion));
+                    imageSrc = `data:image/jpeg;base64,${base64String}`;
+                } else if (typeof compra.fotoPublicacion === 'string') {
+                    // Si ya es string, verificar si tiene prefijo
+                    if (compra.fotoPublicacion.startsWith('data:image')) {
+                        imageSrc = compra.fotoPublicacion;
+                    } else {
+                        // Asumir que es base64 sin prefijo
+                        imageSrc = `data:image/jpeg;base64,${compra.fotoPublicacion}`;
+                    }
+                }
+            }
+
 
         fila.innerHTML = `
-            <td>${venta.usuario || venta.nombre_usuario || 'Usuario desconocido'}</td>
-            <td>${venta.titulo || venta.nombre_producto || 'Sin título'}</td>
-            <td>$${venta.monto_total || venta.precio || '0'}</td>
+            <td><h3 class="fuenteTabla">${compra.vendedorNombre || 'Usuario desconocido'}</h3></td>
+            <td><h3 class="fuenteTabla">${compra.tituloPublicacion || 'Sin título'}</h3></td>
+            <td><h3 class="fuenteTabla">$${compra.precioTotal || '0'}</h3></td>
+            <td><h3 class="fuenteTabla">${compra.cantidadVendida || '0'}</h3></td>
             <td>
-                <img src="${imagenUrl}" 
+            <a href="/pages/comprar.html?id=${compra.idPublicacion}">    
+            <img src="${imageSrc}" 
                      class="img-tabla" 
                      alt="Producto"
                      onerror="this.onerror=null; this.src='https://via.placeholder.com/50x50?text=Error';">
+            </a>
             </td>
-            <td>${fechaFormateada}</td>
+            <td><h3 class="fuenteTabla">${dia}-${mes}-${anio}<br>${hrs}:${min}</br></h3></td>
             <td>
-                <a href="detalle-compra.html?id=${venta.id || venta._id || ''}" 
+                <a href="detalleCompraConcretada.html?id=${compra.idCompra}" 
                    class="ver-detalles">Ver detalles</a>
             </td>
         `;

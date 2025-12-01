@@ -14,29 +14,8 @@ const btnQueja = document.getElementById('btn_queja');
 const cantidadSelect = document.getElementById("cantidadSelect");
 const cantidadInput = document.getElementById("cantidadInput");
 
-// ============================================
-// EVENT LISTENER: BOTÓN COMPRAR
-// ============================================
-btncomprar.addEventListener('click', (e) => {
-    e.preventDefault(); 
-    const userId = localStorage.getItem('userId');
-    
-    if (userId) {
-        // Guardar datos del producto para la página de pago
-        const cantidad = cantidadInput.value || 1;
-        localStorage.setItem('productoCompra', JSON.stringify({
-            producto: productoActual,
-            cantidad: cantidad,
-            vendedor: vendedorActual
-        }));
-        window.location.href = '/pages/pago.html'; 
-    } else {
-        mostrarAlerta('⚠️ Debes iniciar sesión para comprar', 'warning');
-        setTimeout(() => {
-            window.location.href = '/pages/login.html';
-        }, 1500);
-    }
-});
+
+
 
 // ============================================
 // EVENT LISTENER: BOTÓN QUEJA
@@ -84,6 +63,7 @@ cantidadInput.addEventListener("blur", () => {
     }
 });
 
+btncomprar.disabled = true;
 // ============================================
 // CARGAR PRODUCTO AL INICIAR
 // ============================================
@@ -160,6 +140,32 @@ document.addEventListener('DOMContentLoaded', async function (){
         console.error('❌ Error al cargar:', error);
         mostrarError(error.message || 'Error al cargar el producto');
     }
+
+    // ============================================
+// EVENT LISTENER: BOTÓN COMPRAR
+// ============================================
+btncomprar.disabled = false;
+btncomprar.addEventListener('click', (e) => {
+    e.preventDefault(); 
+    const userId = localStorage.getItem('userId');
+    
+    if (userId) {
+        // Guardar datos del producto para la página de pago
+        const cantidad = cantidadInput.value || 1;
+        localStorage.setItem('productoCompra', JSON.stringify({
+            producto: productoActual.id_publicacion,
+            cantidad: cantidad,
+            vendedor: vendedorActual.id_usuario
+        }));
+        window.location.href = '/pages/pago.html'; 
+    } else {
+        mostrarAlerta('⚠️ Debes iniciar sesión para comprar', 'warning');
+        setTimeout(() => {
+            window.location.href = '/pages/login.html';
+        }, 1500);
+    }
+});
+
 });
 
 // ============================================
@@ -303,6 +309,7 @@ function actualizarPrecioTotal() {
     } else {
         precioElement.textContent = `$${total}`;
     }
+    return total
 }
 
 // ============================================

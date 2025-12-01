@@ -44,11 +44,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             const card = document.createElement('div');
             card.className = 'membresia-card';
             card.innerHTML = `
-                <div class="precio">$${plan.precio}</div>
-                <h3>${plan.nombre_membresia}</h3>
-                <p>${plan.descripcion}</p>
-                <p><strong>Duración:</strong> ${plan.duracion_dias} días</p>
+                
+                <div class="info-plan">
+                    <div class="precio">$${plan.precio}</div>
+                    <h3>${plan.nombreMembresia}</h3>
+                    <p class="descripcionPlan">${plan.descripcion}</p>
+                </div>
                 <input type="radio" name="membresia" value="${plan.id_membresia_tipo}">
+               
             `;
             contenedorMembresias.appendChild(card);
         });
@@ -102,6 +105,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const returnFunction = document.getElementById("return")
     returnFunction.addEventListener("click", ()=>{
-    window.location.href = '../index.html'; 
+    window.location.href = '../../index.html'; 
     })
 });

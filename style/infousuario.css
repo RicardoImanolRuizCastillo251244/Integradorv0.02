@@ -1,95 +1,214 @@
-/* Pestañas superiores */
-.tabs-usuario {
-  display: flex;
-  justify-content: space-around;
-  background: #fc4b08;
-  padding: 10px 0;
-  margin-top: 10px;
-}
+body {
+            font-family: "Open Sauce One", sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
 
-.tabs-usuario .tab {
-  background: transparent;
-  border: none;
-  color: white;
-  font-weight: bold;
-  font-size: 15px;
-  padding: 10px 15px;
-  cursor: pointer;
-}
+        /* Header principal - Todo en una sola línea */
+        .contenedor-nav {
+            background-color: #fc4b08;
+            padding: 15px 0;
+        }
 
-.tabs-usuario .active {
-  background: white;
-  color: #fc4b08;
-  border-radius: 10px;
-}
+        .navbar-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
 
-/* Perfil */
-.perfil-container {
-  text-align: center;
-  margin-top: 25px;
-}
+        /* Logo */
+        .navbar-brand-img {
+            height: 60px;
+            width: auto;
+        }
 
-.circle-iniciales {
-  width: 110px;
-  height: 110px;
-  background: #fc4b08;
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: auto;
-  font-size: 40px;
-  font-weight: bold;
-}
+        /* Tabs de usuario - En el centro */
+        .tabs-usuario {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            justify-content: center;
+        }
 
-#nombreUsuario {
-  font-size: 22px;
-  font-weight: bold;
-  margin-top: 10px;
-}
+        .tabs-usuario .tab {
+            background: transparent;
+            border: none;
+            color: white;
+            font-weight: 600;
+            font-size: 15px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-radius: 8px;
+            white-space: nowrap;
+        }
 
-#correoUsuario {
-  font-size: 15px;
-  color: gray;
-  margin-bottom: 20px;
-}
+        .tabs-usuario .tab:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
 
-/* Campos */
-.info-usuario {
-  max-width: 700px;
-}
+        .tabs-usuario .active {
+            background: white;
+            color: #fc4b08;
+        }
 
-.campo-item {
-  background: #fc4b08;
-  color: white;
-  padding: 18px;
-  border-radius: 8px;
-  margin-bottom: 18px;
-  position: relative;
-}
+        /* Iconos de usuario y notificaciones - A la derecha */
+        .header-icons {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
 
-.titulo-campo {
-  font-size: 14px;
-  opacity: .8;
-}
+        .header-icons button {
+            background: transparent;
+            border: none;
+            padding: 0;
+            transition: transform 0.3s;
+        }
 
-.icono-edit {
-  position: absolute;
-  right: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 22px;
-  cursor: pointer;
-}
+        .header-icons button:hover {
+            transform: scale(1.1);
+        }
 
-/* Nuevo icono mostrar/ocultar contraseña */
-.icono-ver {
-  position: absolute;
-  right: 45px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 22px;
-  cursor: pointer;
-  color: white;
-}
+        .header-icons img {
+            width: 35px;
+            height: 35px;
+            filter: brightness(0) invert(1);
+        }
+
+        /* Perfil */
+        .perfil-container {
+            text-align: center;
+            margin-top: 40px;
+            margin-bottom: 30px;
+        }
+
+        .circle-iniciales {
+            width: 110px;
+            height: 110px;
+            background: #fc4b08;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: auto;
+            font-size: 40px;
+            font-weight: bold;
+        }
+
+        #nombreUsuario {
+            font-size: 22px;
+            font-weight: bold;
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+
+        #correoUsuario {
+            font-size: 15px;
+            color: #666;
+        }
+
+        /* Campos de información */
+        .info-usuario {
+            max-width: 700px;
+            margin: 0 auto 40px;
+            padding: 0 20px;
+        }
+
+        .campo-item {
+            background: #fc4b08;
+            color: white;
+            padding: 18px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+            position: relative;
+        }
+
+        .titulo-campo {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+
+        .valor-campo {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .icono-edit {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 22px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .icono-edit:hover {
+            transform: translateY(-50%) scale(1.2);
+        }
+
+        /* Icono mostrar/ocultar contraseña */
+        .icono-ver {
+            position: absolute;
+            right: 50px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 22px;
+            cursor: pointer;
+            color: white;
+            transition: transform 0.3s;
+        }
+
+        .icono-ver:hover {
+            transform: translateY(-50%) scale(1.2);
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .tabs-usuario .tab {
+                font-size: 13px;
+                padding: 8px 12px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar-brand-img {
+                height: 50px;
+            }
+
+            .navbar-content {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+            }
+
+            .tabs-usuario {
+                gap: 5px;
+            }
+
+            .tabs-usuario .tab {
+                font-size: 12px;
+                padding: 8px 10px;
+            }
+
+            .header-icons img {
+                width: 30px;
+                height: 30px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .tabs-usuario {
+                gap: 3px;
+            }
+
+            .tabs-usuario .tab {
+                font-size: 11px;
+                padding: 6px 8px;
+            }
+        }

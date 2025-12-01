@@ -115,8 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch(BASE_URL+'publicacion', {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${token}`,
-                    // 'Content-Type': 'multipart/form-data' // NO poner esto manualmente con FormData
+                    'Authorization': `Bearer ${token}`
                 },
                 body: formData
             });

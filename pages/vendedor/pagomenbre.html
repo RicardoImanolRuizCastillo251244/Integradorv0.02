@@ -17,9 +17,9 @@
 
   <!-- CSS -->
    <link rel="stylesheet" href="/style/style.css">
-  <link rel="stylesheet" href="../style/pagomembre.css" />
-  <link rel="stylesheet" href="../style/main.css" />
-  <link rel="stylesheet" href="../style/infousuario.css" />
+  <link rel="stylesheet" href="/style/pagomembre.css" />
+  <link rel="stylesheet" href="/style/main.css" />
+ 
   <link rel="stylesheet" href="/style/btnBack.css">
   <link rel="stylesheet" href="/style/styleHeaderFooter.css">
 </head>
@@ -34,19 +34,16 @@
           <!-- LOGO -->
           <div class="col-2">
             <a href="#">
-              <img class="navbar-brand-img" src="../images/LogoUpsitos.png" alt="Logo">
+              <img class="navbar-brand-img" src="/images/LogoUpsitos.png" alt="Logo">
             </a>
           </div>
 
           <!-- BUSCADOR -->
-          <div class="col-6 col-md-6 mx-auto">
-            <form class="position-relative d-flex align-items-center" role="search">
-              <input class="form-control form-control-search rounded-5" type="search" placeholder="Buscar..."
-                aria-label="Buscar" />
-              <button type="submit" class="btn position-absolute end-0 me-2 p-0 border-0 bg-transparent">
-                <img src="../images/lupa.png" alt="Buscar" style="width:25px; height:25px;">
-              </button>
-            </form>
+          <div class="tabs-usuario">
+          <a href="../infousuario.html" class="tab">Información de usuario</a>
+          <a href="pagomenbre.html" class="tab active">Membresía</a>
+          <a href="../compraconcretadas.html" class="tab">Compras</a>
+          <a href="estadistica.html" class="tab">Estadísticas</a>
           </div>
 
           <!-- ICONOS DERECHA -->
@@ -54,12 +51,12 @@
 
             <!-- BOTÓN USUARIO -->
             <button type="button" class="btn border-0 bg-transparent me-3" onclick="window.location.href='ventas.html'">
-              <img class="img-user" src="../images/usuario.png" alt="Usuario" style="width:35px; height:35px;">
+              <img class="img-user" src="/images/usuario.png" alt="Usuario" style="width:35px; height:35px;">
             </button>
 
             <!-- BOTÓN CAMPANA -->
             <button type="button" class="btn border-0 bg-transparent me-2" onclick="window.location.href='#'">
-              <img class="img-notificacion" src="../images/campana (2).png" alt="Notificaciones"
+              <img class="img-notificacion" src="/images/campana (2).png" alt="Notificaciones"
                 style="width:30px; height:30px;">
             </button>
 
@@ -74,15 +71,10 @@
     </a>
 
   <!-- Tabs -->
-  <div class="tabs-usuario">
-    <a href="infousuario.html" class="tab">Información de usuario</a>
-    <a href="" class="tab active">Membresía</a>
-    <a href="compraconcretadas.html" class="tab">Compras</a>
-    <a href="estadistica.html" class="tab">Estadísticas</a>
-  </div>
+  
 
   <!-- CONTENIDO -->
-  <section class="contenido text-center mt-4">
+  <section id="contenidoMembresia" class="contenido text-center mt-4">
 
     <h2>Pago de membresía</h2>
 
@@ -93,9 +85,8 @@
     </div>
 
     <div class="membresia-card">
-      <div class="precio">$5</div>
-      <p>Publicar ilimitadamente productos por una semana y si eres de las primeras cuatro personas en pagar tu
-        publicación aparecerá en el carrusel de imágenes</p>
+      <div class="precio"></div>
+      <p></p>
       <input type="radio" name="membresia" value="5">
     </div>
 
@@ -152,7 +143,7 @@
         </div>
     </footer>
 
-  <script type="module" src="../js/pagomenbre.js"></script>
+  <script type="module" src="/js/pagomenbre.js"></script>
 
 </body>
 

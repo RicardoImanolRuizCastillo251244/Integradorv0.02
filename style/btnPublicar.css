@@ -1,0 +1,21 @@
+/*SECTION BOTON PUBLICAR*/
+.seccion-publicar{
+    background-color: #fff;
+}
+.btn-publicar{
+    width: 400px;
+    font-family: 'Open Sauce One'!important;
+    font-weight: bold;
+    background-color: #00cd37;
+    border: none;
+    border-radius: 9px;
+    color: #fff;
+}
+.img-btn-publicar{
+    width: 20px;
+    height: 20px;
+}
+
+.seccion-main{
+    background-color: #F2F2F2;
+}

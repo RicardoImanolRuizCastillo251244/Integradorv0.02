@@ -1,0 +1,25 @@
+ /* Mejor estilo para los checkboxes */
+        .horario-card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            transition: 0.3s;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+        .horario-card:hover {
+            background-color: #f0f8ff;
+        }
+        .horario-card input[type="checkbox"] {
+            margin-right: 15px;
+            transform: scale(1.2);
+        }
+        #formHorarios button {
+            width: 100%;
+        }
+        h3 {
+            font-weight: bold;
+            margin-bottom: 20px;
+        }

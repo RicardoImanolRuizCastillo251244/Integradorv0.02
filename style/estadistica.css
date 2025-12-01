@@ -1,27 +1,52 @@
-/* === PESTAÑAS SUPERIORES === */
-.tabs-usuario {
-  display: flex;
-  justify-content: space-around;
-  background: #fc4b08;
-  padding: 10px 0;
-  margin-top: 10px;
-}
+/* Header principal - Todo en una sola línea */
+        .contenedor-nav {
+            background-color: #fc4b08;
+            padding: 15px 0;
+        }
 
-.tabs-usuario .tab {
-  background: transparent;
-  border: none;
-  color: white;
-  font-weight: bold;
-  font-size: 15px;
-  padding: 10px 15px;
-  cursor: pointer;
-}
+        .navbar-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
 
-.tabs-usuario .active {
-  background: white;
-  color: #fc4b08;
-  border-radius: 10px;
-}
+        /* Logo */
+        .navbar-brand-img {
+            height: 60px;
+            width: auto;
+        }
+
+        /* Tabs de usuario - En el centro */
+        .tabs-usuario {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .tabs-usuario .tab {
+            background: transparent;
+            border: none;
+            color: white;
+            font-weight: 600;
+            font-size: 15px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-radius: 8px;
+            white-space: nowrap;
+        }
+
+        .tabs-usuario .tab:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .tabs-usuario .active {
+            background: white;
+            color: #fc4b08;
+        }
 
 /* === SUBPESTAÑAS === */
 .subtabs {

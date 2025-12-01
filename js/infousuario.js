@@ -1,24 +1,13 @@
 import { BASE_URL } from "./api_url.js";
 
 document.addEventListener('DOMContentLoaded', async () => {
+    const infousuario = document.getElementById('contenedor-global');
     const userId = localStorage.getItem('userId');
     const authToken = localStorage.getItem('authToken');
     const rol = localStorage.getItem("rol");
-    const calificacion = document.getElementById("evaluacion");
-    const infousuario = document.getElementById('contenedor-global');
-
-    if (rol == 2) {
-        calificacion.hidden = true;
-    }
-
-    if (!userId || !authToken) {
-        // Si no hay sesión, redirigir al login
-        window.location.href = 'login.html';
-        return;
-    }
-
     // Mostrar loader mientras carga
     mostrarLoader();
+
 
     try {
         // Fetch datos del usuario
@@ -59,6 +48,27 @@ document.addEventListener('DOMContentLoaded', async () => {
                         <i class="fa-solid fa-pen-to-square icono-edit" onclick="editarCampo('campoPass', 'Contraseña')"></i>
                         <i class="fa-solid fa-eye icono-ver" onclick="togglePass()"></i>
                     </div>
+
+                    <div class="campo-item">
+                        <p class="titulo-campo">Numero de cuenta</p>
+                        <p id="campoNumCuenta"></p>
+                        <i class="fa-solid fa-pen-to-square icono-edit"></i>
+                        
+                    </div>
+
+                    <div class="campo-item">
+                        <p class="titulo-campo">Titular de cuenta</p>
+                        <p id="campoTitular"></p>
+                        <i class="fa-solid fa-pen-to-square icono-edit"></i>
+                        
+                    </div>
+
+                    <div class="col-12 d-flex justify-content-center mt-4 mb-4">
+                    <button type="button" id="buttonPost" class="btn-publicar pb-2 pt-2">VENDER
+                        <img class="img-btn-publicar mb-1" src="/images/editar.png" alt="">
+                    </button>
+                    </div>
+
                 </section>
 
                 <div class="container my-5">
@@ -75,10 +85,37 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.error('Error al obtener datos del usuario:', response.status);
             mostrarError('No se pudo cargar la información del usuario.');
         }
+        
     } catch (error) {
         console.error('Error de red:', error);
         mostrarError('Error de conexión al cargar perfil.');
     }
+
+    
+    
+    const membresia = document.getElementById('membresia')
+    const estadisticas = document.getElementById('estadisticas')
+    const numCuenta = document.getElementById('campoNumCuenta')
+    const titularCuenta = document.getElementById('campoTitular')
+    const btnPublicar = document.getElementById('buttonPost')
+
+    if (rol == 1) {
+        membresia.hidden = true;
+        estadisticas.hidden = true;
+        numCuenta.hidden = true;
+        titularCuenta.hidden = true;
+    }
+    else{
+        btnPublicar.hidden=true
+    }
+
+    if (!userId || !authToken) {
+        // Si no hay sesión, redirigir al login
+        window.location.href = 'login.html';
+        return;
+    }
+
+    
 
     function mostrarLoader() {
         infousuario.innerHTML = `

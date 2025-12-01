@@ -1,3 +1,6 @@
+const compra = JSON.parse(localStorage.getItem('productoCompra'));
+console.log(compra);
+
 // BOTONES
 const btnTransfer = document.getElementById('btnTransfer');
 const btnEfectivo = document.getElementById('btnEfectivo');

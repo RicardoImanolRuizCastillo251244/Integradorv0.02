@@ -1,11 +1,5 @@
 /* ===== ESTRUCTURA PRINCIPAL ===== */
 /* Esto hace que el body use todo el alto de la pantalla */
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
 body {
   display: flex;
   flex-direction: column;
@@ -27,34 +21,90 @@ h2 {
 }
 
 /* Tarjeta de membresía */
+
+#contenidoMembresia {
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    padding: 0;
+}
+
+
 .membresia-card {
-  background: #fc4b08;
-  color: white;
-  padding: 18px;
-  border-radius: 10px;
+  background: #ffffff;
+  border: 1px solid #dadada;
+  border-radius: 12px;
+
+  padding: 18px 20px;
   width: 85%;
-  margin: 15px auto;
+  margin: 18px auto;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 15px;
+
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
+/* Hover sutil */
+.membresia-card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.10);
+  border-color: #fc4b08;
+}
+
+/* Precio */
 .precio {
-  font-size: 32px;
-  font-weight: bold;
-  margin-right: 15px;
+  font-size: 30px;
+  font-weight: 700;
+  color: #fc4b08;
+  margin-bottom: 4px;
 }
 
-.membresia-card p {
-  flex: 1;
-  text-align: left;
+/* Título */
+.membresia-card h3 {
+  font-size: 18px;
   margin: 0;
+  font-weight: 600;
+  color: #333;
 }
 
-.membresia-card input {
-  width: 25px;
-  height: 25px;
+/* Descripción */
+.descripcionPlan {
+  margin-top: 6px;
+  font-size: 15px;
+  color: #666;
+  line-height: 1.35;
 }
+
+/* Contenedor texto */
+.info-plan {
+  flex: 1;
+}
+
+/* Radio */
+.membresia-card input {
+  width: 24px;
+  height: 24px;
+  accent-color: #fc4b08;
+}
+
+/* Seleccionado */
+.membresia-card.selected {
+  border: none !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3) !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .membresia-card {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+
 
 /* Botón pagar */
 .btn-pagar {
@@ -69,6 +119,7 @@ h2 {
   cursor: pointer;
   text-decoration: none;
   display: inline-block;
+  margin-bottom: 20px;
 }
 
 .btn-pagar:hover {
@@ -76,41 +127,61 @@ h2 {
   color: white;
 }
 
-/* Efecto visual cuando se selecciona una membresía */
-.membresia-card.selected {
-  border: 3px solid white;
-  box-shadow: 0 0 10px rgba(0,0,0,0.4);
-}
-
 .tabs-usuario a {
   text-decoration: none;
   color: inherit;
 }
 
-/* ===== PESTAÑAS ===== */
-.tabs-usuario {
-  display: flex;
-  justify-content: space-around;
-  background: #fc4b08;
-  padding: 10px 0;
-  margin-top: 10px;
-}
 
-.tabs-usuario .tab {
-  background: transparent;
-  border: none;
-  color: white;
-  font-weight: bold;
-  font-size: 15px;
-  padding: 10px 15px;
-  cursor: pointer;
-}
+        /* Header principal - Todo en una sola línea */
+        .contenedor-nav {
+            background-color: #fc4b08;
+            padding: 15px 0;
+        }
 
-.tabs-usuario .active {
-  background: white;
-  color: #fc4b08;
-  border-radius: 10px;
-}
+        .navbar-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        /* Logo */
+        .navbar-brand-img {
+            height: 60px;
+            width: auto;
+        }
+
+        /* Tabs de usuario - En el centro */
+        .tabs-usuario {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .tabs-usuario .tab {
+            background: transparent;
+            border: none;
+            color: white;
+            font-weight: 600;
+            font-size: 15px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-radius: 8px;
+            white-space: nowrap;
+        }
+
+        .tabs-usuario .tab:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .tabs-usuario .active {
+            background: white;
+            color: #fc4b08;
+        }
 
 /* ===== PERFIL ===== */
 .perfil-container {
