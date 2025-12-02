@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 </div>
             `;
 
-            //AGREGAR EVENT LISTENER DESPUÉS DE CREAR EL BOTÓN
+            
             configurarLogout();
 
         } else {
@@ -141,7 +141,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-// ✅ FUNCIÓN SEPARADA PARA CONFIGURAR EL LOGOUT
+
 function configurarLogout() {
     const logoutButton = document.getElementById("logoutButton");
     

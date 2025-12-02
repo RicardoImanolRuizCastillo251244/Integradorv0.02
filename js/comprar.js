@@ -1,25 +1,75 @@
 import { BASE_URL } from "./api_url.js";
 
-// ============================================
-// VARIABLES GLOBALES
-// ============================================
 let productoActual = null;
 let vendedorActual = null;
+let calificacion = null;
+document.addEventListener('DOMContentLoaded', async function (){
+    
 
-// ============================================
-// REFERENCIAS A ELEMENTOS DEL DOM
-// ============================================
-const btncomprar = document.getElementById('btn_comprar');
-const btnQueja = document.getElementById('btn_queja');
-const cantidadSelect = document.getElementById("cantidadSelect");
-const cantidadInput = document.getElementById("cantidadInput");
+    const container = document.querySelector('.producto-container');
+    const contenidoOriginal = container.innerHTML;
+    
+    
+    container.innerHTML = `
+        <div class="loader-wrapper">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
+            <p class="mt-4 text-muted fs-5">Cargando producto...</p>
+        </div>
+    `;
+    
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString); 
+    const idObtenido = urlParams.get('id');
+
+
+    if (!idObtenido) {
+        mostrarError('No se especificó un producto válido');
+        return;
+    }
+
+    try {
+        const response = await fetch(BASE_URL + 'publicacion/' + idObtenido);
+        
+        if (!response.ok) {
+            throw new Error('Producto no encontrado');
+        }
+
+        productoActual = await response.json();
+        
+        const responseUser = await fetch(BASE_URL + 'usuario/' + productoActual.id_vendedor);
+        vendedorActual = await responseUser.json();
+
+        const responseCalificacion = await fetch(BASE_URL+'calificacion/promedio/'+19);
+
+        calificacion = await responseCalificacion
+
+        console.log('✅ Producto cargado:', productoActual);
+        console.log('✅ Vendedor cargado:', vendedorActual);
+        console.log("Calificacion cargada:", calificacion)
+        
+        container.innerHTML = contenidoOriginal;
+        let existencia = ''
+        if(productoActual.existencia_publicacion<10){
+            existencia = `<strong>${productoActual.existencia_publicacion} unidades</strong>`
+        }
+        else{
+            existencia = '<strong>10+ unidades</strong'
+        }
+        
+
+        renderProducto(productoActual);
+        renderDetallesVendedor(vendedorActual, existencia);
+
+        
+    const btncomprar = document.getElementById('btn_comprar');
+    const btnQueja = document.getElementById('btn_queja');
+    const cantidadSelect = document.getElementById("cantidadSelect");
+    const cantidadInput = document.getElementById("cantidadInput");
 
 
 
-
-// ============================================
-// EVENT LISTENER: BOTÓN QUEJA
-// ============================================
 btnQueja.addEventListener('click', (e) => {
     e.preventDefault(); 
     const userId = localStorage.getItem('userId');
@@ -31,17 +81,13 @@ btnQueja.addEventListener('click', (e) => {
         }
         window.location.href = '/pages/Queja.html'; 
     } else {
-        mostrarAlerta('⚠️ Debes iniciar sesión para reportar', 'warning');
+        mostrarAlerta('Debes iniciar sesión para reportar', 'warning');
         setTimeout(() => {
             window.location.href = '/pages/login.html';
         }, 1500);
     }
 });
 
-// ============================================
-// SINCRONIZACIÓN DE CANTIDAD
-// ============================================
-// Cuando se selecciona una opción del select
 cantidadSelect.addEventListener("change", () => {
     if (cantidadSelect.value !== "") {
         cantidadInput.value = cantidadSelect.value;
@@ -49,13 +95,13 @@ cantidadSelect.addEventListener("change", () => {
     }
 });
 
-// Cuando se escribe en el input
+
 cantidadInput.addEventListener("input", () => {
     cantidadSelect.value = "";
     actualizarPrecioTotal();
 });
 
-// Validar que no sea menor a 1 cuando pierde el foco
+
 cantidadInput.addEventListener("blur", () => {
     if (cantidadInput.value < 1 || cantidadInput.value === '') {
         cantidadInput.value = 1;
@@ -63,70 +109,28 @@ cantidadInput.addEventListener("blur", () => {
     }
 });
 
-btncomprar.disabled = true;
-// ============================================
-// CARGAR PRODUCTO AL INICIAR
-// ============================================
-document.addEventListener('DOMContentLoaded', async function (){
+    btncomprar.addEventListener('click', () => {
+    const userId = localStorage.getItem('userId');
     
-    // Obtener contenedor
-    const container = document.querySelector('.producto-container');
-    const contenidoOriginal = container.innerHTML;
-    
-    // Mostrar loader
-    container.innerHTML = `
-        <div class="loader-wrapper">
-            <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Cargando...</span>
-            </div>
-            <p class="mt-4 text-muted fs-5">Cargando producto...</p>
-        </div>
-    `;
-    
-    // Obtener ID del producto desde URL
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString); 
-    const idObtenido = urlParams.get('id');
-
-    // Validar que exista ID
-    if (!idObtenido) {
-        mostrarError('No se especificó un producto válido');
-        return;
+    if (userId) {
+        // Guardar datos del producto para la página de pago
+        const cantidad = cantidadInput.value || 1;
+        localStorage.setItem('productoCompra', JSON.stringify({
+            productoId: productoActual.id_publicacion,
+            cantidad: cantidad,
+            vendedor: vendedorActual.id_usuario,
+            total: actualizarPrecioTotal()
+        }));
+        console.log("HOLAAA"+localStorage.getItem('productoCompra'))
+        //window.location.href = '/pages/pago.html'; 
+    } else {
+        mostrarAlerta('⚠️ Debes iniciar sesión para comprar', 'warning');
+        setTimeout(() => {
+            //window.location.href = '/pages/login.html';
+        }, 1500);
     }
+});
 
-    // Cargar datos
-    try {
-        // Fetch del producto
-        const response = await fetch(BASE_URL + 'publicacion/' + idObtenido);
-        
-        if (!response.ok) {
-            throw new Error('Producto no encontrado');
-        }
-
-        productoActual = await response.json();
-        
-        // Fetch del vendedor
-        const responseUser = await fetch(BASE_URL + 'usuario/' + productoActual.id_vendedor);
-        vendedorActual = await responseUser.json();
-        
-        console.log('✅ Producto cargado:', productoActual);
-        console.log('✅ Vendedor cargado:', vendedorActual);
-        
-        // Restaurar contenido original
-        container.innerHTML = contenidoOriginal;
-        let existencia = ''
-        if(productoActual.existencia_publicacion<10){
-            existencia = `<strong>${productoActual.existencia_publicacion} unidades</strong>`
-        }
-        else{
-            existencia = '<strong>10+ unidades</strong'
-        }
-        
-        // Renderizar datos
-        renderProducto(productoActual);
-        renderDetallesVendedor(vendedorActual, existencia);
-        
-        // Animación de entrada
         container.style.opacity = '0';
         container.style.transform = 'translateY(20px)';
         container.style.transition = 'all 0.5s ease';
@@ -136,80 +140,50 @@ document.addEventListener('DOMContentLoaded', async function (){
             container.style.transform = 'translateY(0)';
         }, 100);
 
+
     } catch (error) {
-        console.error('❌ Error al cargar:', error);
+        console.error('Error al cargar:', error);
         mostrarError(error.message || 'Error al cargar el producto');
     }
 
-    // ============================================
-// EVENT LISTENER: BOTÓN COMPRAR
-// ============================================
-btncomprar.disabled = false;
-btncomprar.addEventListener('click', (e) => {
-    e.preventDefault(); 
-    const userId = localStorage.getItem('userId');
-    
-    if (userId) {
-        // Guardar datos del producto para la página de pago
-        const cantidad = cantidadInput.value || 1;
-        localStorage.setItem('productoCompra', JSON.stringify({
-            producto: productoActual.id_publicacion,
-            cantidad: cantidad,
-            vendedor: vendedorActual.id_usuario
-        }));
-        window.location.href = '/pages/pago.html'; 
-    } else {
-        mostrarAlerta('⚠️ Debes iniciar sesión para comprar', 'warning');
-        setTimeout(() => {
-            window.location.href = '/pages/login.html';
-        }, 1500);
-    }
 });
 
-});
-
-// ============================================
-// FUNCIÓN: RENDERIZAR PRODUCTO
-// ============================================
 function renderProducto(producto){
     const descripcion = document.getElementById('card-text');
     const titulo = document.getElementById('card-title');
     const precio = document.getElementById('precio');
     const img = document.getElementById('productoPublicado');
 
-    // Asignar textos
+
     titulo.textContent = producto.titulo_publicacion || 'Producto sin título';
     descripcion.textContent = producto.descripcion_publicacion || 'Sin descripción disponible';
     
-    // Formatear precio
+
     const precioFormateado = parseFloat(producto.precio_producto).toFixed(2);
     precio.textContent = `$${precioFormateado}`;
     
-    // Procesar imagen
+
     let imageSrc = procesarImagen(producto.foto_publicacion);
     
     img.src = imageSrc;
     img.alt = producto.titulo_publicacion || 'Producto';
     
-    // Manejar error de carga de imagen
+
     img.onerror = function() {
         this.src = 'https://via.placeholder.com/450x450/fc4b08/ffffff?text=Sin+Imagen';
     };
 }
 
-// ============================================
-// FUNCIÓN: PROCESAR IMAGEN
-// ============================================
 function procesarImagen(fotoPublicacion) {
     let imageSrc = "";
     
     if (fotoPublicacion) {
         if (Array.isArray(fotoPublicacion)) {
-            // Si es un array de bytes
+
             const base64String = btoa(String.fromCharCode.apply(null, fotoPublicacion));
             imageSrc = `data:image/jpeg;base64,${base64String}`;
         } else if (typeof fotoPublicacion === 'string') {
-            // Si ya es string
+
             if (fotoPublicacion.startsWith('data:image')) {
                 imageSrc = fotoPublicacion;
             } else {
@@ -217,20 +191,16 @@ function procesarImagen(fotoPublicacion) {
             }
         }
     } else {
-        // Imagen placeholder
+
         imageSrc = 'https://via.placeholder.com/450x450/fc4b08/ffffff?text=Sin+Imagen';
     }
     
     return imageSrc;
 }
 
-// ============================================
-// FUNCIÓN: RENDERIZAR VENDEDOR
-// ============================================
 function renderDetallesVendedor(vendedor,existencia){
     const infor = document.getElementById('contenedorDetalles');
     
-    // Calificación del vendedor (puedes obtenerla de la API o usar valor por defecto)
     const calificacion = vendedor.calificacion || 4.5;
     const estrellasHTML = generarEstrellas(calificacion);
 
@@ -260,25 +230,19 @@ function renderDetallesVendedor(vendedor,existencia){
     `;
 }
 
-// ============================================
-// FUNCIÓN: GENERAR ESTRELLAS
-// ============================================
 function generarEstrellas(calificacion) {
     const estrellasCompletas = Math.floor(calificacion);
     const tieneMedia = (calificacion % 1) >= 0.5;
     let html = '';
-    
-    // Estrellas completas
+
     for (let i = 0; i < estrellasCompletas; i++) {
         html += '<i class="fa-solid fa-star" style="color: #ffc107;"></i>';
     }
-    
-    // Media estrella
+
     if (tieneMedia) {
         html += '<i class="fa-solid fa-star-half-stroke" style="color: #ffc107;"></i>';
     }
-    
-    // Estrellas vacías
+
     const estrellasVacias = 5 - estrellasCompletas - (tieneMedia ? 1 : 0);
     for (let i = 0; i < estrellasVacias; i++) {
         html += '<i class="fa-regular fa-star" style="color: #ffc107;"></i>';
@@ -287,9 +251,7 @@ function generarEstrellas(calificacion) {
     return html;
 }
 
-// ============================================
-// FUNCIÓN: ACTUALIZAR PRECIO TOTAL
-// ============================================
+
 function actualizarPrecioTotal() {
     if (!productoActual) return;
     
@@ -312,11 +274,9 @@ function actualizarPrecioTotal() {
     return total
 }
 
-// ============================================
-// FUNCIÓN: MOSTRAR ALERTAS
-// ============================================
+
 function mostrarAlerta(mensaje, tipo = 'info') {
-    // Crear elemento de alerta
+
     const alertaDiv = document.createElement('div');
     alertaDiv.className = `alert alert-${tipo} alert-dismissible fade show position-fixed`;
     alertaDiv.style.cssText = 'top: 100px; right: 20px; z-index: 9999; min-width: 320px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);';
@@ -326,17 +286,13 @@ function mostrarAlerta(mensaje, tipo = 'info') {
     `;
     
     document.body.appendChild(alertaDiv);
-    
-    // Auto-remover después de 3 segundos
+
     setTimeout(() => {
         alertaDiv.classList.remove('show');
         setTimeout(() => alertaDiv.remove(), 200);
     }, 3000);
 }
 
-// ============================================
-// FUNCIÓN: MOSTRAR ERROR
-// ============================================
 function mostrarError(mensaje) {
     const container = document.querySelector('.producto-container');
     container.innerHTML = `

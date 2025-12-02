@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btnPublicar.addEventListener('click', () => {
             const userId = localStorage.getItem('userId');
             if (userId) {
-                window.location.href = '/pages/publicacion.html';
+                window.location.href = '/pages/vendedor/publicacion.html';
             }
             else {
                 window.location.href = '/pages/login.html';

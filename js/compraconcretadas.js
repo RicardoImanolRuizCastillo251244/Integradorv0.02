@@ -1,6 +1,9 @@
 import { BASE_URL } from "./api_url.js";
 
 const userId = localStorage.getItem('userId');
+const rol = localStorage.getItem("rol")
+
+
 let ventas = [];
 let cargando = false; // Prevenir múltiples cargas
 
@@ -37,6 +40,20 @@ async function fetchVenta() {
         cargando = false;
     }
 }
+
+const membresia = document.getElementById('membresia')
+    const estadisticas = document.getElementById('estadisticas')
+    const btnPublicar = document.getElementById('buttonPost')
+
+    if (rol == 1) {
+        membresia.hidden = true;
+        estadisticas.hidden = true;
+    }
+    else{
+        btnPublicar.hidden=true
+    }
+
+    
 
 function mostrarTabla(compras) {
     const tablaContainer = document.getElementById("tabla-concretadas");
@@ -177,3 +194,4 @@ if (returnButton) {
         window.location.href = '../index.html';
     });
 }
+
