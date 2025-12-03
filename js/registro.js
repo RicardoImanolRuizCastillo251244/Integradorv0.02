@@ -110,8 +110,20 @@ registroForm.addEventListener('submit', async function (e) {
             // Registro exitoso
             console.log('Registro exitoso:', data);
 
-            // Mostrar mensaje de éxito (podría ser un alert o usar el mismo contenedor de error con estilo de éxito)
-            // Por simplicidad, alert y redirección
+            // Guardar datos del usuario registrado en localStorage (opcional)
+            // La respuesta incluye: id_rol, nombre_usuario, correo_usuario, numero_cuenta, titular_usuario
+            if (data) {
+                // Guardar temporalmente los datos del nuevo usuario
+                localStorage.setItem('usuario_registrado', JSON.stringify({
+                    id_rol: data.id_rol,
+                    nombre_usuario: data.nombre_usuario,
+                    correo_usuario: data.correo_usuario,
+                    numero_cuenta: data.numero_cuenta || null,
+                    titular_usuario: data.titular_usuario || null
+                }));
+            }
+
+            // Mostrar mensaje de éxito
             alert('Registro exitoso. Por favor inicia sesión.');
 
             // Limpiar formulario
