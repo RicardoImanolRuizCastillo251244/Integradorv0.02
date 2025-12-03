@@ -72,7 +72,7 @@ function filtrarPorPeriodo(periodo) {
         case 'Dia':
             // Filtrar ventas de hoy
             ventasFiltradas = todasLasVentas.filter(venta => {
-                const fechaVenta = new Date(venta.fecha_venta || venta.fechaVenta);
+                const fechaVenta = new Date(venta.fechaVenta);
                 return fechaVenta.toDateString() === fechaLimite.toDateString();
             });
             break;
@@ -81,7 +81,7 @@ function filtrarPorPeriodo(periodo) {
             // Filtrar últimos 7 días
             fechaLimite.setDate(fechaLimite.getDate() - 7);
             ventasFiltradas = todasLasVentas.filter(venta => {
-                const fechaVenta = new Date(venta.fecha_venta || venta.fechaVenta);
+                const fechaVenta = new Date(venta.fechaVenta);
                 return fechaVenta >= fechaLimite;
             });
             break;
@@ -90,7 +90,7 @@ function filtrarPorPeriodo(periodo) {
             // Filtrar últimos 30 días
             fechaLimite.setDate(fechaLimite.getDate() - 30);
             ventasFiltradas = todasLasVentas.filter(venta => {
-                const fechaVenta = new Date(venta.fecha_venta || venta.fechaVenta);
+                const fechaVenta = new Date(venta.fechaVenta);
                 return fechaVenta >= fechaLimite;
             });
             break;
@@ -99,7 +99,7 @@ function filtrarPorPeriodo(periodo) {
             // Filtrar últimos 90 días
             fechaLimite.setDate(fechaLimite.getDate() - 90);
             ventasFiltradas = todasLasVentas.filter(venta => {
-                const fechaVenta = new Date(venta.fecha_venta || venta.fechaVenta);
+                const fechaVenta = new Date(venta.fechaVenta);
                 return fechaVenta >= fechaLimite;
             });
             break;
@@ -122,15 +122,15 @@ function mostrarEstadisticas(ventas) {
     // Calcular estadísticas
     const totalVentas = ventas.length;
     
-    // Calcular monto total (compatible con diferentes nombres de campo)
+    // Calcular monto total usando los nombres correctos del CompraDTO
     const montoTotal = ventas.reduce((sum, venta) => {
-        const monto = venta.monto_total || venta.precioTotal || venta.total || 0;
+        const monto = venta.precioTotal || 0;
         return sum + parseFloat(monto);
     }, 0);
 
     // Obtener publicaciones únicas
     const publicacionesUnicas = new Set(
-        ventas.map(v => v.idPublicacion || v.id_publicacion).filter(id => id)
+        ventas.map(v => v.idPublicacion).filter(id => id)
     );
     const totalPublicaciones = publicacionesUnicas.size;
 
