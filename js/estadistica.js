@@ -32,6 +32,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 // Función para cargar TODAS las ventas del vendedor
 async function cargarTodasLasVentas() {
     try {
+        console.log('Cargando ventas del vendedor:', userId);
+        console.log('URL:', `${BASE_URL}venta/vendedor/${userId}`);
+        
         const response = await fetch(`${BASE_URL}venta/vendedor/${userId}`, {
             method: 'GET',
             headers: {
@@ -39,28 +42,35 @@ async function cargarTodasLasVentas() {
             }
         });
 
-        if (response.ok) {
-            todasLasVentas = await response.json();
-            console.log('Todas las ventas del vendedor:', todasLasVentas);
+        console.log('Response status:', response.status);
 
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Datos recibidos del servidor:', data);
+            todasLasVentas = Array.isArray(data) ? data : [];
+            
             // Mostrar todas las ventas por defecto
             mostrarEstadisticas(todasLasVentas);
         } else if (response.status === 401) {
             alert('Tu sesión ha expirado. Por favor inicia sesión nuevamente.');
             window.location.href = '../login.html';
         } else {
-            console.error('Error al cargar estadísticas:', response.status);
+            const errorText = await response.text();
+            console.error('Error al cargar estadísticas:', response.status, errorText);
             mostrarEstadisticasVacias();
         }
     } catch (error) {
-        console.error('Error de red:', error);
+        console.error('Error de red completo:', error);
         mostrarEstadisticasVacias();
     }
 }
 
 // Función para filtrar por periodo (igual que en admin)
 function filtrarPorPeriodo(periodo) {
+    console.log('Filtrando por periodo:', periodo);
+    
     if (!todasLasVentas || todasLasVentas.length === 0) {
+        console.log('No hay ventas para filtrar');
         mostrarEstadisticasVacias();
         return;
     }
@@ -72,8 +82,13 @@ function filtrarPorPeriodo(periodo) {
         case 'Dia':
             // Filtrar ventas de hoy
             ventasFiltradas = todasLasVentas.filter(venta => {
-                const fechaVenta = new Date(venta.fechaVenta);
-                return fechaVenta.toDateString() === fechaLimite.toDateString();
+                try {
+                    const fechaVenta = new Date(venta.fechaVenta || venta.fecha_venta);
+                    return fechaVenta.toDateString() === fechaLimite.toDateString();
+                } catch (e) {
+                    console.error('Error al procesar fecha:', e);
+                    return false;
+                }
             });
             break;
 
@@ -81,8 +96,13 @@ function filtrarPorPeriodo(periodo) {
             // Filtrar últimos 7 días
             fechaLimite.setDate(fechaLimite.getDate() - 7);
             ventasFiltradas = todasLasVentas.filter(venta => {
-                const fechaVenta = new Date(venta.fechaVenta);
-                return fechaVenta >= fechaLimite;
+                try {
+                    const fechaVenta = new Date(venta.fechaVenta || venta.fecha_venta);
+                    return fechaVenta >= fechaLimite;
+                } catch (e) {
+                    console.error('Error al procesar fecha:', e);
+                    return false;
+                }
             });
             break;
 
@@ -90,8 +110,13 @@ function filtrarPorPeriodo(periodo) {
             // Filtrar últimos 30 días
             fechaLimite.setDate(fechaLimite.getDate() - 30);
             ventasFiltradas = todasLasVentas.filter(venta => {
-                const fechaVenta = new Date(venta.fechaVenta);
-                return fechaVenta >= fechaLimite;
+                try {
+                    const fechaVenta = new Date(venta.fechaVenta || venta.fecha_venta);
+                    return fechaVenta >= fechaLimite;
+                } catch (e) {
+                    console.error('Error al procesar fecha:', e);
+                    return false;
+                }
             });
             break;
 
@@ -99,8 +124,13 @@ function filtrarPorPeriodo(periodo) {
             // Filtrar últimos 90 días
             fechaLimite.setDate(fechaLimite.getDate() - 90);
             ventasFiltradas = todasLasVentas.filter(venta => {
-                const fechaVenta = new Date(venta.fechaVenta);
-                return fechaVenta >= fechaLimite;
+                try {
+                    const fechaVenta = new Date(venta.fechaVenta || venta.fecha_venta);
+                    return fechaVenta >= fechaLimite;
+                } catch (e) {
+                    console.error('Error al procesar fecha:', e);
+                    return false;
+                }
             });
             break;
 
@@ -108,13 +138,16 @@ function filtrarPorPeriodo(periodo) {
             ventasFiltradas = todasLasVentas;
     }
 
-    console.log(`Ventas filtradas para ${periodo}:`, ventasFiltradas);
+    console.log(`Ventas filtradas para ${periodo}:`, ventasFiltradas.length);
     mostrarEstadisticas(ventasFiltradas);
 }
 
 // Función para mostrar estadísticas en pantalla (igual que admin)
 function mostrarEstadisticas(ventas) {
+    console.log('Mostrando estadísticas para:', ventas);
+    
     if (!ventas || ventas.length === 0) {
+        console.log('No hay ventas para mostrar');
         mostrarEstadisticasVacias();
         return;
     }
@@ -122,17 +155,26 @@ function mostrarEstadisticas(ventas) {
     // Calcular estadísticas
     const totalVentas = ventas.length;
     
-    // Calcular monto total usando los nombres correctos del CompraDTO
+    // Calcular monto total - intentar con todos los posibles nombres de campo
     const montoTotal = ventas.reduce((sum, venta) => {
-        const monto = venta.precioTotal || 0;
-        return sum + parseFloat(monto);
+        const monto = venta.precioTotal || venta.precio_total || venta.total || 0;
+        console.log('Monto de venta individual:', monto);
+        return sum + parseFloat(monto || 0);
     }, 0);
 
     // Obtener publicaciones únicas
-    const publicacionesUnicas = new Set(
-        ventas.map(v => v.idPublicacion).filter(id => id)
-    );
+    const publicacionesUnicas = new Set();
+    ventas.forEach(v => {
+        const id = v.idPublicacion || v.id_publicacion;
+        if (id) publicacionesUnicas.add(id);
+    });
     const totalPublicaciones = publicacionesUnicas.size;
+
+    console.log('Resultados calculados:', { 
+        totalVentas, 
+        totalPublicaciones, 
+        montoTotal 
+    });
 
     // Actualizar UI
     const ventasElement = document.querySelector('.color-ventas .dato-numero');
@@ -148,8 +190,6 @@ function mostrarEstadisticas(ventas) {
     if (montoElement) {
         montoElement.textContent = `$${montoTotal.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     }
-
-    console.log('Estadísticas mostradas:', { totalVentas, totalPublicaciones, montoTotal });
 }
 
 // Función para mostrar estadísticas vacías
