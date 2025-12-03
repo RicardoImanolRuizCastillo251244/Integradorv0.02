@@ -1,15 +1,17 @@
 import { BASE_URL } from "./api_url.js";
-
+const userId = localStorage.getItem("userId");
+const token = localStorage.getItem("authToken");
 let productoActual = null;
 let vendedorActual = null;
 let calificacion = null;
-document.addEventListener('DOMContentLoaded', async function (){
-    
+let listaHorarios = null
+document.addEventListener('DOMContentLoaded', async function () {
+
 
     const container = document.querySelector('.producto-container');
     const contenidoOriginal = container.innerHTML;
-    
-    
+
+
     container.innerHTML = `
         <div class="loader-wrapper">
             <div class="spinner-border text-primary" role="status">
@@ -18,9 +20,9 @@ document.addEventListener('DOMContentLoaded', async function (){
             <p class="mt-4 text-muted fs-5">Cargando producto...</p>
         </div>
     `;
-    
+
     const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString); 
+    const urlParams = new URLSearchParams(queryString);
     const idObtenido = urlParams.get('id');
 
 
@@ -31,77 +33,129 @@ document.addEventListener('DOMContentLoaded', async function (){
 
     try {
         const response = await fetch(BASE_URL + 'publicacion/' + idObtenido);
-        
+
         if (!response.ok) {
             throw new Error('Producto no encontrado');
         }
 
         productoActual = await response.json();
-        
+
         const responseUser = await fetch(BASE_URL + 'usuario/' + productoActual.id_vendedor);
         vendedorActual = await responseUser.json();
 
+<<<<<<< HEAD
+        const responseCalificacion = await fetch(BASE_URL + 'calificacion/promedio/' + productoActual.id_publicacion);
+
+        if (!responseCalificacion.ok) {
+            const errorCalificacion = await responseCalificacion.text()
+            console.error(errorCalificacion)
+
+        }
+
+        calificacion = await responseCalificacion.json()
+
+        const horarios = await fetch(`${BASE_URL}horaEntrega/${productoActual.id_vendedor}`, {
+            headers: { "Authorization": `Bearer ${token}` }
+        });
+
+        listaHorarios = await horarios.json()
+        
+        console.log(listaHorarios)
+=======
         const responseCalificacion = await fetch(BASE_URL+'calificacion/promedio/'+productoActual.id_publicacion);
 
         calificacion = await responseCalificacion.json()
+>>>>>>> 360cc9d684137b5388400e5fd6af31bc3cccabe7
 
         console.log('✅ Producto cargado:', productoActual);
         console.log('✅ Vendedor cargado:', vendedorActual);
         console.log("Calificacion cargada:", calificacion)
-        
+
         container.innerHTML = contenidoOriginal;
         let existencia = ''
-        if(productoActual.existencia_publicacion<10){
+        if (productoActual.existencia_publicacion < 10) {
             existencia = `<strong>${productoActual.existencia_publicacion} unidades</strong>`
         }
-        else{
+        else {
             existencia = '<strong>10+ unidades</strong'
         }
-        
+
 
         renderProducto(productoActual);
-        renderDetallesVendedor(vendedorActual, existencia);
+        renderDetallesVendedor(vendedorActual, existencia, calificacion);
+        renderHorarios()
 
-        
-    const btncomprar = document.getElementById('btn_comprar');
-    const btnQueja = document.getElementById('btn_queja');
-    const cantidadSelect = document.getElementById("cantidadSelect");
-    const cantidadInput = document.getElementById("cantidadInput");
+        const btncomprar = document.getElementById('btn_comprar');
+        const btnQueja = document.getElementById('btn_queja');
+        const cantidadSelect = document.getElementById("cantidadSelect");
+        const cantidadInput = document.getElementById("cantidadInput");
+        const selectHorario = document.getElementById('select_horario')
+
+        btncomprar.addEventListener('click', () => {
+            const userId = localStorage.getItem('userId');
+
+            if (userId) {
+                // Guardar datos del producto para la página de pago
+                const cantidad = cantidadInput.value || 1;
+                const horario = selectHorario.value
+                localStorage.setItem('productoCompra', JSON.stringify({
+                    productoId: productoActual.id_publicacion,
+                    cantidad: cantidad,
+                    vendedorId: vendedorActual.id_usuario,
+                    totalVenta: actualizarPrecioTotal(),
+                    hora: horario
+                }));
+                window.location.href = '/pages/pago.html'; 
+            } else {
+                mostrarAlerta('Debes iniciar sesión para comprar', 'warning');
+                setTimeout(() => {
+                    window.location.href = '/pages/login.html';
+                }, 1500);
+            }
+        });
+
+        btnQueja.addEventListener('click', (e) => {
+            e.preventDefault();
+            const userId = localStorage.getItem('userId');
+
+            if (userId) {
+                // Guardar ID del producto para la queja
+                if (productoActual && productoActual.id) {
+                    localStorage.setItem('productoQuejaId', productoActual.id);
+                }
+                window.location.href = '/pages/Queja.html';
+            } else {
+                mostrarAlerta('Debes iniciar sesión para reportar', 'warning');
+                setTimeout(() => {
+                    window.location.href = '/pages/login.html';
+                }, 1500);
+            }
+        });
+
+        cantidadSelect.addEventListener("change", () => {
+            if (cantidadSelect.value !== "") {
+                cantidadInput.value = cantidadSelect.value;
+                actualizarPrecioTotal();
+            }
+        });
 
 
-
-btnQueja.addEventListener('click', (e) => {
-    e.preventDefault(); 
-    const userId = localStorage.getItem('userId');
-    
-    if (userId) {
-        // Guardar ID del producto para la queja
-        if (productoActual && productoActual.id) {
-            localStorage.setItem('productoQuejaId', productoActual.id);
-        }
-        window.location.href = '/pages/Queja.html'; 
-    } else {
-        mostrarAlerta('Debes iniciar sesión para reportar', 'warning');
-        setTimeout(() => {
-            window.location.href = '/pages/login.html';
-        }, 1500);
-    }
-});
-
-cantidadSelect.addEventListener("change", () => {
-    if (cantidadSelect.value !== "") {
-        cantidadInput.value = cantidadSelect.value;
-        actualizarPrecioTotal();
-    }
-});
+        cantidadInput.addEventListener("input", () => {
+            cantidadSelect.value = "";
+            actualizarPrecioTotal();
+        });
 
 
-cantidadInput.addEventListener("input", () => {
-    cantidadSelect.value = "";
-    actualizarPrecioTotal();
-});
+        cantidadInput.addEventListener("blur", () => {
+            if (cantidadInput.value < 1 || cantidadInput.value === '') {
+                cantidadInput.value = 1;
+                actualizarPrecioTotal();
+            }
+        });
 
 
+<<<<<<< HEAD
+=======
 cantidadInput.addEventListener("blur", () => {
     if (cantidadInput.value < 1 || cantidadInput.value === '') {
         cantidadInput.value = 1;
@@ -131,10 +185,11 @@ cantidadInput.addEventListener("blur", () => {
     }
 });
 
+>>>>>>> 360cc9d684137b5388400e5fd6af31bc3cccabe7
         container.style.opacity = '0';
         container.style.transform = 'translateY(20px)';
         container.style.transition = 'all 0.5s ease';
-        
+
         setTimeout(() => {
             container.style.opacity = '1';
             container.style.transform = 'translateY(0)';
@@ -148,7 +203,7 @@ cantidadInput.addEventListener("blur", () => {
 
 });
 
-function renderProducto(producto){
+function renderProducto(producto) {
     const descripcion = document.getElementById('card-text');
     const titulo = document.getElementById('card-title');
     const precio = document.getElementById('precio');
@@ -157,26 +212,26 @@ function renderProducto(producto){
 
     titulo.textContent = producto.titulo_publicacion || 'Producto sin título';
     descripcion.textContent = producto.descripcion_publicacion || 'Sin descripción disponible';
-    
+
 
     const precioFormateado = parseFloat(producto.precio_producto).toFixed(2);
     precio.textContent = `$${precioFormateado}`;
-    
+
 
     let imageSrc = procesarImagen(producto.foto_publicacion);
-    
+
     img.src = imageSrc;
     img.alt = producto.titulo_publicacion || 'Producto';
-    
 
-    img.onerror = function() {
+
+    img.onerror = function () {
         this.src = 'https://via.placeholder.com/450x450/fc4b08/ffffff?text=Sin+Imagen';
     };
 }
 
 function procesarImagen(fotoPublicacion) {
     let imageSrc = "";
-    
+
     if (fotoPublicacion) {
         if (Array.isArray(fotoPublicacion)) {
 
@@ -194,18 +249,20 @@ function procesarImagen(fotoPublicacion) {
 
         imageSrc = 'https://via.placeholder.com/450x450/fc4b08/ffffff?text=Sin+Imagen';
     }
-    
+
     return imageSrc;
 }
 
-function renderDetallesVendedor(vendedor,existencia){
+function renderDetallesVendedor(vendedor, existencia, calificacion) {
     const infor = document.getElementById('contenedorDetalles');
-    
-    const calificacion = vendedor.calificacion || 4.5;
-    const estrellasHTML = generarEstrellas(calificacion);
+    let calificacionTransformada = 0
+    if (calificacion.promedio !== null) {
+        calificacionTransformada = calificacion.promedio
+    }
+    const estrellasHTML = generarEstrellas(calificacionTransformada);
 
     infor.innerHTML = `
-        <h5><i class="fa-solid fa-store"></i> Información del Vendedor</h5>
+        <h5><i class="fa-solid fa-store"></i> Información de publicacion</h5>
         <p>
             <i class="fa-solid fa-user"></i> 
             <strong>${vendedor.nombre_usuario || 'Vendedor'}</strong>
@@ -213,12 +270,14 @@ function renderDetallesVendedor(vendedor,existencia){
         <p>
             <i class="fa-solid fa-star"></i> 
             ${estrellasHTML} 
-            <span style="color: #666;">(${calificacion.toFixed(1)})</span>
+            <span style="color: #666;">(${calificacionTransformada.toFixed(1)})</span>
         </p>
+        <div id="horarios_container">
         <p>
-            <i class="fa-solid fa-clock"></i> 
-            Horario: <strong>08:00 - 20:00</strong>
+        <i class="fa-solid fa-clock"></i> 
+        Horarios de entregas:
         </p>
+        </div> 
         <p>
             <i class="fa-solid fa-box"></i> 
             Disponibles: ${existencia}
@@ -247,20 +306,20 @@ function generarEstrellas(calificacion) {
     for (let i = 0; i < estrellasVacias; i++) {
         html += '<i class="fa-regular fa-star" style="color: #ffc107;"></i>';
     }
-    
+
     return html;
 }
 
 
 function actualizarPrecioTotal() {
     if (!productoActual) return;
-    
+
     const cantidad = parseInt(cantidadInput.value) || 1;
     const precioUnitario = parseFloat(productoActual.precio_producto);
     const total = (precioUnitario * cantidad).toFixed(2);
-    
+
     const precioElement = document.getElementById('precio');
-    
+
     if (cantidad > 1) {
         precioElement.innerHTML = `
             $${total}
@@ -284,7 +343,7 @@ function mostrarAlerta(mensaje, tipo = 'info') {
         <strong>${mensaje}</strong>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     `;
-    
+
     document.body.appendChild(alertaDiv);
 
     setTimeout(() => {
@@ -307,5 +366,44 @@ function mostrarError(mensaje) {
                 <i class="fa-solid fa-home"></i> Volver al inicio
             </a>
         </div>
+    `;
+}
+
+function renderHorarios() {
+    const contenedor = document.getElementById("horarios_container");
+    if (!contenedor) return;
+
+    // Si la lista está vacía
+    if (!listaHorarios || listaHorarios.length === 0) {
+        contenedor.innerHTML = `
+            <p>
+                <i class="fa-solid fa-clock"></i> 
+                Horarios de entrega: <strong>No disponible</strong>
+            </p>
+        `;
+        return;
+    }
+
+    // Construir <option> dinámicos
+    let opciones = `<option value="">Selecciona horario</option>`;
+
+    listaHorarios.map(h => {
+        let hrTransform=h.hora+":00"
+        if(hrTransform<10){
+            hrTransform="0"+h.hora+":00"
+        }
+        opciones += `
+            <option value="${h.id_horario}">
+                ${hrTransform}
+            </option>
+        `;
+    });
+
+    // Render final
+    contenedor.innerHTML = `
+        <p><i class="fa-solid fa-clock"></i> Horarios de entregas:</p>
+        <select id="select_horario">
+            ${opciones}
+        </select>
     `;
 }
