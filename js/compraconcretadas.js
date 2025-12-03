@@ -114,11 +114,7 @@ function mostrarTabla(compras) {
                 </a>
             </td>
             <td><h3 class="fuenteTabla">${fechaStr}</h3></td>
-            <td>
-                <button class="btn btn-sm btn-primary" onclick="alert('Detalles de compra ID: ${compra.idCompra}')">
-                    <i class="fa-solid fa-eye"></i> Detalles
-                </button>
-            </td>
+
         `;
         
         tbody.appendChild(fila);
