@@ -4,10 +4,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     const tablaBody = document.getElementById('tablaBody');
     const authToken = localStorage.getItem('authToken');
 
-    if (!authToken) {
-        window.location.href = '../pages/login.html';
-        return;
-    }
+ //   if (!authToken) {
+  //      window.location.href = '../pages/login.html';
+  //      return;
+  //  }
 
     try {
         // Obtener todas las publicaciones y filtrar las que están en cuarentena/revisión
