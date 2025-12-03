@@ -104,27 +104,20 @@ const url = `${BASE_URL}auth/register`;
             body: JSON.stringify(userData)
         });
 
-        const data = await response.json();
-
         if (response.ok) { // 201 Created
+            const data = await response.json();
             // Registro exitoso
             console.log('Registro exitoso:', data);
 
             // Guardar datos del usuario registrado en localStorage (opcional)
-            // La respuesta incluye: id_rol, nombre_usuario, correo_usuario, numero_cuenta, titular_usuario
-            if (data) {
-                // Guardar temporalmente los datos del nuevo usuario
-                localStorage.setItem('usuario_registrado', JSON.stringify({
-                    id_rol: data.id_rol,
-                    nombre_usuario: data.nombre_usuario,
-                    correo_usuario: data.correo_usuario,
-                    numero_cuenta: data.numero_cuenta || null,
-                    titular_usuario: data.titular_usuario || null
-                }));
+            // La respuesta incluye: userId, message
+            if (data && data.userId) {
+                // Guardar temporalmente el ID del nuevo usuario
+                localStorage.setItem('nuevo_usuario_id', data.userId);
             }
 
             // Mostrar mensaje de éxito
-            alert('Registro exitoso. Por favor inicia sesión.');
+            alert('¡Registro exitoso! Por favor inicia sesión con tus credenciales.');
 
             // Limpiar formulario
             registroForm.reset();
@@ -133,7 +126,23 @@ const url = `${BASE_URL}auth/register`;
             window.location.href = 'login.html';
         } else {
             // Error del servidor (400, 500, etc.)
-            throw new Error(data.message || 'Error al registrar usuario');
+            const errorMessage = await response.text();
+            
+            if (response.status === 400) {
+                // Datos inválidos o usuario ya existe
+                if (errorMessage.toLowerCase().includes('correo') || errorMessage.toLowerCase().includes('email')) {
+                    throw new Error('Este correo electrónico ya está registrado. Por favor, usa otro correo o inicia sesión.');
+                } else if (errorMessage.toLowerCase().includes('usuario')) {
+                    throw new Error('Este nombre de usuario ya está en uso. Por favor, elige otro.');
+                } else {
+                    throw new Error(errorMessage || 'Los datos proporcionados no son válidos. Por favor, verifica la información.');
+                }
+            } else if (response.status === 500) {
+                // Error del servidor
+                throw new Error('Error en el servidor. Por favor, intenta más tarde.');
+            } else {
+                throw new Error(errorMessage || 'Error al registrar usuario. Por favor, intenta nuevamente.');
+            }
         }
 
     } catch (error) {
