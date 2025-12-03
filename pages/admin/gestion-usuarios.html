@@ -89,11 +89,12 @@
 
     <!-- FILTROS -->
     <div class="filtros-usuarios mb-4">
-      <button class="btn-filtro active" onclick="filtrarUsuarios('todos')">Todos</button>
-      <button class="btn-filtro" onclick="filtrarUsuarios('vendedor')">Vendedores</button>
-      <button class="btn-filtro" onclick="filtrarUsuarios('comprador')">Compradores</button>
-      <button class="btn-filtro" onclick="filtrarUsuarios('activo')">Activos</button>
-      <button class="btn-filtro" onclick="filtrarUsuarios('inactivo')">Inactivos</button>
+      <button class="btn-filtro active" onclick="filtrarUsuarios('todos', this)">Todos</button>
+      <button class="btn-filtro" onclick="filtrarUsuarios('consumidor', this)">Consumidores</button>
+      <button class="btn-filtro" onclick="filtrarUsuarios('vendedor', this)">Vendedores</button>
+      <button class="btn-filtro" onclick="filtrarUsuarios('administrador', this)">Administradores</button>
+      <button class="btn-filtro" onclick="filtrarUsuarios('activo', this)">Activos</button>
+      <button class="btn-filtro" onclick="filtrarUsuarios('inactivo', this)">Inactivos</button>
     </div>
 
     <!-- TABLA DE USUARIOS -->
@@ -106,13 +107,12 @@
             <th>Correo</th>
             <th>Rol</th>
             <th>Estado</th>
-            <th>Fecha Registro</th>
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody id="tablaBody">
           <tr>
-            <td colspan="7" class="text-center">Cargando...</td>
+            <td colspan="6" class="text-center">Cargando...</td>
           </tr>
         </tbody>
       </table>

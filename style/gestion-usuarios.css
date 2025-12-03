@@ -159,6 +159,7 @@ header nav {
   color: white;
 }
 
+.badge-administrador,
 .badge-admin {
   background: #c00000;
 }
@@ -167,6 +168,7 @@ header nav {
   background: #051bb2;
 }
 
+.badge-consumidor,
 .badge-comprador,
 .badge-usuario {
   background: #4d9d30;

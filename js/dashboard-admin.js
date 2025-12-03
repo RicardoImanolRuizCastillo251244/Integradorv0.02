@@ -41,8 +41,9 @@ async function cargarDashboard() {
             }, 0);
         }
         document.getElementById('ventasMes').innerText = `$${montoVentas.toLocaleString('es-MX', { minimumFractionDigits: 2 })}`;
-        
-        const membresiasActivas = Array.isArray(membresias) ? membresias.filter(m => m.estado === 'activo' || m.activo) : [];
+
+        // Filtrar membresías activas usando el campo correcto
+        const membresiasActivas = Array.isArray(membresias) ? membresias.filter(m => m.activa === true) : [];
         document.getElementById('totalMembresias').innerText = membresiasActivas.length || 0;
 
         // Cargar badges de acciones rápidas
@@ -70,10 +71,11 @@ async function cargarBadges() {
         }).then(r => r.json()).then(pubs => pubs.filter(p => p.estado_publicacion === 'cuarentena'));
         document.getElementById('badgeCuarentena').innerText = cuarentena.length || 0;
 
-        // Membresías pendientes
-        const membresiasPendientes = await fetch(BASE_URL + 'usuario-membresia', {
+        // Membresías pendientes (inactivas)
+        const membresias = await fetch(BASE_URL + 'usuario-membresia', {
             headers: { 'Authorization': authToken }
         }).then(r => r.json());
+        const membresiasPendientes = membresias.filter(m => m.activa === false);
         document.getElementById('badgeMembresias').innerText = membresiasPendientes.length || 0;
 
         // Quejas pendientes
