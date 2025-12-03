@@ -16,10 +16,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
 
   <!-- CSS -->
-  <link rel="stylesheet" href="../style/estadistica.css" />
-  <link rel="stylesheet" href="../style/main.css" />
-  <link rel="stylesheet" href="../style/infousuario.css" />
-  <link rel="stylesheet" href="../style/ventas.css" />
+  <link rel="stylesheet" href="../../style/estadistica.css" />
+  <link rel="stylesheet" href="../../style/membreciaestadistica.css" />
+  <link rel="stylesheet" href="../../style/main.css" />
 
 </head>
 
@@ -34,8 +33,8 @@
 
           <!-- LOGO -->
           <div class="col-2">
-            <a href="#">
-              <img class="navbar-brand-img" src="../images/LogoUpsitos.png" alt="Logo">
+            <a href="../../index.html">
+              <img class="navbar-brand-img" src="../../images/LogoUpsitos.png" alt="Logo">
             </a>
           </div>
 
@@ -45,7 +44,7 @@
               <input class="form-control form-control-search rounded-5" type="search" placeholder="Buscar..."
                 aria-label="Buscar" />
               <button type="submit" class="btn position-absolute end-0 me-2 p-0 border-0 bg-transparent">
-                <img src="../images/lupa.png" alt="Buscar" style="width:25px; height:25px;">
+                <img src="../../images/lupa.png" alt="Buscar" style="width:25px; height:25px;">
               </button>
             </form>
           </div>
@@ -55,13 +54,13 @@
 
             <!-- BOTÓN USUARIO -->
             <button type="button" class="btn border-0 bg-transparent me-3"
-              onclick="window.location.href='infousuario.html'">
-              <img class="img-user" src="../images/usuario.png" alt="Usuario" style="width:35px; height:35px;">
+              onclick="window.location.href='infousuario-admin.html'">
+              <img class="img-user" src="../../images/usuario.png" alt="Usuario" style="width:35px; height:35px;">
             </button>
 
             <!-- BOTÓN CAMPANA -->
             <button type="button" class="btn border-0 bg-transparent me-2" onclick="window.location.href='#'">
-              <img class="img-notificacion" src="../images/campana (2).png" alt="Notificaciones"
+              <img class="img-notificacion" src="../../images/campana (2).png" alt="Notificaciones"
                 style="width:30px; height:30px;">
             </button>
 
@@ -73,77 +72,85 @@
 
 
   <!-- BOTÓN REGRESAR -->
-  <a href="#" class="btn-regresar">
+  <a href="infousuario-admin.html" class="btn-regresar">
     <i class="fa-solid fa-arrow-left"></i>
   </a>
+
   <!-- NUEVOS BOTONES SUPERIORES -->
   <div class="botones-superiores">
-
-    <button onclick="window.location.href=''">Membresías</button>
-    <button onclick="window.location.href='listamembre.html'">Lista de membresías</button>
-    <button onclick="window.location.href='revisonproducto.html'">Revisión productos</button>
-    <button onclick="window.location.href='revisonmembrecia.html'">Revisión membresías</button>
-    <button onclick="window.location.href='quejas.html'">Quejas y sugerencias</button>
-    <button onclick="window.location.href='ventas.html'">Ventas</button>
-    <button onclick="window.location.href='infousuario.html'">Información Usuario</button>
-    <button onclick="window.location.href='diasrestantes.html'">Dias de membresia</button>
+    <button onclick="window.location.href='infousuario-admin.html'">Información Usuario</button>
+    <button onclick="window.location.href='estadisticas-ventas.html'">Estadísticas</button>
+    <button onclick="window.location.href='quejas-lista.html'">Quejas y sugerencias</button>
   </div>
 
   <!-- PESTAÑAS SUPERIORES -->
   <div class="tabs-usuario">
-
-
-
-    <button class="tab active">Estadísticas</button>
+    <button class="tab" onclick="window.location.href='estadisticas-ventas.html'">Ventas</button>
+    <button class="tab active">Membresías</button>
   </div>
 
   <!-- SUBPESTAÑAS -->
+  <div class="subtabs">
+    <button class="subtab active">Estadísticas</button>
+    <button class="subtab" onclick="window.location.href='revisonmembrecia.html'">Revisión membresías</button>
+    <button class="subtab" onclick="window.location.href='lista-membresias.html'">Lista de membresías</button>
+  </div>
 
 
   <!-- CONTENIDO PRINCIPAL -->
   <section class="container mt-4 estadisticas-contenido">
-    <div class="selector-dias text-center mb-3">
-      <select class="select-dias">
+    <h3 class="text-center mb-4" style="color: #fc4b08; font-weight: bold;">Estadísticas de Membresías</h3>
+
+    <!-- SELECTOR DE PERÍODO -->
+    <div class="selector-dias text-center mb-4">
+      <select class="select-dias" id="selectPeriodo" onchange="cargarEstadisticas()">
         <option value="7">Últimos 7 días</option>
         <option value="15">Últimos 15 días</option>
-        <option value="30">Últimos 30 días</option>
+        <option value="30" selected>Últimos 30 días</option>
         <option value="90">Últimos 3 meses</option>
       </select>
     </div>
-    <!-- Gráfico circular -->
-    <div class="text-center">
-      <img src="../images/grafica.webp" alt="Gráfico circular" class="grafico-img">
+
+    <!-- GRÁFICO CIRCULAR -->
+    <div class="grafico-container text-center mb-4">
+      <canvas id="graficoMembresias" width="300" height="300"></canvas>
     </div>
 
-    <!-- Datos -->
+    <!-- DATOS DE MEMBRESÍAS -->
     <div class="row mt-4 justify-content-center">
       <div class="col-md-4 col-12 mb-3">
-        <div class="dato-box color-ventas">
-          <p class="dato-titulo">Membresía Estantar</p>
-          <p class="dato-numero">00</p>
+        <div class="dato-box color-oro">
+          <p class="dato-titulo">Membresía Oro</p>
+          <p class="dato-numero" id="cantidadOro">0</p>
         </div>
       </div>
       <div class="col-md-4 col-12 mb-3">
-        <div class="dato-box color-publicaciones">
-          <p class="dato-titulo">Membresía Premium</p>
-          <p class="dato-numero">00</p>
+        <div class="dato-box color-plata">
+          <p class="dato-titulo">Membresía Plata</p>
+          <p class="dato-numero" id="cantidadPlata">0</p>
+        </div>
+      </div>
+      <div class="col-md-4 col-12 mb-3">
+        <div class="dato-box color-bronce">
+          <p class="dato-titulo">Membresía Bronce</p>
+          <p class="dato-numero" id="cantidadBronce">0</p>
         </div>
       </div>
     </div>
 
-    <!-- Monto total -->
+    <!-- MONTO TOTAL -->
     <div class="monto-total text-center">
       <p class="titulo-monto">Monto total generado</p>
-      <p class="valor-monto">$00</p>
+      <p class="valor-monto" id="montoTotal">$0.00</p>
     </div>
   </section>
 
   <!-- FOOTER -->
   <footer class="pie-pagina">
     <div class="d-flex justify-content-end mb-2">
-      <img src="../images/X.png" />
-      <img src="../images/instragram.png" />
-      <img src="../images/facebook.png" />
+      <img src="../../images/X.png" alt="X" />
+      <img src="../../images/instragram.png" alt="Instagram" />
+      <img src="../../images/facebook.png" alt="Facebook" />
     </div>
 
     <p><strong>Contactos:</strong></p>
@@ -151,8 +158,10 @@
     <p>✉ 251243@ids.upchiapas.edu.mx</p>
   </footer>
 
-  <!-- SCRIPT NAVEGACIÓN -->
-  <script src="../js/membreciaestadistica.js"></script>
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script type="module" src="../../js/membreciaestadistica.js"></script>
 
 </body>
 

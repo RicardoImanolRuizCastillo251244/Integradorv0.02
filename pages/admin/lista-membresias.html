@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Estadísticas</title>
+  <title>Lista de Membresías</title>
 
   <!-- Fuente -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sauce+One&display=swap" rel="stylesheet" />
@@ -14,8 +14,9 @@
 
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
-  <link rel="stylesheet" href="../../style/revisonmembrecia.css" />
-  <link rel="stylesheet" href="../../style/estadistica.css" />
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="../../style/lista-membresias.css" />
   <link rel="stylesheet" href="../../style/main.css" />
 </head>
 
@@ -50,7 +51,7 @@
 
             <!-- BOTÓN USUARIO -->
             <button type="button" class="btn border-0 bg-transparent me-3"
-              onclick="window.location.href='infousuario-admin.html'">
+              onclick="window.location.href='infousuario.html'">
               <img class="img-user" src="../../images/usuario.png" alt="Usuario" style="width:35px; height:35px;">
             </button>
 
@@ -66,15 +67,14 @@
     </nav>
   </header>
 
-
   <!-- BOTÓN REGRESAR -->
-  <a href="infousuario-admin.html" class="btn-regresar">
+  <a href="infousuario.html" class="btn-regresar">
     <i class="fa-solid fa-arrow-left"></i>
   </a>
 
-  <!-- NUEVOS BOTONES SUPERIORES -->
+  <!-- BOTONES SUPERIORES -->
   <div class="botones-superiores">
-    <button onclick="window.location.href='infousuario-admin.html'">Información Usuario</button>
+    <button onclick="window.location.href='infousuario.html'">Información Usuario</button>
     <button onclick="window.location.href='estadisticas-ventas.html'">Estadísticas</button>
     <button onclick="window.location.href='quejas-lista.html'">Quejas y sugerencias</button>
   </div>
@@ -88,13 +88,14 @@
   <!-- SUBPESTAÑAS -->
   <div class="subtabs">
     <button class="subtab" onclick="window.location.href='membreciaestadistica.html'">Estadísticas</button>
-    <button class="subtab active">Revisión membresías</button>
-    <button class="subtab" onclick="window.location.href='lista-membresias.html'">Lista de membresías</button>
+    <button class="subtab active">Lista de membresías</button>
+    <button class="subtab" onclick="window.location.href='zona-cuarentena.html'">Revisión productos</button>
+    <button class="subtab" onclick="window.location.href='revisonmembrecia.html'">Revisión membresías</button>
   </div>
 
   <!-- CONTENIDO PRINCIPAL -->
-  <section class="container mt-4 estadisticas-contenido">
-    <h3 class="text-center mb-4" style="color: #fc4b08; font-weight: bold;">Revisión de Solicitudes de Membresía</h3>
+  <section class="container mt-4 contenido-lista">
+    <h3 class="text-center mb-4" style="color: #fc4b08; font-weight: bold;">Lista de Membresías</h3>
 
     <!-- TABLA DE MEMBRESÍAS -->
     <div class="tabla-membresias">
@@ -103,36 +104,22 @@
           <tr>
             <th>Usuario</th>
             <th>Correo</th>
-            <th>Tipo de Membresía</th>
-            <th>Captura Transferencia</th>
-            <th>Fecha Solicitud</th>
+            <th>Tipo de membresía</th>
+            <th>Fecha de inicio</th>
+            <th>Fecha de fin</th>
+            <th>Estado</th>
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody id="tablaBody">
+          <!-- Datos dinámicos desde JS -->
           <tr>
-            <td colspan="6" class="text-center">Cargando...</td>
+            <td colspan="7" class="text-center">Cargando...</td>
           </tr>
         </tbody>
       </table>
     </div>
-
   </section>
-
-  <!-- MODAL PARA VER CAPTURA -->
-  <div class="modal fade" id="modalImagen" tabindex="-1" aria-labelledby="modalImagenLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalImagenLabel">Captura de Transferencia</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body text-center">
-          <img id="imagenAmpliada" src="" alt="Captura ampliada" style="max-width: 100%; height: auto; max-height: 70vh; object-fit: contain;">
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!-- FOOTER -->
   <footer class="pie-pagina">
@@ -149,7 +136,7 @@
 
   <!-- SCRIPTS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script type="module" src="../../js/revisonmembrecia.js"></script>
+  <script type="module" src="../../js/lista-membresias.js"></script>
 
 </body>
 

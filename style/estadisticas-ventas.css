@@ -112,103 +112,89 @@ header nav {
   color: white;
 }
 
-/* === CONTENIDO === */
+/* === CONTENIDO PRINCIPAL === */
 .estadisticas-contenido {
-  text-align: center;
   min-height: 60vh;
   padding-bottom: 40px;
 }
 
-/* === GRÁFICO === */
-.grafico-container {
-  max-width: 400px;
-  margin: 0 auto;
-  padding: 20px;
+/* === SELECTOR DE PERÍODO === */
+.selector-periodo {
+  margin: 30px 0;
+}
+
+.btn-dropdown {
   background: white;
-  border-radius: 10px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* === CAJAS DE DATOS === */
-.dato-box {
-  background: white;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
-  transition: 0.3s;
-}
-
-.dato-box:hover {
-  transform: translateY(-5px);
-  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
-}
-
-.dato-titulo {
+  border: 2px solid #fc4b08;
+  color: #fc4b08;
   font-weight: bold;
   font-size: 18px;
-  color: #333;
-  margin: 0 0 10px 0;
+  padding: 12px 40px;
+  border-radius: 10px;
+  transition: 0.3s;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
 }
 
-.dato-numero {
-  font-size: 42px;
-  font-weight: bold;
-  margin: 0;
-  color: #fc4b08;
-}
-
-.color-oro {
-  border-left: 8px solid #FFD700;
-}
-
-.color-plata {
-  border-left: 8px solid #C0C0C0;
-}
-
-.color-bronce {
-  border-left: 8px solid #CD7F32;
-}
-
-/* === MONTO TOTAL === */
-.monto-total {
-  background: linear-gradient(135deg, #fc4b08 0%, #f1a87e 100%);
+.btn-dropdown:hover,
+.btn-dropdown:focus {
+  background: #fc4b08;
   color: white;
-  border-radius: 14px;
-  padding: 25px;
-  margin: 30px auto;
-  width: 80%;
-  max-width: 500px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  border-color: #fc4b08;
 }
 
-.titulo-monto {
-  font-weight: bold;
-  font-size: 20px;
-  margin: 0 0 10px 0;
-}
-
-.valor-monto {
-  font-size: 36px;
-  font-weight: bold;
-  margin: 0;
-}
-
-/* === SELECTOR DE DÍAS === */
-.select-dias {
-  padding: 10px 20px;
+.dropdown-menu {
   border: 2px solid #fc4b08;
   border-radius: 10px;
-  font-size: 16px;
-  font-weight: bold;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.dropdown-item {
   color: #fc4b08;
-  outline: none;
-  cursor: pointer;
-  background: white;
+  font-weight: bold;
+  padding: 10px 20px;
   transition: 0.3s;
 }
 
-.select-dias:hover {
-  background: #fff5f0;
+.dropdown-item:hover {
+  background: #fc4b08;
+  color: white;
+}
+
+/* === MÉTRICAS === */
+.metrica-box {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  height: 120px;
+}
+
+.metrica-contenido {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.metrica-indicador {
+  width: 12px;
+}
+
+.metrica-titulo {
+  font-size: 18px;
+  font-weight: bold;
+  color: #fc4b08;
+  margin: 0 0 10px 0;
+}
+
+.metrica-valor {
+  font-size: 36px;
+  font-weight: bold;
+  color: #333;
+  margin: 0;
 }
 
 /* === BOTÓN REGRESAR === */
@@ -269,15 +255,11 @@ header nav {
     flex-wrap: wrap;
   }
 
-  .monto-total {
-    width: 90%;
+  .metrica-titulo {
+    font-size: 16px;
   }
 
-  .dato-numero {
-    font-size: 32px;
-  }
-
-  .valor-monto {
+  .metrica-valor {
     font-size: 28px;
   }
 }

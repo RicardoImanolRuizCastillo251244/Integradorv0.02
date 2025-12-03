@@ -1,0 +1,338 @@
+/* === ESTILOS GENERALES === */
+body {
+  font-family: 'Open Sauce One', sans-serif;
+  background: #f2f2f2;
+  margin: 0;
+  padding: 0;
+}
+
+/* === HEADER === */
+.contenedor-nav {
+  background: #fc4b08 !important;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+header nav {
+  background-color: #fc4b08 !important;
+}
+
+.form-control-search {
+  padding-right: 45px;
+}
+
+/* === BOTONES SUPERIORES === */
+.botones-superiores {
+  display: flex;
+  overflow-x: auto;
+  gap: 10px;
+  padding: 10px;
+  background: #ffffff;
+  border-bottom: 2px solid #fc4b08;
+}
+
+.botones-superiores button {
+  background: #feeacf;
+  color: #fc4b08;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 14px;
+  font-weight: bold;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.botones-superiores button:hover {
+  background: #fc4b08;
+  color: white;
+}
+
+/* === PESTAÑAS PRINCIPALES === */
+.tabs-usuario {
+  display: flex;
+  justify-content: space-around;
+  background: #fc4b08;
+  padding: 10px 0;
+  margin-top: 0;
+}
+
+.tabs-usuario .tab {
+  background: transparent;
+  border: none;
+  color: #fc4b08;
+  background: #feeacf;
+  font-weight: bold;
+  font-size: 16px;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 14px;
+  transition: 0.3s;
+}
+
+.tabs-usuario .tab.active {
+  background: #c00000;
+  color: white;
+}
+
+.tabs-usuario .tab:hover {
+  background: #d83e05;
+  color: white;
+}
+
+/* === CONTENIDO PRINCIPAL === */
+.info-usuario-contenido {
+  min-height: 60vh;
+  padding-bottom: 40px;
+}
+
+/* === TARJETA DE INFORMACIÓN === */
+.info-card {
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  margin-bottom: 30px;
+}
+
+.info-card-header {
+  background: linear-gradient(135deg, #fc4b08 0%, #f1a87e 100%);
+  padding: 30px 20px;
+  text-align: center;
+  color: white;
+}
+
+.avatar-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.avatar-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 4px solid white;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  object-fit: cover;
+  background: white;
+}
+
+.usuario-nombre {
+  font-size: 28px;
+  font-weight: bold;
+  margin: 0;
+  color: white;
+}
+
+.usuario-rol {
+  font-size: 16px;
+  margin: 5px 0 0 0;
+  opacity: 0.95;
+  font-weight: bold;
+}
+
+/* === CUERPO DE LA TARJETA === */
+.info-card-body {
+  padding: 30px 25px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+  color: #333;
+  font-size: 15px;
+}
+
+.info-label i {
+  color: #fc4b08;
+  font-size: 18px;
+}
+
+.info-value {
+  font-weight: normal;
+  color: #555;
+  font-size: 15px;
+  text-align: right;
+}
+
+/* === BADGES === */
+.badge-membresia {
+  background: #e0e0e0;
+  color: #555;
+  padding: 6px 15px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.badge-oro {
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+  color: white;
+}
+
+.badge-plata {
+  background: linear-gradient(135deg, #C0C0C0 0%, #808080 100%);
+  color: white;
+}
+
+.badge-bronce {
+  background: linear-gradient(135deg, #CD7F32 0%, #8B4513 100%);
+  color: white;
+}
+
+/* === ESTADOS === */
+.estado-activo {
+  color: #4d9d30;
+  font-weight: bold;
+  background: #e8f5e9;
+  padding: 5px 12px;
+  border-radius: 15px;
+  font-size: 13px;
+}
+
+.estado-inactivo {
+  color: #c00000;
+  font-weight: bold;
+  background: #ffebee;
+  padding: 5px 12px;
+  border-radius: 15px;
+  font-size: 13px;
+}
+
+/* === FOOTER DE LA TARJETA === */
+.info-card-footer {
+  padding: 20px 25px;
+  background: #f7f7f7;
+  display: flex;
+  justify-content: space-around;
+  gap: 15px;
+}
+
+.btn-accion {
+  flex: 1;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.btn-editar {
+  background: #fc4b08;
+  color: white;
+}
+
+.btn-editar:hover {
+  background: #d83e05;
+  transform: translateY(-2px);
+}
+
+.btn-cerrar-sesion {
+  background: #c00000;
+  color: white;
+}
+
+.btn-cerrar-sesion:hover {
+  background: #a00000;
+  transform: translateY(-2px);
+}
+
+/* === BOTÓN REGRESAR === */
+.btn-regresar {
+  position: fixed;
+  left: 20px;
+  bottom: 120px;
+  width: 55px;
+  height: 55px;
+  background-color: #ffffff;
+  border: 3px solid #fc4b08;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  z-index: 1500;
+  transition: 0.3s;
+}
+
+.btn-regresar i {
+  font-size: 28px;
+  color: #fc4b08;
+}
+
+.btn-regresar:hover {
+  transform: scale(1.1);
+  background-color: #0e0a08;
+}
+
+.btn-regresar:hover i {
+  color: #ffffff;
+}
+
+/* === FOOTER === */
+.pie-pagina {
+  background: #fc4b08;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  margin-top: 50px;
+}
+
+.pie-pagina img {
+  width: 40px;
+  height: 40px;
+  margin: 0 10px;
+}
+
+/* === RESPONSIVIDAD === */
+@media (max-width: 768px) {
+  .tabs-usuario {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .usuario-nombre {
+    font-size: 22px;
+  }
+
+  .info-card-footer {
+    flex-direction: column;
+  }
+
+  .btn-accion {
+    width: 100%;
+  }
+
+  .info-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .info-value {
+    text-align: left;
+  }
+}

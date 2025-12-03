@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Estadísticas</title>
+  <title>Zona de Cuarentena</title>
 
   <!-- Fuente -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sauce+One&display=swap" rel="stylesheet" />
@@ -14,8 +14,9 @@
 
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
-  <link rel="stylesheet" href="../../style/revisonmembrecia.css" />
-  <link rel="stylesheet" href="../../style/estadistica.css" />
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="../../style/zona-cuarentena.css" />
   <link rel="stylesheet" href="../../style/main.css" />
 </head>
 
@@ -50,7 +51,7 @@
 
             <!-- BOTÓN USUARIO -->
             <button type="button" class="btn border-0 bg-transparent me-3"
-              onclick="window.location.href='infousuario-admin.html'">
+              onclick="window.location.href='infousuario.html'">
               <img class="img-user" src="../../images/usuario.png" alt="Usuario" style="width:35px; height:35px;">
             </button>
 
@@ -66,15 +67,14 @@
     </nav>
   </header>
 
-
   <!-- BOTÓN REGRESAR -->
-  <a href="infousuario-admin.html" class="btn-regresar">
+  <a href="infousuario.html" class="btn-regresar">
     <i class="fa-solid fa-arrow-left"></i>
   </a>
 
-  <!-- NUEVOS BOTONES SUPERIORES -->
+  <!-- BOTONES SUPERIORES -->
   <div class="botones-superiores">
-    <button onclick="window.location.href='infousuario-admin.html'">Información Usuario</button>
+    <button onclick="window.location.href='infousuario.html'">Información Usuario</button>
     <button onclick="window.location.href='estadisticas-ventas.html'">Estadísticas</button>
     <button onclick="window.location.href='quejas-lista.html'">Quejas y sugerencias</button>
   </div>
@@ -88,47 +88,75 @@
   <!-- SUBPESTAÑAS -->
   <div class="subtabs">
     <button class="subtab" onclick="window.location.href='membreciaestadistica.html'">Estadísticas</button>
-    <button class="subtab active">Revisión membresías</button>
-    <button class="subtab" onclick="window.location.href='lista-membresias.html'">Lista de membresías</button>
+    <button class="subtab" onclick="window.location.href='listamembre.html'">Lista de membresías</button>
+    <button class="subtab active">Revisión productos</button>
+    <button class="subtab" onclick="window.location.href='revisonmembrecia.html'">Revisión membresías</button>
   </div>
 
   <!-- CONTENIDO PRINCIPAL -->
-  <section class="container mt-4 estadisticas-contenido">
-    <h3 class="text-center mb-4" style="color: #fc4b08; font-weight: bold;">Revisión de Solicitudes de Membresía</h3>
+  <section class="container mt-4 contenido-cuarentena">
+    <h3 class="text-center mb-4" style="color: #fc4b08; font-weight: bold;">Zona de Cuarentena - Productos</h3>
 
-    <!-- TABLA DE MEMBRESÍAS -->
-    <div class="tabla-membresias">
+    <!-- TABLA DE PRODUCTOS -->
+    <div class="tabla-cuarentena">
       <table class="table table-bordered">
         <thead class="tabla-header">
           <tr>
             <th>Usuario</th>
             <th>Correo</th>
-            <th>Tipo de Membresía</th>
-            <th>Captura Transferencia</th>
-            <th>Fecha Solicitud</th>
+            <th>Título de publicación</th>
+            <th>Fotos de publicación</th>
+            <th>Queja</th>
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody id="tablaBody">
+          <!-- Datos dinámicos desde JS -->
           <tr>
             <td colspan="6" class="text-center">Cargando...</td>
           </tr>
         </tbody>
       </table>
     </div>
-
   </section>
 
-  <!-- MODAL PARA VER CAPTURA -->
+  <!-- MODAL PARA VER IMAGEN -->
   <div class="modal fade" id="modalImagen" tabindex="-1" aria-labelledby="modalImagenLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="modalImagenLabel">Captura de Transferencia</h5>
+          <h5 class="modal-title" id="modalImagenLabel">Imágenes del Producto</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body text-center">
-          <img id="imagenAmpliada" src="" alt="Captura ampliada" style="max-width: 100%; height: auto; max-height: 70vh; object-fit: contain;">
+          <div id="carouselImagenes" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner" id="imagenesCarousel">
+              <!-- Imágenes dinámicas -->
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselImagenes" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselImagenes" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Siguiente</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL PARA VER QUEJA -->
+  <div class="modal fade" id="modalQueja" tabindex="-1" aria-labelledby="modalQuejaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalQuejaLabel">Detalle de la Queja</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p id="quejaTexto"></p>
         </div>
       </div>
     </div>
@@ -149,7 +177,7 @@
 
   <!-- SCRIPTS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script type="module" src="../../js/revisonmembrecia.js"></script>
+  <script type="module" src="../../js/zona-cuarentena.js"></script>
 
 </body>
 

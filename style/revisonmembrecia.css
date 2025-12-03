@@ -222,31 +222,102 @@
       font-weight:bold;
     }
 
-    /* === ESTILOS NUEVOS PARA TABLA DE REVISIÓN === */
-    .btn-aceptar {
-      background: #4caf50;
-      color: white;
-      border: none;
-      padding: 8px 20px;
-      border-radius: 5px;
-      font-weight: bold;
-      margin-right: 5px;
-    }
+/* === ESTILOS NUEVOS PARA TABLA DE REVISIÓN === */
+.btn-aceptar {
+  background: #4caf50;
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 5px;
+  font-weight: bold;
+  margin-right: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
 
-    .btn-declinar {
-      background: #b02e26;
-      color: white;
-      border: none;
-      padding: 8px 20px;
-      border-radius: 5px;
-      font-weight: bold;
-    }
+.btn-aceptar:hover {
+  background: #3d7d20;
+}
 
-    .captura-icon {
-      width: 30px;
-      height: 30px;
-      cursor: pointer;
-    }
+.btn-declinar {
+  background: #b02e26;
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-declinar:hover {
+  background: #8b1e18;
+}
+
+.btn-ver-captura {
+  background: transparent;
+  border: none;
+  color: #fc4b08;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-ver-captura:hover {
+  color: #d83e05;
+  text-decoration: underline;
+}
+
+.btn-ver-captura i {
+  margin-right: 5px;
+}
+
+.captura-icon {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+/* === TABLA DE MEMBRESÍAS === */
+.tabla-membresias {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  margin-bottom: 30px;
+}
+
+.tabla-membresias table {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  font-size: 14px;
+  margin-bottom: 0;
+}
+
+.tabla-header {
+  background: white;
+  font-weight: bold;
+  color: #fc4b08;
+  border-bottom: 2px solid #fc4b08;
+}
+
+.tabla-membresias th,
+.tabla-membresias td {
+  text-align: center;
+  vertical-align: middle;
+  padding: 15px 10px;
+  color: #fc4b08;
+}
+
+.tabla-membresias tbody tr {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.tabla-membresias tbody tr:hover {
+  background-color: #fff9f5;
+}
 
     /* HEADER */
     .contenedor-nav {
@@ -282,38 +353,14 @@
     body {
     margin: 0;
     padding: 0;
+    font-family: 'Open Sauce One', sans-serif;
+    background: #f5f5f5;
 }
 
 /* Asegura que la barra naranja ocupe todo */
 header, nav.navbar {
-    background-color: #e95b2a !important;
+    background-color: #fc4b08 !important;
     width: 100%;
     margin: 0;
     padding: 0;
-}
-
-/* === ESTILOS NUEVOS PARA TABLA DE REVISIÓN === */
-.btn-aceptar {
-  background: #4caf50;
-  color: white;
-  border: none;
-  padding: 8px 20px;
-  border-radius: 5px;
-  font-weight: bold;
-  margin-right: 5px;
-}
-
-.btn-declinar {
-  background: #b02e26;
-  color: white;
-  border: none;
-  padding: 8px 20px;
-  border-radius: 5px;
-  font-weight: bold;
-}
-
-.captura-icon {
-  width: 30px;
-  height: 30px;
-  cursor: pointer;
 }
