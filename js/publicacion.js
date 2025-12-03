@@ -115,7 +115,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch(BASE_URL+'publicacion', {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${token}`,
+                    'User-Id': idVendedor
                 },
                 body: formData
             });
