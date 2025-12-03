@@ -145,21 +145,47 @@ async function marcarComoLeida(idNotificacion) {
 }
 
 function calcularTiempoTranscurrido(fechaCreacion) {
-    if (!fechaCreacion) return 'Ahora';
+    if (!fechaCreacion) return 'Recién enviada';
 
-    const ahora = new Date();
-    const fecha = new Date(fechaCreacion);
-    const diferencia = ahora - fecha;
+    try {
+        let fecha;
+        
+        // Si la fecha es un array [año, mes, día, hora, minuto, segundo]
+        if (Array.isArray(fechaCreacion)) {
+            fecha = new Date(
+                fechaCreacion[0],           // año
+                fechaCreacion[1] - 1,       // mes (0-indexado)
+                fechaCreacion[2],           // día
+                fechaCreacion[3] || 0,      // hora
+                fechaCreacion[4] || 0,      // minuto
+                fechaCreacion[5] || 0       // segundo
+            );
+        } else {
+            // Si es un string, parsearlo normalmente
+            fecha = new Date(fechaCreacion);
+        }
+        
+        // Verificar si la fecha es válida
+        if (isNaN(fecha.getTime())) {
+            return 'Recién enviada';
+        }
+        
+        const ahora = new Date();
+        const diferencia = ahora - fecha;
 
-    const minutos = Math.floor(diferencia / 60000);
-    const horas = Math.floor(diferencia / 3600000);
-    const dias = Math.floor(diferencia / 86400000);
+        const minutos = Math.floor(diferencia / 60000);
+        const horas = Math.floor(diferencia / 3600000);
+        const dias = Math.floor(diferencia / 86400000);
 
-    if (minutos < 1) return 'Ahora';
-    if (minutos < 60) return `Hace ${minutos} minuto${minutos > 1 ? 's' : ''}`;
-    if (horas < 24) return `Hace ${horas} hora${horas > 1 ? 's' : ''}`;
-    if (dias === 1) return 'Ayer';
-    if (dias < 7) return `Hace ${dias} días`;
-    
-    return fecha.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+        if (minutos < 1) return 'Ahora';
+        if (minutos < 60) return `Hace ${minutos} minuto${minutos > 1 ? 's' : ''}`;
+        if (horas < 24) return `Hace ${horas} hora${horas > 1 ? 's' : ''}`;
+        if (dias === 1) return 'Ayer';
+        if (dias < 7) return `Hace ${dias} días`;
+        
+        return fecha.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+    } catch (error) {
+        console.error('Error al calcular tiempo:', error);
+        return 'Recién enviada';
+    }
 }
