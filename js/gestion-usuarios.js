@@ -321,37 +321,13 @@ window.cambiarEstadoUsuario = async (idUsuario, accion) => {
         return;
     }
 
-    // Si no tenemos el perfil, intentar obtenerlo nuevamente
-    if (!perfilUsuarioActual) {
-        console.log('Perfil no disponible, intentando obtenerlo...');
-        try {
-            const response = await fetch(BASE_URL + 'usuario/profile', {
-                headers: { 'Authorization': authToken }
-            });
-            if (response.ok) {
-                perfilUsuarioActual = await response.json();
-                console.log('Perfil obtenido:', perfilUsuarioActual);
-            } else {
-                console.error('Error al obtener perfil:', response.status);
-                alert('Error: No se pudo verificar tu identidad como administrador. Por favor, recarga la página.');
-                return;
-            }
-        } catch (error) {
-            console.error('Error al obtener perfil:', error);
-            alert('Error de conexión al verificar permisos.');
-            return;
-        }
-    }
-
     try {
         console.log('Cambiando estado del usuario:', idUsuario, 'a', nuevoActivo);
 
-        // Usar PATCH para actualización parcial - solo enviar el campo que cambia
         const response = await fetch(BASE_URL + `usuario/${idUsuario}`, {
             method: 'PATCH',
             headers: {
                 'Authorization': authToken,
-                'User-Id': perfilUsuarioActual.id_usuario.toString(),
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ activo: nuevoActivo })
