@@ -21,7 +21,7 @@ async function cargarUsuarios() {
     const authToken = localStorage.getItem('authToken');
 
     try {
-        const response = await fetch(BASE_URL + 'usuarios', {
+        const response = await fetch(BASE_URL + 'usuario', {
             headers: {
                 'Authorization': authToken
             }
@@ -151,7 +151,7 @@ window.verDetalleUsuario = async (idUsuario) => {
     const authToken = localStorage.getItem('authToken');
 
     try {
-        const response = await fetch(BASE_URL + `usuarios/${idUsuario}`, {
+        const response = await fetch(BASE_URL + `usuario/${idUsuario}`, {
             headers: {
                 'Authorization': authToken
             }
@@ -197,13 +197,25 @@ window.cambiarEstadoUsuario = async (idUsuario, accion) => {
     }
 
     try {
-        const response = await fetch(BASE_URL + `usuarios/${idUsuario}/estado`, {
-            method: 'PATCH',
+        // Primero obtener los datos actuales del usuario
+        const getResponse = await fetch(BASE_URL + `usuario/${idUsuario}`, {
+            headers: { 'Authorization': authToken }
+        });
+        
+        if (!getResponse.ok) {
+            throw new Error('No se pudo obtener los datos del usuario');
+        }
+        
+        const userData = await getResponse.json();
+        
+        // Actualizar el usuario con el nuevo estado
+        const response = await fetch(BASE_URL + `usuario/${idUsuario}`, {
+            method: 'PUT',
             headers: {
                 'Authorization': authToken,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ estado: nuevoEstado })
+            body: JSON.stringify({ ...userData, estado: nuevoEstado })
         });
 
         if (response.ok) {

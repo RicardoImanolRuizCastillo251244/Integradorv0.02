@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     try {
         // Endpoint para obtener todas las membresías
-        const response = await fetch(BASE_URL + 'usuario-membresia/all', {
+        const response = await fetch(BASE_URL + 'usuario-membresia', {
             headers: {
                 'Authorization': authToken
             }
@@ -88,13 +88,25 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         try {
-            const response = await fetch(BASE_URL + `usuario-membresia/${idMembresia}/estado`, {
-                method: 'PATCH',
+            // Primero obtener los datos actuales de la membresía
+            const getResponse = await fetch(BASE_URL + `usuario-membresia/${idMembresia}`, {
+                headers: { 'Authorization': authToken }
+            });
+            
+            if (!getResponse.ok) {
+                throw new Error('No se pudo obtener los datos de la membresía');
+            }
+            
+            const membresiaData = await getResponse.json();
+            
+            // Actualizar la membresía con el nuevo estado
+            const response = await fetch(BASE_URL + `usuario-membresia/${idMembresia}`, {
+                method: 'PUT',
                 headers: {
                     'Authorization': authToken,
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ estado: nuevoEstado })
+                body: JSON.stringify({ ...membresiaData, estado: nuevoEstado })
             });
 
             if (response.ok) {

@@ -12,18 +12,27 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     try {
-        // Endpoint para obtener quejas
-        const response = await fetch(BASE_URL + 'quejas', {
-            headers: {
-                'Authorization': authToken
-            }
-        });
+        // Cargar tanto quejas de usuario como de venta
+        const [responseUsuario, responseVenta] = await Promise.all([
+            fetch(BASE_URL + 'queja-usuario', { headers: { 'Authorization': authToken } }),
+            fetch(BASE_URL + 'queja-venta', { headers: { 'Authorization': authToken } })
+        ]);
 
-        if (response.ok) {
-            const quejas = await response.json();
+        let quejas = [];
+        
+        if (responseUsuario.ok) {
+            const quejasUsuario = await responseUsuario.json();
+            quejas = [...quejas, ...quejasUsuario.map(q => ({ ...q, tipo: 'usuario' }))];
+        }
+        
+        if (responseVenta.ok) {
+            const quejasVenta = await responseVenta.json();
+            quejas = [...quejas, ...quejasVenta.map(q => ({ ...q, tipo: 'venta' }))];
+        }
+        if (quejas.length > 0) {
             renderTabla(quejas);
         } else {
-            console.error('Error al cargar quejas:', response.status);
+            console.error('No se pudieron cargar las quejas');
             tablaBody.innerHTML = '<tr><td colspan="6" class="text-center">Error al cargar datos.</td></tr>';
         }
     } catch (error) {
@@ -46,6 +55,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             const correoUsuario = q.correo_usuario || 'N/A';
             const tituloPublicacion = q.titulo_publicacion || 'Sin título';
             const imagenes = q.imagenes || [];
+            const tipoQueja = q.tipo || 'usuario';
+            const idQueja = q.id_queja || q.id_queja_usuario || q.id_queja_venta || q.id;
 
             row.innerHTML = `
                 <td>${nombreUsuario}</td>
@@ -57,15 +68,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                     </button>
                 </td>
                 <td class="text-center">
-                    <button class="btn-ver-queja" onclick="window.verDetalleQueja(${q.id_queja})">
+                    <button class="btn-ver-queja" onclick="window.verDetalleQueja(${idQueja}, '${tipoQueja}')">
                         <i class="fa-solid fa-comment"></i> Ver queja
                     </button>
                 </td>
                 <td class="text-center">
-                    <button class="btn-aceptar" onclick="window.accionQueja(${q.id_queja}, 'aceptar')">
+                    <button class="btn-aceptar" onclick="window.accionQueja(${idQueja}, 'aceptar', '${tipoQueja}')">
                         Aceptar
                     </button>
-                    <button class="btn-declinar" onclick="window.accionQueja(${q.id_queja}, 'declinar')">
+                    <button class="btn-declinar" onclick="window.accionQueja(${idQueja}, 'declinar', '${tipoQueja}')">
                         Declinar
                     </button>
                 </td>
@@ -96,12 +107,16 @@ window.verImagenes = (imagenes) => {
 };
 
 // Ver detalle de queja
-window.verDetalleQueja = async (idQueja) => {
+let tipoQuejaActual = null;
+
+window.verDetalleQueja = async (idQueja, tipoQueja) => {
     const authToken = localStorage.getItem('authToken');
     quejaActualId = idQueja;
+    tipoQuejaActual = tipoQueja;
 
     try {
-        const response = await fetch(BASE_URL + `quejas/${idQueja}`, {
+        const endpoint = tipoQueja === 'usuario' ? 'queja-usuario' : 'queja-venta';
+        const response = await fetch(BASE_URL + `${endpoint}/${idQueja}`, {
             headers: {
                 'Authorization': authToken
             }
@@ -157,13 +172,30 @@ window.enviarRespuesta = async () => {
     }
 
     try {
-        const response = await fetch(BASE_URL + `quejas/${quejaActualId}/responder`, {
-            method: 'POST',
+        // Primero obtener los datos actuales de la queja
+        const endpoint = tipoQuejaActual === 'usuario' ? 'queja-usuario' : 'queja-venta';
+        const getResponse = await fetch(BASE_URL + `${endpoint}/${quejaActualId}`, {
+            headers: { 'Authorization': authToken }
+        });
+        
+        if (!getResponse.ok) {
+            throw new Error('No se pudo obtener los datos de la queja');
+        }
+        
+        const quejaData = await getResponse.json();
+        
+        // Actualizar la queja con la respuesta
+        const response = await fetch(BASE_URL + `${endpoint}/${quejaActualId}`, {
+            method: 'PUT',
             headers: {
                 'Authorization': authToken,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ respuesta: respuesta })
+            body: JSON.stringify({ 
+                ...quejaData, 
+                respuesta: respuesta,
+                estado: 'respondida'
+            })
         });
 
         if (response.ok) {
@@ -189,7 +221,7 @@ window.enviarRespuesta = async () => {
 };
 
 // Aceptar o declinar queja
-window.accionQueja = async (idQueja, accion) => {
+window.accionQueja = async (idQueja, accion, tipoQueja) => {
     if (!confirm(`¿Estás seguro de que deseas ${accion === 'aceptar' ? 'aceptar' : 'declinar'} esta queja?`)) {
         return;
     }
@@ -197,16 +229,27 @@ window.accionQueja = async (idQueja, accion) => {
     const authToken = localStorage.getItem('authToken');
 
     try {
-        const endpoint = accion === 'aceptar' 
-            ? `quejas/${idQueja}/aceptar` 
-            : `quejas/${idQueja}/declinar`;
-
-        const response = await fetch(BASE_URL + endpoint, {
-            method: 'POST',
+        // Primero obtener los datos actuales de la queja
+        const endpoint = tipoQueja === 'usuario' ? 'queja-usuario' : 'queja-venta';
+        const getResponse = await fetch(BASE_URL + `${endpoint}/${idQueja}`, {
+            headers: { 'Authorization': authToken }
+        });
+        
+        if (!getResponse.ok) {
+            throw new Error('No se pudo obtener los datos de la queja');
+        }
+        
+        const quejaData = await getResponse.json();
+        
+        // Actualizar la queja con el nuevo estado
+        const nuevoEstado = accion === 'aceptar' ? 'aceptada' : 'rechazada';
+        const response = await fetch(BASE_URL + `${endpoint}/${idQueja}`, {
+            method: 'PUT',
             headers: {
                 'Authorization': authToken,
                 'Content-Type': 'application/json'
-            }
+            },
+            body: JSON.stringify({ ...quejaData, estado: nuevoEstado })
         });
 
         if (response.ok) {

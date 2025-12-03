@@ -19,7 +19,7 @@ async function cargarNotificaciones() {
     const userId = localStorage.getItem('userId');
 
     try {
-        const response = await fetch(BASE_URL + `notificaciones/usuario/${userId}`, {
+        const response = await fetch(BASE_URL + `notificacion/usuario/${userId}`, {
             headers: {
                 'Authorization': authToken
             }
@@ -129,11 +129,25 @@ window.marcarLeida = async (idNotificacion) => {
     const authToken = localStorage.getItem('authToken');
 
     try {
-        const response = await fetch(BASE_URL + `notificaciones/${idNotificacion}/leer`, {
-            method: 'PATCH',
+        // Primero obtener los datos actuales de la notificación
+        const getResponse = await fetch(BASE_URL + `notificacion/${idNotificacion}`, {
+            headers: { 'Authorization': authToken }
+        });
+        
+        if (!getResponse.ok) {
+            throw new Error('No se pudo obtener los datos de la notificación');
+        }
+        
+        const notifData = await getResponse.json();
+        
+        // Actualizar la notificación marcándola como leída
+        const response = await fetch(BASE_URL + `notificacion/${idNotificacion}`, {
+            method: 'PUT',
             headers: {
-                'Authorization': authToken
-            }
+                'Authorization': authToken,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ ...notifData, leida: true })
         });
 
         if (response.ok) {
@@ -155,19 +169,32 @@ window.marcarTodasLeidas = async () => {
     const userId = localStorage.getItem('userId');
 
     try {
-        const response = await fetch(BASE_URL + `notificaciones/usuario/${userId}/marcar-todas-leidas`, {
-            method: 'PATCH',
-            headers: {
-                'Authorization': authToken
-            }
+        // Como no existe un endpoint para marcar todas, iteramos sobre las no leídas
+        const notificacionesNoLeidas = notificaciones.filter(n => !n.leida);
+        
+        const promesas = notificacionesNoLeidas.map(async (notif) => {
+            const idNotif = notif.id_notificacion || notif.id;
+            return fetch(BASE_URL + `notificacion/${idNotif}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': authToken,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ ...notif, leida: true })
+            });
         });
+        
+        const resultados = await Promise.all(promesas);
 
-        if (response.ok) {
+        const todasExitosas = resultados.every(r => r.ok);
+        
+        if (todasExitosas) {
             notificaciones.forEach(n => n.leida = true);
             renderizarNotificaciones();
             alert('Todas las notificaciones marcadas como leídas.');
         } else {
-            alert('Error al marcar todas como leídas.');
+            alert('Algunas notificaciones no pudieron marcarse como leídas.');
+            await cargarNotificaciones(); // Recargar para ver el estado real
         }
     } catch (error) {
         console.error('Error:', error);
@@ -183,7 +210,7 @@ window.eliminarNotificacion = async (idNotificacion) => {
     const authToken = localStorage.getItem('authToken');
 
     try {
-        const response = await fetch(BASE_URL + `notificaciones/${idNotificacion}`, {
+        const response = await fetch(BASE_URL + `notificacion/${idNotificacion}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': authToken
