@@ -30,11 +30,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             renderTabla(membresias, usuarios);
         } else {
             console.error('Error al cargar datos:', responseMem.status, responseUsers.status);
-            tablaBody.innerHTML = '<tr><td colspan="5" class="text-center">Error al cargar datos.</td></tr>';
+            tablaBody.innerHTML = '<tr><td colspan="6" class="text-center">Error al cargar datos.</td></tr>';
         }
     } catch (error) {
         console.error('Error de red:', error);
-        tablaBody.innerHTML = '<tr><td colspan="5" class="text-center">Error de conexión.</td></tr>';
+        tablaBody.innerHTML = '<tr><td colspan="6" class="text-center">Error de conexión.</td></tr>';
     }
 
     function renderTabla(membresias, usuarios) {
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.log('Membresías pendientes:', membresiasPendientes.length);
 
         if (membresiasPendientes.length === 0) {
-            tablaBody.innerHTML = '<tr><td colspan="5" class="text-center">No hay membresías pendientes para revisar.</td></tr>';
+            tablaBody.innerHTML = '<tr><td colspan="6" class="text-center">No hay membresías pendientes para revisar.</td></tr>';
             return;
         }
 
@@ -62,6 +62,22 @@ document.addEventListener('DOMContentLoaded', async () => {
             const nombreMembresia = m.nombre_membresia || m.tipo_membresia || `Tipo ${m.id_membresia_tipo}`;
             const captura = m.captura_transferencia || m.comprobante || null;
 
+            // Convertir fecha de array a Date
+            let fechaSolicitud = 'N/A';
+            if (Array.isArray(m.fecha_inicio)) {
+                const fechaObj = new Date(
+                    m.fecha_inicio[0],
+                    m.fecha_inicio[1] - 1,
+                    m.fecha_inicio[2],
+                    m.fecha_inicio[3] || 0,
+                    m.fecha_inicio[4] || 0,
+                    m.fecha_inicio[5] || 0
+                );
+                fechaSolicitud = fechaObj.toLocaleDateString('es-ES');
+            } else if (m.fecha_inicio) {
+                fechaSolicitud = new Date(m.fecha_inicio).toLocaleDateString('es-ES');
+            }
+
             row.innerHTML = `
                 <td>${nombreUsuario}</td>
                 <td>${correoUsuario}</td>
@@ -73,6 +89,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                            </button>`
                         : '<span class="text-muted">Sin captura</span>'}
                 </td>
+                <td>${fechaSolicitud}</td>
                 <td class="text-center">
                     <button class="btn-aceptar" onclick="window.accionMembresia(${m.id_usuario_membresia}, 'aceptar')">
                         Aceptar

@@ -19,40 +19,99 @@ window.cargarEstadisticas = async () => {
     const periodo = document.getElementById('selectPeriodo').value;
 
     try {
-        const response = await fetch(BASE_URL + `usuario-membresia`, {
+        // Obtener membresías
+        const responseMem = await fetch(BASE_URL + `usuario-membresia`, {
             headers: {
                 'Authorization': authToken
             }
         });
 
-        if (response.ok) {
-            const todasMembresias = await response.json();
-            
+        // Obtener tipos de membresías para obtener los precios
+        const responseTipos = await fetch(BASE_URL + `membresia-tipo`, {
+            headers: {
+                'Authorization': authToken
+            }
+        });
+
+        if (responseMem.ok && responseTipos.ok) {
+            const todasMembresias = await responseMem.json();
+            const tiposMembresia = await responseTipos.json();
+
+            console.log('Total de membresías obtenidas:', todasMembresias.length);
+            console.log('Todas las membresías:', todasMembresias);
+            console.log('Tipos de membresía disponibles:', tiposMembresia);
+
+            // Filtrar solo membresías activas
+            const membresiasActivas = todasMembresias.filter(m => m.activa === true);
+            console.log('Membresías activas:', membresiasActivas.length);
+            console.log('Detalle membresías activas:', membresiasActivas);
+
             // Filtrar por periodo
             const fechaLimite = new Date();
             fechaLimite.setDate(fechaLimite.getDate() - parseInt(periodo));
-            
-            const membresiasFiltradas = todasMembresias.filter(m => {
-                const fechaMembresia = new Date(m.fecha_adquisicion || m.fecha);
+            console.log('Fecha límite para filtro:', fechaLimite);
+
+            const membresiasFiltradas = membresiasActivas.filter(m => {
+                // Convertir array de fecha [año, mes, día, hora, minuto, segundo] a Date
+                let fechaMembresia;
+                if (Array.isArray(m.fecha_inicio)) {
+                    // Restar 1 al mes porque JavaScript usa 0-11 para meses
+                    fechaMembresia = new Date(
+                        m.fecha_inicio[0], // año
+                        m.fecha_inicio[1] - 1, // mes (0-11)
+                        m.fecha_inicio[2], // día
+                        m.fecha_inicio[3] || 0, // hora
+                        m.fecha_inicio[4] || 0, // minuto
+                        m.fecha_inicio[5] || 0  // segundo
+                    );
+                } else {
+                    fechaMembresia = new Date(m.fecha_inicio);
+                }
+                console.log(`Comparando fecha ${m.fecha_inicio} (${fechaMembresia}) con límite ${fechaLimite}`);
                 return fechaMembresia >= fechaLimite;
             });
-            
-            // Contar por tipo de membresía
-            const oro = membresiasFiltradas.filter(m => m.id_tipo_membresia === 1).length;
-            const plata = membresiasFiltradas.filter(m => m.id_tipo_membresia === 2).length;
-            const bronce = membresiasFiltradas.filter(m => m.id_tipo_membresia === 3).length;
-            const montoTotal = membresiasFiltradas.reduce((sum, m) => sum + (parseFloat(m.monto || 0)), 0);
-            
+
+            console.log('Membresías filtradas por periodo:', membresiasFiltradas.length);
+            console.log('Detalle membresías filtradas:', membresiasFiltradas);
+
+            // Contar por tipo de membresía (solo hay tipo 1 y 2)
+            const tipo1 = membresiasFiltradas.filter(m => m.id_membresia_tipo === 1);
+            const tipo2 = membresiasFiltradas.filter(m => m.id_membresia_tipo === 2);
+
+            // Obtener nombre y precio de cada tipo
+            const tipoMembresia1 = tiposMembresia.find(t => t.id_membresia_tipo === 1);
+            const tipoMembresia2 = tiposMembresia.find(t => t.id_membresia_tipo === 2);
+
+            console.log(`Tipo 1 (${tipoMembresia1?.nombre || 'N/A'}): ${tipo1.length} membresías`);
+            console.log(`Tipo 2 (${tipoMembresia2?.nombre || 'N/A'}): ${tipo2.length} membresías`);
+
+            // Calcular monto total
+            const montoTotal = membresiasFiltradas.reduce((sum, m) => {
+                const tipo = tiposMembresia.find(t => t.id_membresia_tipo === m.id_membresia_tipo);
+                const precio = tipo ? parseFloat(tipo.precio || 0) : 0;
+                console.log(`Membresía tipo ${m.id_membresia_tipo} (${tipo?.nombre}), precio: ${precio}`);
+                return sum + precio;
+            }, 0);
+
+            console.log('Monto total calculado:', montoTotal);
+
             const datos = {
-                oro: oro,
-                plata: plata,
-                bronce: bronce,
+                tipo1: {
+                    cantidad: tipo1.length,
+                    nombre: tipoMembresia1?.nombre || 'Membresía 1',
+                    precio: tipoMembresia1?.precio || 0
+                },
+                tipo2: {
+                    cantidad: tipo2.length,
+                    nombre: tipoMembresia2?.nombre || 'Membresía 2',
+                    precio: tipoMembresia2?.precio || 0
+                },
                 monto_total: montoTotal
             };
-            
+
             actualizarEstadisticas(datos);
         } else {
-            console.error('Error al cargar estadísticas:', response.status);
+            console.error('Error al cargar estadísticas:', responseMem.status, responseTipos.status);
             mostrarError();
         }
     } catch (error) {
@@ -63,23 +122,25 @@ window.cargarEstadisticas = async () => {
 
 function actualizarEstadisticas(datos) {
     // Actualizar cantidades por tipo de membresía
-    const oro = datos.oro || datos.membresia_oro || 0;
-    const plata = datos.plata || datos.membresia_plata || 0;
-    const bronce = datos.bronce || datos.membresia_bronce || 0;
+    const cantidad1 = datos.tipo1?.cantidad || 0;
+    const cantidad2 = datos.tipo2?.cantidad || 0;
+    const nombre1 = datos.tipo1?.nombre || 'Membresía 1';
+    const nombre2 = datos.tipo2?.nombre || 'Membresía 2';
 
-    document.getElementById('cantidadOro').innerText = oro;
-    document.getElementById('cantidadPlata').innerText = plata;
-    document.getElementById('cantidadBronce').innerText = bronce;
+    document.getElementById('cantidadTipo1').innerText = cantidad1;
+    document.getElementById('cantidadTipo2').innerText = cantidad2;
+    document.getElementById('nombreTipo1').innerText = nombre1;
+    document.getElementById('nombreTipo2').innerText = nombre2;
 
     // Actualizar monto total
     const montoTotal = datos.monto_total || 0;
     document.getElementById('montoTotal').innerText = `$${montoTotal.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
     // Actualizar gráfico circular
-    actualizarGrafico(oro, plata, bronce);
+    actualizarGrafico(cantidad1, cantidad2, nombre1, nombre2);
 }
 
-function actualizarGrafico(oro, plata, bronce) {
+function actualizarGrafico(cantidad1, cantidad2, nombre1, nombre2) {
     const ctx = document.getElementById('graficoMembresias').getContext('2d');
 
     // Destruir gráfico anterior si existe
@@ -91,18 +152,16 @@ function actualizarGrafico(oro, plata, bronce) {
     graficoMembresias = new Chart(ctx, {
         type: 'pie',
         data: {
-            labels: ['Membresía Oro', 'Membresía Plata', 'Membresía Bronce'],
+            labels: [nombre1, nombre2],
             datasets: [{
-                data: [oro, plata, bronce],
+                data: [cantidad1, cantidad2],
                 backgroundColor: [
-                    '#FFD700', // Oro
-                    '#C0C0C0', // Plata
-                    '#CD7F32'  // Bronce
+                    '#FFD700', // Color para tipo 1
+                    '#C0C0C0'  // Color para tipo 2
                 ],
                 borderColor: [
                     '#FFA500',
-                    '#A9A9A9',
-                    '#8B4513'
+                    '#A9A9A9'
                 ],
                 borderWidth: 2
             }]
@@ -139,11 +198,10 @@ function actualizarGrafico(oro, plata, bronce) {
 }
 
 function mostrarError() {
-    document.getElementById('cantidadOro').innerText = 'Error';
-    document.getElementById('cantidadPlata').innerText = 'Error';
-    document.getElementById('cantidadBronce').innerText = 'Error';
+    document.getElementById('cantidadTipo1').innerText = 'Error';
+    document.getElementById('cantidadTipo2').innerText = 'Error';
     document.getElementById('montoTotal').innerText = 'Error';
 
     // Mostrar gráfico vacío
-    actualizarGrafico(0, 0, 0);
+    actualizarGrafico(0, 0, 'Tipo 1', 'Tipo 2');
 }
