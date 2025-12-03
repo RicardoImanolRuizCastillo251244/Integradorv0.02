@@ -433,11 +433,11 @@ window.editarCampo = async function (tipoCampo, nombreCampo) {
         }
         
         // Hacer petición PUT al backend
-        const response = await fetch(`${BASE_URL}usuario`, {
-            method: 'PUT',
+        const response = await fetch(`${BASE_URL}usuario/${userId}`, {
+            method: 'PATCH',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': authToken,
+               'Content-Type': 'application/json',
+                'Authorization': authToken.startsWith('Bearer ') ? authToken : `Bearer ${authToken}`,
                 'User-Id': userId
             },
             body: JSON.stringify(datosActualizacion)
