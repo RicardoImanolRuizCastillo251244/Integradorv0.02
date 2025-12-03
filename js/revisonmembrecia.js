@@ -31,12 +31,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     function renderTabla(membresias) {
         tablaBody.innerHTML = '';
 
-        if (membresias.length === 0) {
-            tablaBody.innerHTML = '<tr><td colspan="6" class="text-center">No hay membresías para revisar.</td></tr>';
+        // Filtrar solo las membresías INACTIVAS (pendientes de revisión)
+        const membresiasPendientes = membresias.filter(m => m.activa === false);
+
+        console.log('Total de membresías:', membresias.length);
+        console.log('Membresías pendientes:', membresiasPendientes.length);
+
+        if (membresiasPendientes.length === 0) {
+            tablaBody.innerHTML = '<tr><td colspan="6" class="text-center">No hay membresías pendientes para revisar.</td></tr>';
             return;
         }
 
-        membresias.forEach(m => {
+        membresiasPendientes.forEach(m => {
             const row = document.createElement('tr');
 
             const fechaSolicitud = m.fecha_inicio ? new Date(m.fecha_inicio).toLocaleDateString('es-ES') : 'N/A';
@@ -50,10 +56,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <td>${correoUsuario}</td>
                 <td>${nombreMembresia}</td>
                 <td class="text-center">
-                    ${captura 
+                    ${captura
                         ? `<button class="btn-ver-captura" onclick="window.verCaptura('${captura}')">
                              <i class="fa-solid fa-image"></i> Ver captura
-                           </button>` 
+                           </button>`
                         : '<span class="text-muted">Sin captura</span>'}
                 </td>
                 <td>${fechaSolicitud}</td>
@@ -88,48 +94,58 @@ window.accionMembresia = async (id, accion) => {
         return;
     }
 
-    if (accion === 'declinar') {
-        try {
-            const response = await fetch(`${BASE_URL}usuario-membresia/${id}`, {
-                method: 'DELETE',
-                headers: { 
-                    'Authorization': authToken 
-                }
-            });
-
-            if (response.ok) {
-                alert('Membresía declinada correctamente.');
-                location.reload();
-            } else {
-                const error = await response.json();
-                alert(`Error: ${error.message || 'No se pudo declinar la membresía.'}`);
+    try {
+        // Obtener primero los datos de la membresía
+        const getResponse = await fetch(`${BASE_URL}usuario-membresia`, {
+            headers: {
+                'Authorization': authToken
             }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('Error de conexión.');
-        }
-    } else {
-        // Aceptar membresía (si el endpoint requiere PATCH para cambiar estado)
-        try {
-            const response = await fetch(`${BASE_URL}usuario-membresia/${id}/aceptar`, {
-                method: 'PATCH',
-                headers: { 
-                    'Authorization': authToken,
-                    'Content-Type': 'application/json'
-                }
-            });
+        });
 
-            if (response.ok) {
-                alert('Membresía aceptada correctamente.');
-                location.reload();
-            } else {
-                // Si no existe el endpoint de aceptar, mostrar mensaje
-                alert('La membresía ya está activa.');
-                location.reload();
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('Error de conexión.');
+        if (!getResponse.ok) {
+            alert('Error al obtener los datos de la membresía.');
+            return;
         }
+
+        const membresias = await getResponse.json();
+        const membresia = membresias.find(m => m.id_usuario_membresia === id);
+
+        if (!membresia) {
+            alert('No se encontró la membresía.');
+            return;
+        }
+
+        // Construir el objeto limpio con SOLO los campos que acepta el backend
+        const membresiaLimpia = {
+            id_usuario: membresia.id_usuario,
+            id_membresia_tipo: membresia.id_membresia_tipo,
+            fecha_inicio: membresia.fecha_inicio,
+            fecha_expiracion: membresia.fecha_expiracion,
+            activa: accion === 'aceptar' // true para aceptar, false para declinar
+        };
+
+        console.log('Enviando al servidor:', JSON.stringify(membresiaLimpia, null, 2));
+
+        // Actualizar la membresía usando PUT
+        const response = await fetch(`${BASE_URL}usuario-membresia/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': authToken,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(membresiaLimpia)
+        });
+
+        if (response.ok) {
+            alert(`Membresía ${accion === 'aceptar' ? 'aceptada' : 'declinada'} correctamente.`);
+            location.reload();
+        } else {
+            const errorText = await response.text();
+            console.error('Error del servidor:', errorText);
+            alert(`Error: ${errorText || `No se pudo ${accion === 'aceptar' ? 'aceptar' : 'declinar'} la membresía.`}`);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error de conexión.');
     }
 };

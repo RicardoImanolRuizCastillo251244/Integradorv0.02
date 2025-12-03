@@ -132,8 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 resetPreview();
             } else {
                 // Error (400, 401, 500)
-                const errorData = await response.json().catch(() => ({}));
-                const mensajeError = errorData.message || 'Ocurrió un error al crear la publicación.';
+                let mensajeError = 'Ocurrió un error al crear la publicación.';
 
                 if (response.status === 401) {
                     alert('Tu sesión ha expirado. Por favor inicia sesión nuevamente.');
@@ -141,7 +140,31 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
 
-                throw new Error(mensajeError);
+                // Intentar obtener el mensaje de error del servidor
+                try {
+                    // El backend podría devolver un texto plano en vez de JSON
+                    const contentType = response.headers.get('content-type');
+                    if (contentType && contentType.includes('application/json')) {
+                        const errorData = await response.json();
+                        mensajeError = errorData.message || mensajeError;
+                    } else {
+                        // Si es texto plano, leerlo directamente
+                        mensajeError = await response.text();
+                    }
+                } catch (e) {
+                    console.error('Error al leer respuesta:', e);
+                }
+
+                // Manejar errores específicos de membresía
+                if (mensajeError.includes('membresía')) {
+                    // Es un error relacionado con membresía
+                    throw new Error(mensajeError);
+                } else if (mensajeError.includes('límite') || mensajeError.includes('Básica')) {
+                    // Es un error de límite de publicaciones
+                    throw new Error(mensajeError);
+                } else {
+                    throw new Error(mensajeError);
+                }
             }
 
         } catch (error) {

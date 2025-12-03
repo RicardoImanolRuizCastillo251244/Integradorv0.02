@@ -17,20 +17,21 @@ async function fetchVenta() {
         console.log('Ya hay una carga en proceso...');
         return;
     }
-    
+
     cargando = true;
-    
+
     try {
-        console.log('Iniciando fetch de ventas...');
-        const response = await fetch(BASE_URL + 'compras/'+userId);
+        console.log('Iniciando fetch de compras del usuario...');
+        // Usar el endpoint correcto para historial de compras del comprador
+        const response = await fetch(BASE_URL + 'venta/compras/' + userId);
         console.log('Respuesta status:', response.status);
 
         if (response.ok) {
             ventas = await response.json();
-            console.log('Ventas recibidas:', ventas);
+            console.log('Compras recibidas:', ventas);
             mostrarTabla(ventas);
         } else {
-            console.error('Error al obtener ventas. Status:', response.status);
+            console.error('Error al obtener compras. Status:', response.status);
             mostrarError();
         }
     } catch (error) {
@@ -88,7 +89,6 @@ function mostrarTabla(compras) {
     // Limpiar contenido existente
     tbody.innerHTML = '';
 
-    let str = ""
     let dia=""
     let mes=""
     let anio=""
