@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const tituloPublicacion = q.titulo_publicacion || 'Sin título';
             const imagenes = q.imagenes || [];
             const tipoQueja = q.tipo || 'usuario';
-            const idQueja = q.id_queja || q.id_queja_usuario || q.id_queja_venta || q.id;
+            const idQueja = q.id_queja || q.id;
 
             row.innerHTML = `
                 <td>${nombreUsuario}</td>
@@ -126,13 +126,13 @@ window.verDetalleQueja = async (idQueja, tipoQueja) => {
             const queja = await response.json();
             
             // Llenar modal con datos
-            document.getElementById('detalleIdUsuario').innerText = `#${queja.id_usuario}`;
+            document.getElementById('detalleIdUsuario').innerText = `#${queja.id_emisor || queja.id_usuario || '0'}`;
             document.getElementById('detalleUsuario').innerText = queja.nombre_usuario || 'Usuario desconocido';
             
-            const fecha = new Date(queja.fecha_creacion);
+            const fecha = new Date(queja.fecha_emision || queja.fecha_creacion);
             document.getElementById('detalleFecha').innerText = fecha.toLocaleString('es-ES');
             
-            document.getElementById('detalleDescripcion').innerText = queja.descripcion || 'Sin descripción';
+            document.getElementById('detalleDescripcion').innerText = queja.descripcion_queja || queja.descripcion || 'Sin descripción';
 
             const modal = new bootstrap.Modal(document.getElementById('modalDetalleQueja'));
             modal.show();
@@ -184,21 +184,32 @@ window.enviarRespuesta = async () => {
         
         const quejaData = await getResponse.json();
         
-        // Actualizar la queja con la respuesta
+        // Actualizar la queja con la respuesta - usar los nombres de campo correctos del backend
+        const updateData = {
+            id_emisor: quejaData.id_emisor,
+            descripcion_queja: quejaData.descripcion_queja,
+            estado_queja: 'respondida'
+        };
+
+        // Agregar campos específicos según el tipo
+        if (tipoQuejaActual === 'usuario') {
+            updateData.id_receptor = quejaData.id_receptor;
+            updateData.motivo_queja = quejaData.motivo_queja;
+        } else {
+            updateData.id_venta = quejaData.id_venta;
+            updateData.tipo_problema = quejaData.tipo_problema;
+        }
+        
         const response = await fetch(BASE_URL + `${endpoint}/${quejaActualId}`, {
             method: 'PUT',
             headers: {
                 'Authorization': authToken,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ 
-                ...quejaData, 
-                respuesta: respuesta,
-                estado: 'respondida'
-            })
+            body: JSON.stringify(updateData)
         });
 
-        if (response.ok) {
+        if (response.ok || response.status === 204) {
             alert('Respuesta enviada correctamente.');
             
             // Cerrar modal
@@ -211,12 +222,12 @@ window.enviarRespuesta = async () => {
             // Recargar página
             location.reload();
         } else {
-            const error = await response.json();
-            alert(`Error: ${error.message || 'No se pudo enviar la respuesta.'}`);
+            const errorText = await response.text();
+            alert(`Error: ${errorText || 'No se pudo enviar la respuesta.'}`);
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('Error de conexión.');
+        alert('Error de conexión: ' + error.message);
     }
 };
 
@@ -241,26 +252,41 @@ window.accionQueja = async (idQueja, accion, tipoQueja) => {
         
         const quejaData = await getResponse.json();
         
-        // Actualizar la queja con el nuevo estado
+        // Actualizar la queja con el nuevo estado - usar los nombres de campo correctos del backend
         const nuevoEstado = accion === 'aceptar' ? 'aceptada' : 'rechazada';
+        const updateData = {
+            id_emisor: quejaData.id_emisor,
+            descripcion_queja: quejaData.descripcion_queja,
+            estado_queja: nuevoEstado
+        };
+
+        // Agregar campos específicos según el tipo
+        if (tipoQueja === 'usuario') {
+            updateData.id_receptor = quejaData.id_receptor;
+            updateData.motivo_queja = quejaData.motivo_queja;
+        } else {
+            updateData.id_venta = quejaData.id_venta;
+            updateData.tipo_problema = quejaData.tipo_problema;
+        }
+        
         const response = await fetch(BASE_URL + `${endpoint}/${idQueja}`, {
             method: 'PUT',
             headers: {
                 'Authorization': authToken,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ ...quejaData, estado: nuevoEstado })
+            body: JSON.stringify(updateData)
         });
 
-        if (response.ok) {
+        if (response.ok || response.status === 204) {
             alert(`Queja ${accion === 'aceptar' ? 'aceptada' : 'declinada'} correctamente.`);
             location.reload();
         } else {
-            const error = await response.json();
-            alert(`Error: ${error.message || 'No se pudo procesar la acción.'}`);
+            const errorText = await response.text();
+            alert(`Error: ${errorText || 'No se pudo procesar la acción.'}`);
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('Error de conexión.');
+        alert('Error de conexión: ' + error.message);
     }
 };
