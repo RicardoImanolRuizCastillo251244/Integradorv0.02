@@ -23,19 +23,26 @@ async function cargarDashboard() {
             fetch(BASE_URL + 'usuario', { headers: { 'Authorization': authToken } }).then(r => r.json()),
             fetch(BASE_URL + 'publicacion', { headers: { 'Authorization': authToken } }).then(r => r.json()),
             fetch(BASE_URL + 'venta', { headers: { 'Authorization': authToken } }).then(r => r.json()),
-            fetch(BASE_URL + 'usuario-membresia/all', { headers: { 'Authorization': authToken } }).then(r => r.json())
+            fetch(BASE_URL + 'usuario-membresia', { headers: { 'Authorization': authToken } }).then(r => r.json())
         ]);
 
         // Actualizar métricas
         document.getElementById('totalUsuarios').innerText = usuarios.length || 0;
         
-        const productosActivos = productos.filter(p => p.estado === 'activo' || p.activo);
+        const productosActivos = productos.filter(p => p.estado_publicacion === 'activo' || p.activo);
         document.getElementById('totalProductos').innerText = productosActivos.length || 0;
         
-        const montoVentas = ventas.monto_total || ventas.montoTotal || 0;
+        // Calcular el monto total de ventas
+        let montoVentas = 0;
+        if (Array.isArray(ventas)) {
+            montoVentas = ventas.reduce((sum, venta) => {
+                const monto = venta.monto_total || venta.montoTotal || venta.total || 0;
+                return sum + parseFloat(monto);
+            }, 0);
+        }
         document.getElementById('ventasMes').innerText = `$${montoVentas.toLocaleString('es-MX', { minimumFractionDigits: 2 })}`;
         
-        const membresiasActivas = membresias.filter(m => m.estado === 'activo' || m.activo);
+        const membresiasActivas = Array.isArray(membresias) ? membresias.filter(m => m.estado === 'activo' || m.activo) : [];
         document.getElementById('totalMembresias').innerText = membresiasActivas.length || 0;
 
         // Cargar badges de acciones rápidas
@@ -93,7 +100,7 @@ async function cargarActividad() {
     const userId = localStorage.getItem('userId');
 
     try {
-        const response = await fetch(BASE_URL + `notificaciones/usuario/${userId}?limite=10`, {
+        const response = await fetch(BASE_URL + `notificacion/usuario/${userId}`, {
             headers: { 'Authorization': authToken }
         });
 

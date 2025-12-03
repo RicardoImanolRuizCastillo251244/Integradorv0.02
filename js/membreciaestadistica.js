@@ -19,14 +19,37 @@ window.cargarEstadisticas = async () => {
     const periodo = document.getElementById('selectPeriodo').value;
 
     try {
-        const response = await fetch(BASE_URL + `estadisticas/membresias?periodo=${periodo}d`, {
+        const response = await fetch(BASE_URL + `usuario-membresia`, {
             headers: {
                 'Authorization': authToken
             }
         });
 
         if (response.ok) {
-            const datos = await response.json();
+            const todasMembresias = await response.json();
+            
+            // Filtrar por periodo
+            const fechaLimite = new Date();
+            fechaLimite.setDate(fechaLimite.getDate() - parseInt(periodo));
+            
+            const membresiasFiltradas = todasMembresias.filter(m => {
+                const fechaMembresia = new Date(m.fecha_adquisicion || m.fecha);
+                return fechaMembresia >= fechaLimite;
+            });
+            
+            // Contar por tipo de membresía
+            const oro = membresiasFiltradas.filter(m => m.id_tipo_membresia === 1).length;
+            const plata = membresiasFiltradas.filter(m => m.id_tipo_membresia === 2).length;
+            const bronce = membresiasFiltradas.filter(m => m.id_tipo_membresia === 3).length;
+            const montoTotal = membresiasFiltradas.reduce((sum, m) => sum + (parseFloat(m.monto || 0)), 0);
+            
+            const datos = {
+                oro: oro,
+                plata: plata,
+                bronce: bronce,
+                monto_total: montoTotal
+            };
+            
             actualizarEstadisticas(datos);
         } else {
             console.error('Error al cargar estadísticas:', response.status);

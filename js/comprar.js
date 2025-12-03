@@ -122,11 +122,11 @@ cantidadInput.addEventListener("blur", () => {
             total: actualizarPrecioTotal()
         }));
         console.log("HOLAAA"+localStorage.getItem('productoCompra'))
-        //window.location.href = '/pages/pago.html'; 
+        window.location.href = '/pages/pago.html'; 
     } else {
         mostrarAlerta('⚠️ Debes iniciar sesión para comprar', 'warning');
         setTimeout(() => {
-            //window.location.href = '/pages/login.html';
+            window.location.href = '/pages/login.html';
         }, 1500);
     }
 });

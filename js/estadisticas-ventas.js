@@ -28,14 +28,30 @@ window.cargarEstadisticas = async (dias) => {
     document.getElementById('dropdownPeriodo').innerText = periodos[dias] || `Últimos ${dias} días`;
 
     try {
-        const response = await fetch(BASE_URL + `estadisticas/ventas?periodo=${dias}d`, {
+        const response = await fetch(BASE_URL + `venta`, {
             headers: {
                 'Authorization': authToken
             }
         });
 
         if (response.ok) {
-            const datos = await response.json();
+            const todasVentas = await response.json();
+            
+            // Filtrar ventas por periodo
+            const fechaLimite = new Date();
+            fechaLimite.setDate(fechaLimite.getDate() - dias);
+            
+            const ventasFiltradas = todasVentas.filter(v => {
+                const fechaVenta = new Date(v.fecha_venta || v.fecha);
+                return fechaVenta >= fechaLimite;
+            });
+            
+            // Calcular estadísticas
+            const datos = {
+                total_productos: ventasFiltradas.reduce((sum, v) => sum + (parseInt(v.cantidad || 0)), 0),
+                monto_total: ventasFiltradas.reduce((sum, v) => sum + (parseFloat(v.monto_total || v.total || 0)), 0)
+            };
+            
             actualizarMetricas(datos);
         } else {
             console.error('Error al cargar estadísticas:', response.status);

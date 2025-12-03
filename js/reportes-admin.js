@@ -46,23 +46,23 @@ window.generarVistaPrevia = async () => {
         
         switch(tipoSeleccionado) {
             case 'ventas':
-                endpoint = `estadisticas/ventas?periodo=${periodo}d`;
+                endpoint = `venta`;
                 titulo = 'Reporte de Ventas';
                 break;
             case 'usuarios':
-                endpoint = 'usuarios';
+                endpoint = 'usuario';
                 titulo = 'Reporte de Usuarios';
                 break;
             case 'productos':
-                endpoint = 'productos';
+                endpoint = 'publicacion';
                 titulo = 'Reporte de Productos';
                 break;
             case 'membresias':
-                endpoint = 'estadisticas/membresias?periodo=' + periodo + 'd';
+                endpoint = 'usuario-membresia';
                 titulo = 'Reporte de Membresías';
                 break;
             case 'quejas':
-                endpoint = 'quejas';
+                endpoint = 'queja-usuario';
                 titulo = 'Reporte de Quejas';
                 break;
         }
