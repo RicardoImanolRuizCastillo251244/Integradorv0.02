@@ -177,11 +177,11 @@ header nav {
   margin-right: 5px;
 }
 
-.btn-aceptar {
-  background: #4d9d30;
+.btn-descartar {
+  background: #fc9803;
   color: white;
   border: none;
-  padding: 8px 20px;
+  padding: 10px 20px;
   border-radius: 5px;
   font-weight: bold;
   margin-right: 8px;
@@ -189,23 +189,33 @@ header nav {
   transition: 0.3s;
 }
 
-.btn-aceptar:hover {
-  background: #3d7d20;
+.btn-descartar:hover {
+  background: #e68a00;
+  transform: scale(1.05);
 }
 
-.btn-declinar {
+.btn-descartar i {
+  margin-right: 5px;
+}
+
+.btn-eliminar {
   background: #c00000;
   color: white;
   border: none;
-  padding: 8px 20px;
+  padding: 10px 20px;
   border-radius: 5px;
   font-weight: bold;
   cursor: pointer;
   transition: 0.3s;
 }
 
-.btn-declinar:hover {
+.btn-eliminar:hover {
   background: #a00000;
+  transform: scale(1.05);
+}
+
+.btn-eliminar i {
+  margin-right: 5px;
 }
 
 /* === BOTÓN REGRESAR === */

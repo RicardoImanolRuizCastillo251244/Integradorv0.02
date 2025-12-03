@@ -72,44 +72,45 @@
     <i class="fa-solid fa-arrow-left"></i>
   </a>
 
-  <!-- BOTONES SUPERIORES -->
-  <div class="botones-superiores">
-    <button>Información Usuario</button>
-    <button onclick="window.location.href='estadisticas-ventas.html'">Estadísticas</button>
-    <button onclick="window.location.href='quejas-lista.html'">Quejas y sugerencias</button>
-  </div>
-
   <!-- PESTAÑAS SUPERIORES -->
   <div class="tabs-usuario">
-    <button class="tab active">Información</button>
+    <button class="tab active">Información Usuario</button>
+    <button class="tab" onclick="window.location.href='estadisticas-ventas.html'">Estadísticas</button>
+    <button class="tab" onclick="window.location.href='quejas-lista.html'">Quejas y sugerencias</button>
   </div>
 
   <!-- CONTENIDO PRINCIPAL -->
-  <section class="container mt-3 info-usuario">
+  <main>
+    <section class="perfil-container">
+      <div class="circle-iniciales" id="circleIniciales"></div>
+      <h3 id="nombreUsuario"></h3>
+      <p id="correoUsuario"></p>
+    </section>
 
-    <div class="campo-item">
-      <p class="titulo-campo"></p>
-      <p id="campoNombre"></p>
-      <i class="fa-solid fa-pen-to-square icono-edit"
-        onclick="editarCampo('nombre', 'Nombre de usuario')"></i>
+    <section class="container mt-3 info-usuario">
+
+      <div class="campo-item">
+        <p class="titulo-campo">Nombre de usuario</p>
+        <p id="campoNombre"></p>
+        <i class="fa-solid fa-pen-to-square icono-edit"
+          onclick="editarCampo('nombre', 'Nombre de usuario')"></i>
+      </div>
+
+      <div class="campo-item">
+        <p class="titulo-campo">Cambiar contraseña</p>
+        <p id="campoPass">●●●●●●</p>
+        <i class="fa-solid fa-pen-to-square icono-edit" onclick="editarCampo('password', 'Contraseña')"></i>
+        <i class="fa-solid fa-eye icono-ver" onclick="togglePass()"></i>
+      </div>
+
+    </section>
+
+    <div class="container my-5">
+      <button id="logoutButton" class="btn btn-danger w-100">
+        <i class="fa-solid fa-right-from-bracket me-2"></i> Cerrar Sesión
+      </button>
     </div>
-
-    <div class="campo-item">
-      <p class="titulo-campo">Cambiar contraseña</p>
-      <p id="campoPass">●●●●●●</p>
-
-      <i class="fa-solid fa-pen-to-square icono-edit" onclick="editarCampo('password', 'Contraseña')"></i>
-
-      <i class="fa-solid fa-eye icono-ver" onclick="togglePass()"></i>
-    </div>
-
-  </section>
-
-  <div class="container my-5">
-    <button id="logoutButton" class="btn btn-danger w-100">
-      <i class="fa-solid fa-right-from-bracket me-2"></i> Cerrar Sesión
-    </button>
-  </div>
+  </main>
 
   <!-- FOOTER -->
   <footer class="pie-pagina">
@@ -172,7 +173,7 @@
 
   <!-- SCRIPTS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script type="module" src="../../js/infousuario.js"></script>
+  <script type="module" src="../../js/infousuario-admin.js"></script>
 
 </body>
 

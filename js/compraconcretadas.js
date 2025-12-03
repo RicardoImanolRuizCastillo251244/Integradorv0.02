@@ -1,197 +1,162 @@
 import { BASE_URL } from "./api_url.js";
 
-const userId = localStorage.getItem('userId');
-const rol = localStorage.getItem("rol")
-
-
-let ventas = [];
-let cargando = false; // Prevenir múltiples cargas
-
 document.addEventListener('DOMContentLoaded', () => {
+    // 1. Configuración de UI según rol
+    configurarVistaPorRol();
+
+    // 2. Iniciar carga de datos
     fetchVenta();
+
+    // 3. Configurar botón regresar
+    const returnButton = document.getElementById("return");
+    if (returnButton) {
+        returnButton.addEventListener("click", () => {
+            window.location.href = '../index.html';
+        });
+    }
 });
 
-async function fetchVenta() {
-    // Prevenir múltiples llamadas simultáneas
-    if (cargando) {
-        console.log('Ya hay una carga en proceso...');
-        return;
-    }
+function configurarVistaPorRol() {
+    const rol = localStorage.getItem("rol");
+    const membresia = document.getElementById('membresia');
+    const estadisticas = document.getElementById('estadisticas');
+    
+    // CORRECCIÓN: Validamos que el botón exista antes de ocultarlo
+    // (En compraconcretadas.html NO existe el botón de publicar, por eso fallaba tu código anterior)
+    const btnPublicar = document.getElementById('buttonPost'); 
 
-    cargando = true;
-
-    try {
-        console.log('Iniciando fetch de compras del usuario...');
-        // Usar el endpoint correcto para historial de compras del comprador
-        const response = await fetch(BASE_URL + 'venta/compras/' + userId);
-        console.log('Respuesta status:', response.status);
-
-        if (response.ok) {
-            ventas = await response.json();
-            console.log('Compras recibidas:', ventas);
-            mostrarTabla(ventas);
-        } else {
-            console.error('Error al obtener compras. Status:', response.status);
-            mostrarError();
-        }
-    } catch (error) {
-        console.error('Error de red:', error);
-        mostrarError();
-    } finally {
-        cargando = false;
+    if (rol == 1) { // Consumidor
+        if (membresia) membresia.style.display = 'none';
+        if (estadisticas) estadisticas.style.display = 'none';
+    } else { // Vendedor
+        if (btnPublicar) btnPublicar.style.display = 'none';
     }
 }
 
-const membresia = document.getElementById('membresia')
-    const estadisticas = document.getElementById('estadisticas')
-    const btnPublicar = document.getElementById('buttonPost')
+async function fetchVenta() {
+    const userId = localStorage.getItem('userId');
+    const token = localStorage.getItem('authToken');
 
-    if (rol == 1) {
-        membresia.hidden = true;
-        estadisticas.hidden = true;
-    }
-    else{
-        btnPublicar.hidden=true
-    }
-
-    
-
-function mostrarTabla(compras) {
-    const tablaContainer = document.getElementById("tabla-concretadas");
-    
-    if (!tablaContainer) {
-        console.error('No se encontró el contenedor de tabla');
+    if (!userId) {
+        mostrarError("No has iniciado sesión.");
         return;
     }
     
+    try {
+        console.log('Iniciando fetch de ventas...');
+        const response = await fetch(`${BASE_URL}compras/${userId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'User-Id': userId
+            }
+        });
+
+        if (response.ok) {
+            const ventas = await response.json();
+            console.log('Ventas recibidas:', ventas);
+            mostrarTabla(ventas);
+        } else {
+            const errorText = await response.text();
+            console.error('Error backend:', errorText);
+            mostrarError(`No se pudieron cargar las compras. (${response.status})`);
+        }
+    } catch (error) {
+        console.error('Error de red:', error);
+        mostrarError('Error de conexión con el servidor.');
+    }
+}
+
+function mostrarTabla(compras) {
+    const tablaContainer = document.getElementById("tabla-concretadas");
+    if (!tablaContainer) return;
+    
     // Verificar si hay ventas
     if (!compras || compras.length === 0) {
-        console.log('No hay compras para mostrar');
         tablaContainer.classList.remove('d-none');
         tablaContainer.innerHTML = `
             <div class="text-center py-5">
-                <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
-                <h3 class="text-muted">No hay compras concretadas</h3>
-                <p class="text-secondary">Aún no has realizado ninguna compra</p>
+                <i class="fas fa-shopping-bag fa-3x text-muted mb-3"></i>
+                <h3 class="text-muted">No tienes compras aún</h3>
+                <p class="text-secondary">¡Explora el catálogo y realiza tu primera compra!</p>
+                <a href="../index.html" class="btn btn-outline-primary mt-2">Ir al inicio</a>
             </div>
         `;
         return;
     }
 
-    // Buscar el tbody existente
     const tbody = tablaContainer.querySelector('tbody');
-    
-    if (!tbody) {
-        console.error('No se encontró el tbody en la tabla');
-        return;
-    }
+    if (!tbody) return;
 
-    // Limpiar contenido existente
     tbody.innerHTML = '';
 
-    let dia=""
-    let mes=""
-    let anio=""
-    let hrs=""
-    let min=""
-
-    // Construir las filas de la tabla
-    compras.forEach((compra, index) => {
-        
-        console.log(`Procesando venta ${index + 1}:`, compra);
-        
-        const fila = document.createElement('tr');
-        
-        let fechaFormateada = compra.fechaVenta;
-        try {
-            if (fechaFormateada) {
-                anio=fechaFormateada[0]
-                mes=fechaFormateada[1]
-                dia=fechaFormateada[2]
-                hrs=fechaFormateada[3]
-                min=fechaFormateada[4]
-                if(min<10){
-                    console.log("HOLA")
-                    min="0"+fechaFormateada[4]
-                }
-            }
-        } catch (e) {
-            console.error('Error al formatear fecha:', e);
+    compras.forEach((compra) => {
+        // Formatear Fecha
+        let fechaStr = "Fecha desconocida";
+        if (compra.fechaVenta && Array.isArray(compra.fechaVenta)) {
+            // [año, mes, dia, hora, minuto, segundo]
+            const [anio, mes, dia, hora, min] = compra.fechaVenta;
+            const minStr = min < 10 ? '0' + min : min;
+            fechaStr = `${dia}/${mes}/${anio} <br> <small>${hora}:${minStr} hrs</small>`;
         }
 
-        
-        let imageSrc = 'https://via.placeholder.com/50x50?text=Sin+Imagen';
+        // Procesar Imagen
+        const imageSrc = procesarImagen(compra.fotoPublicacion);
 
-        if (compra.fotoPublicacion) {
-                // Verificar si es un array de bytes (común en Java BLOB -> JSON)
-                if (Array.isArray(compra.fotoPublicacion)) {
-                    // Convertir array de bytes a base64
-                    const base64String = btoa(String.fromCharCode.apply(null, compra.fotoPublicacion));
-                    imageSrc = `data:image/jpeg;base64,${base64String}`;
-                } else if (typeof compra.fotoPublicacion === 'string') {
-                    // Si ya es string, verificar si tiene prefijo
-                    if (compra.fotoPublicacion.startsWith('data:image')) {
-                        imageSrc = compra.fotoPublicacion;
-                    } else {
-                        // Asumir que es base64 sin prefijo
-                        imageSrc = `data:image/jpeg;base64,${compra.fotoPublicacion}`;
-                    }
-                }
-            }
-
-
+        const fila = document.createElement('tr');
         fila.innerHTML = `
-            <td><h3 class="fuenteTabla">${compra.vendedorNombre || 'Usuario desconocido'}</h3></td>
-            <td><h3 class="fuenteTabla">${compra.tituloPublicacion || 'Sin título'}</h3></td>
-            <td><h3 class="fuenteTabla">$${compra.precioTotal || '0'}</h3></td>
-            <td><h3 class="fuenteTabla">${compra.cantidadVendida || '0'}</h3></td>
+            <td><h3 class="fuenteTabla fw-bold">${compra.vendedorNombre || 'Desconocido'}</h3></td>
+            <td><h3 class="fuenteTabla">${compra.tituloPublicacion || 'Producto eliminado'}</h3></td>
+            <td><h3 class="fuenteTabla text-success">$${compra.precioTotal}</h3></td>
+            <td><h3 class="fuenteTabla">${compra.cantidadVendida}</h3></td>
             <td>
-            <a href="/pages/comprar.html?id=${compra.idPublicacion}">    
-            <img src="${imageSrc}" 
-                     class="img-tabla" 
-                     alt="Producto"
-                     onerror="this.onerror=null; this.src='https://via.placeholder.com/50x50?text=Error';">
-            </a>
+                <a href="/pages/comprar.html?id=${compra.idPublicacion}">    
+                    <img src="${imageSrc}" class="img-tabla rounded" alt="Producto" style="width: 60px; height: 60px; object-fit: cover;">
+                </a>
             </td>
-            <td><h3 class="fuenteTabla">${dia}-${mes}-${anio}<br>${hrs}:${min}</br></h3></td>
+            <td><h3 class="fuenteTabla">${fechaStr}</h3></td>
             <td>
-                <a href="detalleCompraConcretada.html?id=${compra.idCompra}" 
-                   class="ver-detalles">Ver detalles</a>
+                <button class="btn btn-sm btn-primary" onclick="alert('Detalles de compra ID: ${compra.idCompra}')">
+                    <i class="fa-solid fa-eye"></i> Detalles
+                </button>
             </td>
         `;
         
         tbody.appendChild(fila);
     });
 
-    // Remover la clase d-none para mostrar la tabla
     tablaContainer.classList.remove('d-none');
-    
-    console.log(`✅ Se mostraron ${ventas.length} compra(s) exitosamente`);
 }
 
-function mostrarError() {
+function procesarImagen(foto) {
+    if (!foto) return 'https://via.placeholder.com/60?text=Sin+Img';
+    
+    try {
+        if (Array.isArray(foto)) {
+            const uint8 = new Uint8Array(foto);
+            let binary = '';
+            for (let i = 0; i < uint8.length; i++) binary += String.fromCharCode(uint8[i]);
+            return `data:image/jpeg;base64,${btoa(binary)}`;
+        }
+        if (typeof foto === 'string') {
+            return foto.startsWith('data:image') ? foto : `data:image/jpeg;base64,${foto}`;
+        }
+    } catch (e) {
+        console.warn("Error procesando imagen", e);
+    }
+    return 'https://via.placeholder.com/60?text=Error';
+}
+
+function mostrarError(msg) {
     const tablaContainer = document.getElementById("tabla-concretadas");
-    
-    if (!tablaContainer) return;
-    
-    tablaContainer.classList.remove('d-none');
-    tablaContainer.innerHTML = `
-        <div class="text-center py-5">
-            <i class="fas fa-exclamation-triangle fa-3x text-danger mb-3"></i>
-            <h3 class="text-danger">Error al cargar las compras</h3>
-            <p class="text-secondary">No se pudieron cargar los datos. Intenta nuevamente.</p>
-            <button class="btn btn-primary mt-3" onclick="location.reload()">
-                <i class="fas fa-sync-alt me-2"></i>Reintentar
-            </button>
-        </div>
-    `;
+    if (tablaContainer) {
+        tablaContainer.classList.remove('d-none');
+        tablaContainer.innerHTML = `
+            <div class="text-center py-5">
+                <i class="fas fa-exclamation-circle fa-3x text-danger mb-3"></i>
+                <h3 class="text-danger">Ocurrió un error</h3>
+                <p class="text-secondary">${msg}</p>
+                <button class="btn btn-primary mt-3" onclick="location.reload()">Reintentar</button>
+            </div>
+        `;
+    }
 }
-
-// Botón regresar
-const returnButton = document.getElementById("return");
-if (returnButton) {
-    returnButton.addEventListener("click", () => {
-        window.location.href = '../index.html';
-    });
-}
-

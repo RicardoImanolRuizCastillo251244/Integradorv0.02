@@ -62,11 +62,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                     </button>
                 </td>
                 <td class="text-center">
-                    <button class="btn-aceptar" onclick="window.accionQueja(${idQueja}, 'aceptar', '${tipoQueja}')">
-                        Aceptar
-                    </button>
-                    <button class="btn-declinar" onclick="window.accionQueja(${idQueja}, 'declinar', '${tipoQueja}')">
-                        Declinar
+                    <button class="btn-eliminar" onclick="window.eliminarQueja(${idQueja}, '${tipoQueja}')">
+                        <i class="fa-solid fa-trash"></i> Eliminar
                     </button>
                 </td>
             `;
@@ -224,72 +221,32 @@ window.enviarRespuesta = async () => {
     }
 };
 
-// Aceptar o declinar queja
-window.accionQueja = async (idQueja, accion, tipoQueja) => {
-    if (!confirm(`¿Estás seguro de que deseas ${accion === 'aceptar' ? 'aceptar' : 'declinar'} esta queja?`)) {
+// Eliminar queja
+window.eliminarQueja = async (idQueja, tipoQueja) => {
+    if (!confirm('¿Estás seguro de que deseas eliminar esta queja?')) {
         return;
     }
 
     const authToken = localStorage.getItem('authToken');
 
     try {
-        // Primero obtener los datos actuales de la queja
         const endpoint = tipoQueja === 'usuario' ? 'queja-usuario' : 'queja-venta';
-        console.log(`Obteniendo queja: ${BASE_URL}${endpoint}/${idQueja}`);
-        
-        const getResponse = await fetch(BASE_URL + `${endpoint}/${idQueja}`, {
-            headers: { 'Authorization': authToken }
-        });
-        
-        if (!getResponse.ok) {
-            const errorText = await getResponse.text();
-            console.error('Error al obtener queja:', getResponse.status, errorText);
-            alert(`Error al obtener la queja (${getResponse.status}): ${errorText}`);
-            return;
-        }
-        
-        const quejaData = await getResponse.json();
-        console.log('Datos de la queja obtenidos:', quejaData);
-        
-        // Actualizar la queja - NO cambiamos estado_queja porque la BD solo acepta "ABIERTA"
-        // La acción de aceptar/declinar solo eliminará la queja o la marcará como respondida
-        const updateData = {
-            id_emisor: quejaData.id_emisor,
-            descripcion_queja: quejaData.descripcion_queja,
-            estado_queja: quejaData.estado_queja  // Mantener el estado actual (ABIERTA)
-        };
-
-        // Agregar campos específicos según el tipo
-        if (tipoQueja === 'usuario') {
-            updateData.id_receptor = quejaData.id_receptor;
-            if (quejaData.motivo_queja) {
-                updateData.motivo_queja = quejaData.motivo_queja;
-            }
-        } else {
-            updateData.id_venta = quejaData.id_venta;
-            if (quejaData.tipo_problema) {
-                updateData.tipo_problema = quejaData.tipo_problema;
-            }
-        }
-        
-        console.log('Datos a enviar:', updateData);
+        console.log(`Eliminando queja: ${BASE_URL}${endpoint}/${idQueja}`);
         
         const response = await fetch(BASE_URL + `${endpoint}/${idQueja}`, {
-            method: 'PUT',
+            method: 'DELETE',
             headers: {
-                'Authorization': authToken,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(updateData)
+                'Authorization': authToken
+            }
         });
 
         if (response.ok || response.status === 204) {
-            alert(`Queja ${accion === 'aceptar' ? 'aceptada' : 'declinada'} correctamente.`);
+            alert('Queja eliminada correctamente.');
             location.reload();
         } else {
             const errorText = await response.text();
-            console.error('Error al actualizar:', response.status, errorText);
-            alert(`Error al actualizar (${response.status}): ${errorText}`);
+            console.error('Error al eliminar:', response.status, errorText);
+            alert(`Error al eliminar (${response.status}): ${errorText}`);
         }
     } catch (error) {
         console.error('Error:', error);

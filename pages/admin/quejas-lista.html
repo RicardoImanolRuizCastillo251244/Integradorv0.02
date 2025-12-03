@@ -68,19 +68,21 @@
   </header>
 
   <!-- BOTÓN REGRESAR -->
-  <a href="infousuario.html" class="btn-regresar">
+  <a href="infousuario-admin.html" class="btn-regresar">
     <i class="fa-solid fa-arrow-left"></i>
   </a>
 
-  <!-- BOTONES SUPERIORES -->
-  <div class="botones-superiores">
-    <button onclick="window.location.href='estadisticas-ventas.html'">Estadísticas</button>
-    <button>Quejas y sugerencias</button>
-  </div>
-
   <!-- PESTAÑAS SUPERIORES -->
   <div class="tabs-usuario">
-    <button class="tab active">Quejas y sugerencias</button>
+    <button class="tab active">Ventas</button>
+    <button class="tab" onclick="window.location.href='membreciaestadistica.html'">Membresías</button>
+  </div>
+
+  <!-- SUBPESTAÑAS -->
+  <div class="subtabs">
+    <button class="subtab" onclick="window.location.href='estadisticas-ventas.html'">Estadísticas</button>
+    <button class="subtab active">Quejas y sugerencias</button>
+    <button class="subtab" onclick="window.location.href='zona-cuarentena.html'">Revisión de productos</button>
   </div>
 
   <!-- CONTENIDO PRINCIPAL -->
