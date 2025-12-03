@@ -1,0 +1,351 @@
+/* === ESTILOS GENERALES === */
+body {
+  font-family: 'Open Sauce One', sans-serif;
+  background: #f2f2f2;
+  margin: 0;
+  padding: 0;
+}
+
+/* === HEADER === */
+.contenedor-nav {
+  background: #fc4b08 !important;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+header nav {
+  background-color: #fc4b08 !important;
+}
+
+.form-control-search {
+  padding-right: 45px;
+}
+
+/* === BOTONES SUPERIORES === */
+.botones-superiores {
+  display: flex;
+  overflow-x: auto;
+  gap: 10px;
+  padding: 10px;
+  background: #ffffff;
+  border-bottom: 2px solid #fc4b08;
+}
+
+.botones-superiores button {
+  background: #feeacf;
+  color: #fc4b08;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 14px;
+  font-weight: bold;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.botones-superiores button.active,
+.botones-superiores button:hover {
+  background: #fc4b08;
+  color: white;
+}
+
+/* === PESTAÑAS PRINCIPALES === */
+.tabs-usuario {
+  display: flex;
+  justify-content: space-around;
+  background: #fc4b08;
+  padding: 10px 0;
+  margin-top: 0;
+}
+
+.tabs-usuario .tab {
+  background: transparent;
+  border: none;
+  color: #fc4b08;
+  background: #feeacf;
+  font-weight: bold;
+  font-size: 16px;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 14px;
+  transition: 0.3s;
+}
+
+.tabs-usuario .tab.active {
+  background: #c00000;
+  color: white;
+}
+
+.tabs-usuario .tab:hover {
+  background: #d83e05;
+  color: white;
+}
+
+/* === CONTENIDO PRINCIPAL === */
+.configuracion-contenido {
+  min-height: 60vh;
+  padding-bottom: 40px;
+}
+
+/* === TAB CONTENT === */
+.tab-content {
+  display: none;
+}
+
+.tab-content.active-tab {
+  display: block;
+}
+
+/* === SECCIONES === */
+.config-seccion {
+  margin-bottom: 30px;
+}
+
+.config-seccion-titulo {
+  color: #fc4b08;
+  font-weight: bold;
+  font-size: 20px;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 3px solid #fc4b08;
+}
+
+.config-seccion-titulo i {
+  margin-right: 10px;
+}
+
+.config-card {
+  background: white;
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* === FORMULARIOS === */
+.config-label {
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.config-input {
+  border: 2px solid #fc4b08;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 14px;
+}
+
+.config-input:focus {
+  border-color: #d83e05;
+  box-shadow: 0 0 0 0.2rem rgba(252, 75, 8, 0.25);
+}
+
+.config-input:disabled,
+.config-input:read-only {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+/* === SWITCHES === */
+.form-check-input {
+  width: 50px;
+  height: 25px;
+  cursor: pointer;
+}
+
+.form-check-input:checked {
+  background-color: #fc4b08;
+  border-color: #fc4b08;
+}
+
+.form-check-input:focus {
+  border-color: #fc4b08;
+  box-shadow: 0 0 0 0.2rem rgba(252, 75, 8, 0.25);
+}
+
+.form-check-label {
+  margin-left: 10px;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+/* === MEMBRESÍAS === */
+.membresia-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
+}
+
+.membresia-header i {
+  font-size: 28px;
+}
+
+.membresia-oro {
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+}
+
+.membresia-plata {
+  background: linear-gradient(135deg, #C0C0C0, #A9A9A9);
+}
+
+.membresia-bronce {
+  background: linear-gradient(135deg, #CD7F32, #B87333);
+}
+
+/* === BOTONES === */
+.btn-guardar {
+  background: #4d9d30;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-guardar:hover {
+  background: #3d7d20;
+  transform: translateY(-2px);
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.btn-guardar.btn-sm {
+  padding: 8px 18px;
+  font-size: 13px;
+}
+
+.btn-guardar i {
+  margin-right: 8px;
+}
+
+.btn-backup {
+  background: #fc4b08;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-backup:hover {
+  background: #d83e05;
+  transform: translateY(-2px);
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.btn-backup i {
+  margin-right: 8px;
+}
+
+.btn-restore {
+  background: #051bb2;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-restore:hover {
+  background: #041590;
+  transform: translateY(-2px);
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.btn-restore i {
+  margin-right: 8px;
+}
+
+/* === BADGES === */
+.badge-estado {
+  padding: 6px 15px;
+  border-radius: 15px;
+  font-size: 13px;
+  font-weight: bold;
+  background: #ff9800;
+  color: white;
+}
+
+.badge-estado.estado-ok {
+  background: #4d9d30;
+}
+
+/* === BOTÓN REGRESAR === */
+.btn-regresar {
+  position: fixed;
+  left: 20px;
+  bottom: 120px;
+  width: 55px;
+  height: 55px;
+  background-color: #ffffff;
+  border: 3px solid #fc4b08;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  z-index: 1500;
+  transition: 0.3s;
+}
+
+.btn-regresar i {
+  font-size: 28px;
+  color: #fc4b08;
+}
+
+.btn-regresar:hover {
+  transform: scale(1.1);
+  background-color: #0e0a08;
+}
+
+.btn-regresar:hover i {
+  color: #ffffff;
+}
+
+/* === FOOTER === */
+.pie-pagina {
+  background: #fc4b08;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  margin-top: 50px;
+}
+
+.pie-pagina img {
+  width: 40px;
+  height: 40px;
+  margin: 0 10px;
+}
+
+/* === RESPONSIVIDAD === */
+@media (max-width: 768px) {
+  .tabs-usuario {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .membresia-header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .btn-backup,
+  .btn-restore {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
