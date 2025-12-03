@@ -10,69 +10,83 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     try {
-        // Endpoint para obtener todas las membresías
-        const response = await fetch(BASE_URL + 'usuario-membresia', {
+        // Obtener todas las membresías
+        const responseMem = await fetch(BASE_URL + 'usuario-membresia', {
             headers: {
                 'Authorization': authToken
             }
         });
 
-        if (response.ok) {
-            const membresias = await response.json();
-            renderTabla(membresias);
+        // Obtener todos los usuarios
+        const responseUsers = await fetch(BASE_URL + 'usuario', {
+            headers: {
+                'Authorization': authToken
+            }
+        });
+
+        if (responseMem.ok && responseUsers.ok) {
+            const membresias = await responseMem.json();
+            const usuarios = await responseUsers.json();
+            renderTabla(membresias, usuarios);
         } else {
-            console.error('Error al cargar membresías:', response.status);
-            tablaBody.innerHTML = '<tr><td colspan="7" class="text-center">Error al cargar datos.</td></tr>';
+            console.error('Error al cargar datos:', responseMem.status, responseUsers.status);
+            tablaBody.innerHTML = '<tr><td colspan="5" class="text-center">Error al cargar datos.</td></tr>';
         }
     } catch (error) {
         console.error('Error de red:', error);
-        tablaBody.innerHTML = '<tr><td colspan="7" class="text-center">Error de conexión.</td></tr>';
+        tablaBody.innerHTML = '<tr><td colspan="5" class="text-center">Error de conexión.</td></tr>';
     }
 
-    function renderTabla(membresias) {
+    function renderTabla(membresias, usuarios) {
         tablaBody.innerHTML = '';
 
-        if (membresias.length === 0) {
-            tablaBody.innerHTML = '<tr><td colspan="7" class="text-center">No hay membresías registradas.</td></tr>';
+        // Filtrar solo las membresías ACTIVAS
+        const membresiasActivas = membresias.filter(m => m.activa === true);
+
+        console.log('Total de membresías:', membresias.length);
+        console.log('Membresías activas:', membresiasActivas.length);
+
+        if (membresiasActivas.length === 0) {
+            tablaBody.innerHTML = '<tr><td colspan="5" class="text-center">No hay membresías activas.</td></tr>';
             return;
         }
 
-        membresias.forEach(m => {
+        membresiasActivas.forEach(m => {
             const row = document.createElement('tr');
 
-            // Formatear fechas
-            const fechaInicio = new Date(m.fecha_inicio).toLocaleDateString('es-ES');
-            const fechaFin = new Date(m.fecha_fin).toLocaleDateString('es-ES');
+            // Buscar el usuario por ID
+            const usuarioEncontrado = usuarios.find(u => u.id_usuario === m.id_usuario);
+            const nombreUsuario = usuarioEncontrado ? usuarioEncontrado.nombre_usuario : `Usuario ${m.id_usuario}`;
+            const correoUsuario = usuarioEncontrado ? usuarioEncontrado.correo_usuario : 'N/A';
 
-            // Determinar estado
-            const estado = m.estado || 'ACTIVA';
-            const esActiva = estado === 'ACTIVA';
-            const claseEstado = esActiva ? 'estado-activo' : 'estado-inactivo';
-            const textoEstado = esActiva ? 'Activo' : 'Inactivo';
+            // Nombre de la membresía
+            const nombreMembresia = m.nombre_membresia || m.tipo_membresia || `Tipo ${m.id_membresia_tipo}`;
 
-            // Datos del usuario y membresía
-            const nombreUsuario = m.nombre_usuario || 'Usuario desconocido';
-            const correoUsuario = m.correo_usuario || 'N/A';
-            const tipoMembresia = m.tipo_membresia || 'Estándar';
+            // Convertir fecha de array a Date
+            let fechaSolicitud = 'N/A';
+            if (Array.isArray(m.fecha_inicio)) {
+                const fechaObj = new Date(
+                    m.fecha_inicio[0],
+                    m.fecha_inicio[1] - 1,
+                    m.fecha_inicio[2],
+                    m.fecha_inicio[3] || 0,
+                    m.fecha_inicio[4] || 0,
+                    m.fecha_inicio[5] || 0
+                );
+                fechaSolicitud = fechaObj.toLocaleDateString('es-ES');
+            } else if (m.fecha_inicio) {
+                fechaSolicitud = new Date(m.fecha_inicio).toLocaleDateString('es-ES');
+            }
 
             row.innerHTML = `
                 <td>${nombreUsuario}</td>
                 <td>${correoUsuario}</td>
-                <td>${tipoMembresia}</td>
-                <td>${fechaInicio}</td>
-                <td>${fechaFin}</td>
-                <td>
-                    <span class="${claseEstado}">${textoEstado}</span>
-                </td>
+                <td>${nombreMembresia}</td>
+                <td>${fechaSolicitud}</td>
                 <td class="text-center">
-                    ${esActiva 
-                        ? `<button class="btn-inhabilitar" onclick="window.cambiarEstadoMembresia(${m.id_usuario_membresia}, 'inhabilitar')">
-                            Inhabilitar
-                           </button>` 
-                        : `<button class="btn-habilitar" onclick="window.cambiarEstadoMembresia(${m.id_usuario_membresia}, 'habilitar')">
-                            Habilitar
-                           </button>`
-                    }
+                    <button class="btn-inhabilitar" onclick="window.cambiarEstadoMembresia(${m.id_usuario_membresia}, 'inhabilitar')">
+                        Inhabilitar
+                    </button>
                 </td>
             `;
             tablaBody.appendChild(row);
@@ -81,40 +95,59 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Función para cambiar estado de membresía
     window.cambiarEstadoMembresia = async (idMembresia, accion) => {
-        const nuevoEstado = accion === 'habilitar' ? 'ACTIVA' : 'INACTIVA';
-        
         if (!confirm(`¿Estás seguro de que deseas ${accion} esta membresía?`)) {
             return;
         }
 
         try {
-            // Primero obtener los datos actuales de la membresía
-            const getResponse = await fetch(BASE_URL + `usuario-membresia/${idMembresia}`, {
-                headers: { 'Authorization': authToken }
+            // Obtener primero los datos de la membresía
+            const getResponse = await fetch(`${BASE_URL}usuario-membresia`, {
+                headers: {
+                    'Authorization': authToken
+                }
             });
-            
+
             if (!getResponse.ok) {
-                throw new Error('No se pudo obtener los datos de la membresía');
+                alert('Error al obtener los datos de la membresía.');
+                return;
             }
-            
-            const membresiaData = await getResponse.json();
-            
-            // Actualizar la membresía con el nuevo estado
-            const response = await fetch(BASE_URL + `usuario-membresia/${idMembresia}`, {
+
+            const membresias = await getResponse.json();
+            const membresia = membresias.find(m => m.id_usuario_membresia === idMembresia);
+
+            if (!membresia) {
+                alert('No se encontró la membresía.');
+                return;
+            }
+
+            // Construir el objeto limpio con SOLO los campos que acepta el backend
+            const membresiaLimpia = {
+                id_usuario: membresia.id_usuario,
+                id_membresia_tipo: membresia.id_membresia_tipo,
+                fecha_inicio: membresia.fecha_inicio,
+                fecha_expiracion: membresia.fecha_expiracion,
+                activa: accion === 'habilitar' // true para habilitar, false para inhabilitar
+            };
+
+            console.log('Enviando al servidor:', JSON.stringify(membresiaLimpia, null, 2));
+
+            // Actualizar la membresía usando PUT
+            const response = await fetch(`${BASE_URL}usuario-membresia/${idMembresia}`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': authToken,
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ ...membresiaData, estado: nuevoEstado })
+                body: JSON.stringify(membresiaLimpia)
             });
 
             if (response.ok) {
                 alert(`Membresía ${accion === 'habilitar' ? 'habilitada' : 'inhabilitada'} correctamente.`);
                 location.reload();
             } else {
-                const error = await response.json();
-                alert(`Error: ${error.message || 'No se pudo cambiar el estado.'}`);
+                const errorText = await response.text();
+                console.error('Error del servidor:', errorText);
+                alert(`Error: ${errorText || `No se pudo ${accion}.`}`);
             }
         } catch (error) {
             console.error('Error:', error);
