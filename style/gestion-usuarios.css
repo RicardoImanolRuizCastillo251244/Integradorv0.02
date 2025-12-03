@@ -1,0 +1,379 @@
+/* === ESTILOS GENERALES === */
+body {
+  font-family: 'Open Sauce One', sans-serif;
+  background: #f2f2f2;
+  margin: 0;
+  padding: 0;
+}
+
+/* === HEADER === */
+.contenedor-nav {
+  background: #fc4b08 !important;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+header nav {
+  background-color: #fc4b08 !important;
+}
+
+.form-control-search {
+  padding-right: 45px;
+}
+
+/* === BOTONES SUPERIORES === */
+.botones-superiores {
+  display: flex;
+  overflow-x: auto;
+  gap: 10px;
+  padding: 10px;
+  background: #ffffff;
+  border-bottom: 2px solid #fc4b08;
+}
+
+.botones-superiores button {
+  background: #feeacf;
+  color: #fc4b08;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 14px;
+  font-weight: bold;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.botones-superiores button:hover {
+  background: #fc4b08;
+  color: white;
+}
+
+/* === PESTAÑAS PRINCIPALES === */
+.tabs-usuario {
+  display: flex;
+  justify-content: space-around;
+  background: #fc4b08;
+  padding: 10px 0;
+  margin-top: 0;
+}
+
+.tabs-usuario .tab {
+  background: transparent;
+  border: none;
+  color: #fc4b08;
+  background: #feeacf;
+  font-weight: bold;
+  font-size: 16px;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 14px;
+  transition: 0.3s;
+}
+
+.tabs-usuario .tab.active {
+  background: #c00000;
+  color: white;
+}
+
+.tabs-usuario .tab:hover {
+  background: #d83e05;
+  color: white;
+}
+
+/* === CONTENIDO PRINCIPAL === */
+.gestion-contenido {
+  min-height: 60vh;
+  padding-bottom: 40px;
+}
+
+/* === FILTROS === */
+.filtros-usuarios {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btn-filtro {
+  background: white;
+  border: 2px solid #fc4b08;
+  color: #fc4b08;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-filtro:hover,
+.btn-filtro.active {
+  background: #fc4b08;
+  color: white;
+}
+
+/* === TABLA === */
+.tabla-usuarios {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  margin-bottom: 20px;
+}
+
+.tabla-usuarios table {
+  margin-bottom: 0;
+}
+
+.tabla-header {
+  background: white;
+  font-weight: bold;
+  color: #fc4b08;
+  border-bottom: 2px solid #fc4b08;
+}
+
+.tabla-usuarios th,
+.tabla-usuarios td {
+  text-align: center;
+  vertical-align: middle;
+  padding: 12px 8px;
+  color: #fc4b08;
+  font-size: 14px;
+}
+
+.tabla-usuarios tbody tr {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.tabla-usuarios tbody tr:hover {
+  background-color: #fff9f5;
+}
+
+/* === BADGES === */
+.badge-rol {
+  padding: 5px 12px;
+  border-radius: 15px;
+  font-size: 12px;
+  font-weight: bold;
+  color: white;
+}
+
+.badge-admin {
+  background: #c00000;
+}
+
+.badge-vendedor {
+  background: #051bb2;
+}
+
+.badge-comprador,
+.badge-usuario {
+  background: #4d9d30;
+}
+
+/* === ESTADOS === */
+.estado-activo {
+  color: #4d9d30;
+  font-weight: bold;
+  background: #e8f5e9;
+  padding: 5px 12px;
+  border-radius: 15px;
+  font-size: 13px;
+}
+
+.estado-inactivo {
+  color: #c00000;
+  font-weight: bold;
+  background: #ffebee;
+  padding: 5px 12px;
+  border-radius: 15px;
+  font-size: 13px;
+}
+
+/* === BOTONES === */
+.btn-ver {
+  background: transparent;
+  border: none;
+  color: #fc4b08;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  padding: 5px 10px;
+  margin: 2px;
+}
+
+.btn-ver:hover {
+  color: #d83e05;
+  text-decoration: underline;
+}
+
+.btn-ver i {
+  margin-right: 5px;
+}
+
+.btn-suspender {
+  background: #c00000;
+  color: white;
+  border: none;
+  padding: 6px 15px;
+  border-radius: 5px;
+  font-weight: bold;
+  margin: 2px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 13px;
+}
+
+.btn-suspender:hover {
+  background: #a00000;
+}
+
+.btn-activar {
+  background: #4d9d30;
+  color: white;
+  border: none;
+  padding: 6px 15px;
+  border-radius: 5px;
+  font-weight: bold;
+  margin: 2px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 13px;
+}
+
+.btn-activar:hover {
+  background: #3d7d20;
+}
+
+/* === PAGINACIÓN === */
+.paginacion {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.btn-pagina {
+  background: #fc4b08;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-pagina:hover {
+  background: #d83e05;
+}
+
+.pagina-actual {
+  font-weight: bold;
+  color: #333;
+  font-size: 16px;
+}
+
+/* === MODAL === */
+.modal-content {
+  border-radius: 10px;
+}
+
+.modal-header {
+  background: #fc4b08;
+  color: white;
+  border-bottom: none;
+}
+
+.modal-header .btn-close {
+  filter: brightness(0) invert(1);
+}
+
+.modal-body {
+  padding: 30px;
+}
+
+.info-label {
+  font-size: 14px;
+  color: #888;
+  margin: 0 0 5px 0;
+  font-weight: bold;
+}
+
+.info-value {
+  font-size: 16px;
+  color: #333;
+  margin: 0 0 15px 0;
+  font-weight: bold;
+}
+
+/* === BOTÓN REGRESAR === */
+.btn-regresar {
+  position: fixed;
+  left: 20px;
+  bottom: 120px;
+  width: 55px;
+  height: 55px;
+  background-color: #ffffff;
+  border: 3px solid #fc4b08;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  z-index: 1500;
+  transition: 0.3s;
+}
+
+.btn-regresar i {
+  font-size: 28px;
+  color: #fc4b08;
+}
+
+.btn-regresar:hover {
+  transform: scale(1.1);
+  background-color: #0e0a08;
+}
+
+.btn-regresar:hover i {
+  color: #ffffff;
+}
+
+/* === FOOTER === */
+.pie-pagina {
+  background: #fc4b08;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  margin-top: 50px;
+}
+
+.pie-pagina img {
+  width: 40px;
+  height: 40px;
+  margin: 0 10px;
+}
+
+/* === RESPONSIVIDAD === */
+@media (max-width: 768px) {
+  .tabs-usuario {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .tabla-usuarios table {
+    font-size: 12px;
+  }
+
+  .tabla-usuarios th,
+  .tabla-usuarios td {
+    padding: 10px 5px;
+  }
+
+  .paginacion {
+    flex-direction: column;
+    gap: 10px;
+  }
+}

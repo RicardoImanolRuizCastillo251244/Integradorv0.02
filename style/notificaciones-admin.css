@@ -1,0 +1,338 @@
+/* === ESTILOS GENERALES === */
+body {
+  font-family: 'Open Sauce One', sans-serif;
+  background: #f2f2f2;
+  margin: 0;
+  padding: 0;
+}
+
+/* === HEADER === */
+.contenedor-nav {
+  background: #fc4b08 !important;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+header nav {
+  background-color: #fc4b08 !important;
+}
+
+.form-control-search {
+  padding-right: 45px;
+}
+
+/* === BOTONES SUPERIORES === */
+.botones-superiores {
+  display: flex;
+  overflow-x: auto;
+  gap: 10px;
+  padding: 10px;
+  background: #ffffff;
+  border-bottom: 2px solid #fc4b08;
+}
+
+.botones-superiores button {
+  background: #feeacf;
+  color: #fc4b08;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 14px;
+  font-weight: bold;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.botones-superiores button:hover {
+  background: #fc4b08;
+  color: white;
+}
+
+/* === PESTAÑAS PRINCIPALES === */
+.tabs-usuario {
+  display: flex;
+  justify-content: space-around;
+  background: #fc4b08;
+  padding: 10px 0;
+  margin-top: 0;
+}
+
+.tabs-usuario .tab {
+  background: transparent;
+  border: none;
+  color: #fc4b08;
+  background: #feeacf;
+  font-weight: bold;
+  font-size: 16px;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 14px;
+  transition: 0.3s;
+}
+
+.tabs-usuario .tab.active {
+  background: #c00000;
+  color: white;
+}
+
+.tabs-usuario .tab:hover {
+  background: #d83e05;
+  color: white;
+}
+
+/* === CONTENIDO PRINCIPAL === */
+.notificaciones-contenido {
+  min-height: 60vh;
+  padding-bottom: 40px;
+}
+
+/* === FILTROS === */
+.filtros-notificaciones {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.btn-filtro {
+  background: white;
+  border: 2px solid #fc4b08;
+  color: #fc4b08;
+  padding: 10px 25px;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-filtro:hover,
+.btn-filtro.active {
+  background: #fc4b08;
+  color: white;
+}
+
+/* === LISTA DE NOTIFICACIONES === */
+.lista-notificaciones {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.notificacion-item {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 15px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+  transition: 0.3s;
+}
+
+.notificacion-item:hover {
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.notificacion-item.no-leida {
+  border-left: 5px solid #fc4b08;
+  background: #fff9f5;
+}
+
+.notificacion-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 10px;
+}
+
+.notificacion-icono {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.notificacion-icono i {
+  font-size: 24px;
+  color: white;
+}
+
+.notificacion-info {
+  flex: 1;
+}
+
+.notificacion-titulo {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  margin: 0 0 5px 0;
+}
+
+.notificacion-fecha {
+  font-size: 14px;
+  color: #888;
+  margin: 0;
+}
+
+.badge-nuevo {
+  background: #c00000;
+  color: white;
+  padding: 5px 12px;
+  border-radius: 15px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.notificacion-cuerpo {
+  margin: 15px 0;
+}
+
+.notificacion-mensaje {
+  font-size: 15px;
+  color: #555;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.notificacion-acciones {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.btn-marcar-leida {
+  background: #4d9d30;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-marcar-leida:hover {
+  background: #3d7d20;
+}
+
+.btn-eliminar-notif {
+  background: #c00000;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-eliminar-notif:hover {
+  background: #a00000;
+}
+
+.texto-leida {
+  color: #4d9d30;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.texto-leida i {
+  margin-right: 5px;
+}
+
+/* === BOTÓN MARCAR TODAS === */
+.btn-marcar-leidas {
+  background: #fc4b08;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-marcar-leidas:hover {
+  background: #d83e05;
+  transform: translateY(-2px);
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.btn-marcar-leidas i {
+  margin-right: 8px;
+}
+
+/* === BOTÓN REGRESAR === */
+.btn-regresar {
+  position: fixed;
+  left: 20px;
+  bottom: 120px;
+  width: 55px;
+  height: 55px;
+  background-color: #ffffff;
+  border: 3px solid #fc4b08;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  z-index: 1500;
+  transition: 0.3s;
+}
+
+.btn-regresar i {
+  font-size: 28px;
+  color: #fc4b08;
+}
+
+.btn-regresar:hover {
+  transform: scale(1.1);
+  background-color: #0e0a08;
+}
+
+.btn-regresar:hover i {
+  color: #ffffff;
+}
+
+/* === FOOTER === */
+.pie-pagina {
+  background: #fc4b08;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  margin-top: 50px;
+}
+
+.pie-pagina img {
+  width: 40px;
+  height: 40px;
+  margin: 0 10px;
+}
+
+/* === RESPONSIVIDAD === */
+@media (max-width: 768px) {
+  .tabs-usuario {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .notificacion-header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .notificacion-info {
+    text-align: center;
+  }
+
+  .notificacion-acciones {
+    justify-content: center;
+  }
+}

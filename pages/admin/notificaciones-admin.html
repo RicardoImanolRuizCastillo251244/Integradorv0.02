@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notificaciones - Admin</title>
+
+  <!-- Fuente -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sauce+One&display=swap" rel="stylesheet" />
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="../../style/notificaciones-admin.css" />
+  <link rel="stylesheet" href="../../style/main.css" />
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <nav>
+      <div class="container-fluid pt-3 contenedor-nav">
+        <div class="row">
+
+          <!-- LOGO -->
+          <div class="col-2">
+            <a href="../../index.html">
+              <img class="navbar-brand-img" src="../../images/LogoUpsitos.png" alt="Logo">
+            </a>
+          </div>
+
+          <!-- BUSCADOR -->
+          <div class="col-6 col-md-6 mx-auto">
+            <form class="position-relative d-flex align-items-center" role="search">
+              <input class="form-control form-control-search rounded-5" type="search" placeholder="Buscar..."
+                aria-label="Buscar" />
+              <button type="submit" class="btn position-absolute end-0 me-2 p-0 border-0 bg-transparent">
+                <img src="../../images/lupa.png" alt="Buscar" style="width:25px; height:25px;">
+              </button>
+            </form>
+          </div>
+
+          <!-- ICONOS DERECHA -->
+          <div class="col-2 text-end herramientas d-flex justify-content-end">
+
+            <!-- BOTÓN USUARIO -->
+            <button type="button" class="btn border-0 bg-transparent me-3"
+              onclick="window.location.href='infousuario-admin.html'">
+              <img class="img-user" src="../../images/usuario.png" alt="Usuario" style="width:35px; height:35px;">
+            </button>
+
+            <!-- BOTÓN CAMPANA -->
+            <button type="button" class="btn border-0 bg-transparent me-2" onclick="window.location.href='notificaciones-admin.html'">
+              <img class="img-notificacion" src="../../images/campana (2).png" alt="Notificaciones"
+                style="width:30px; height:30px;">
+            </button>
+
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- BOTÓN REGRESAR -->
+  <a href="infousuario-admin.html" class="btn-regresar">
+    <i class="fa-solid fa-arrow-left"></i>
+  </a>
+
+  <!-- BOTONES SUPERIORES -->
+  <div class="botones-superiores">
+    <button onclick="window.location.href='infousuario-admin.html'">Información Usuario</button>
+    <button onclick="window.location.href='estadisticas-ventas.html'">Estadísticas</button>
+    <button onclick="window.location.href='quejas-lista.html'">Quejas y sugerencias</button>
+  </div>
+
+  <!-- PESTAÑAS SUPERIORES -->
+  <div class="tabs-usuario">
+    <button class="tab active">Notificaciones</button>
+  </div>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <section class="container mt-4 notificaciones-contenido">
+    <h3 class="text-center mb-4" style="color: #fc4b08; font-weight: bold;">Centro de Notificaciones</h3>
+
+    <!-- FILTROS -->
+    <div class="filtros-notificaciones mb-4">
+      <button class="btn-filtro active" onclick="filtrarNotificaciones('todas')">Todas</button>
+      <button class="btn-filtro" onclick="filtrarNotificaciones('nuevas')">Nuevas</button>
+      <button class="btn-filtro" onclick="filtrarNotificaciones('leidas')">Leídas</button>
+    </div>
+
+    <!-- LISTA DE NOTIFICACIONES -->
+    <div class="lista-notificaciones" id="listaNotificaciones">
+      <div class="notificacion-item">
+        <p class="text-center text-muted">Cargando notificaciones...</p>
+      </div>
+    </div>
+
+    <!-- BOTÓN MARCAR TODAS COMO LEÍDAS -->
+    <div class="text-center mt-4">
+      <button class="btn-marcar-leidas" onclick="marcarTodasLeidas()">
+        <i class="fa-solid fa-check-double"></i> Marcar todas como leídas
+      </button>
+    </div>
+
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="pie-pagina">
+    <div class="d-flex justify-content-end mb-2">
+      <img src="../../images/X.png" alt="X" />
+      <img src="../../images/instragram.png" alt="Instagram" />
+      <img src="../../images/facebook.png" alt="Facebook" />
+    </div>
+
+    <p><strong>Contactos:</strong></p>
+    <p class="mb-0">📞 9613064346</p>
+    <p>✉ 251243@ids.upchiapas.edu.mx</p>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="module" src="../../js/notificaciones-admin.js"></script>
+
+</body>
+
+</html>
