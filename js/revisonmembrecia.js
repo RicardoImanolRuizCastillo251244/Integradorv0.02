@@ -10,25 +10,34 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     try {
-        const response = await fetch(BASE_URL + 'usuario-membresia', {
+        // Obtener todas las membresías
+        const responseMem = await fetch(BASE_URL + 'usuario-membresia', {
             headers: {
                 'Authorization': authToken
             }
         });
 
-        if (response.ok) {
-            const membresias = await response.json();
-            renderTabla(membresias);
+        // Obtener todos los usuarios
+        const responseUsers = await fetch(BASE_URL + 'usuario', {
+            headers: {
+                'Authorization': authToken
+            }
+        });
+
+        if (responseMem.ok && responseUsers.ok) {
+            const membresias = await responseMem.json();
+            const usuarios = await responseUsers.json();
+            renderTabla(membresias, usuarios);
         } else {
-            console.error('Error al cargar membresías:', response.status);
-            tablaBody.innerHTML = '<tr><td colspan="6" class="text-center">Error al cargar datos.</td></tr>';
+            console.error('Error al cargar datos:', responseMem.status, responseUsers.status);
+            tablaBody.innerHTML = '<tr><td colspan="5" class="text-center">Error al cargar datos.</td></tr>';
         }
     } catch (error) {
         console.error('Error de red:', error);
-        tablaBody.innerHTML = '<tr><td colspan="6" class="text-center">Error de conexión.</td></tr>';
+        tablaBody.innerHTML = '<tr><td colspan="5" class="text-center">Error de conexión.</td></tr>';
     }
 
-    function renderTabla(membresias) {
+    function renderTabla(membresias, usuarios) {
         tablaBody.innerHTML = '';
 
         // Filtrar solo las membresías INACTIVAS (pendientes de revisión)
@@ -38,16 +47,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.log('Membresías pendientes:', membresiasPendientes.length);
 
         if (membresiasPendientes.length === 0) {
-            tablaBody.innerHTML = '<tr><td colspan="6" class="text-center">No hay membresías pendientes para revisar.</td></tr>';
+            tablaBody.innerHTML = '<tr><td colspan="5" class="text-center">No hay membresías pendientes para revisar.</td></tr>';
             return;
         }
 
         membresiasPendientes.forEach(m => {
             const row = document.createElement('tr');
 
-            const fechaSolicitud = m.fecha_inicio ? new Date(m.fecha_inicio).toLocaleDateString('es-ES') : 'N/A';
-            const nombreUsuario = m.nombre_usuario || `Usuario ${m.id_usuario}`;
-            const correoUsuario = m.correo_usuario || 'N/A';
+            // Buscar el usuario por ID
+            const usuarioEncontrado = usuarios.find(u => u.id_usuario === m.id_usuario);
+            const nombreUsuario = usuarioEncontrado ? usuarioEncontrado.nombre_usuario : `Usuario ${m.id_usuario}`;
+            const correoUsuario = usuarioEncontrado ? usuarioEncontrado.correo_usuario : 'N/A';
+
             const nombreMembresia = m.nombre_membresia || m.tipo_membresia || `Tipo ${m.id_membresia_tipo}`;
             const captura = m.captura_transferencia || m.comprobante || null;
 
@@ -62,13 +73,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                            </button>`
                         : '<span class="text-muted">Sin captura</span>'}
                 </td>
-                <td>${fechaSolicitud}</td>
                 <td class="text-center">
                     <button class="btn-aceptar" onclick="window.accionMembresia(${m.id_usuario_membresia}, 'aceptar')">
                         Aceptar
-                    </button>
-                    <button class="btn-declinar" onclick="window.accionMembresia(${m.id_usuario_membresia}, 'declinar')">
-                        Declinar
                     </button>
                 </td>
             `;
@@ -86,11 +93,12 @@ window.verCaptura = (urlCaptura) => {
     modal.show();
 };
 
-// Función para aceptar o declinar membresía
+// Función para aceptar o inhabilitar membresía
 window.accionMembresia = async (id, accion) => {
     const authToken = localStorage.getItem('authToken');
 
-    if (!confirm(`¿Estás seguro de que deseas ${accion === 'aceptar' ? 'aceptar' : 'declinar'} esta membresía?`)) {
+    const mensajeAccion = accion === 'aceptar' ? 'aceptar' : 'inhabilitar';
+    if (!confirm(`¿Estás seguro de que deseas ${mensajeAccion} esta membresía?`)) {
         return;
     }
 
@@ -121,7 +129,7 @@ window.accionMembresia = async (id, accion) => {
             id_membresia_tipo: membresia.id_membresia_tipo,
             fecha_inicio: membresia.fecha_inicio,
             fecha_expiracion: membresia.fecha_expiracion,
-            activa: accion === 'aceptar' // true para aceptar, false para declinar
+            activa: accion === 'aceptar' // true para aceptar, false para inhabilitar
         };
 
         console.log('Enviando al servidor:', JSON.stringify(membresiaLimpia, null, 2));
@@ -137,12 +145,12 @@ window.accionMembresia = async (id, accion) => {
         });
 
         if (response.ok) {
-            alert(`Membresía ${accion === 'aceptar' ? 'aceptada' : 'declinada'} correctamente.`);
+            alert(`Membresía ${accion === 'aceptar' ? 'aceptada' : 'inhabilitada'} correctamente.`);
             location.reload();
         } else {
             const errorText = await response.text();
             console.error('Error del servidor:', errorText);
-            alert(`Error: ${errorText || `No se pudo ${accion === 'aceptar' ? 'aceptar' : 'declinar'} la membresía.`}`);
+            alert(`Error: ${errorText || `No se pudo ${accion === 'aceptar' ? 'aceptar' : 'inhabilitar'} la membresía.`}`);
         }
     } catch (error) {
         console.error('Error:', error);
