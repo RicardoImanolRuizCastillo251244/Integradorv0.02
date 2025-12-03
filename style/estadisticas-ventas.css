@@ -244,6 +244,107 @@ header nav {
   margin: 0 10px;
 }
 
+/* === GRÁFICAS === */
+.grafica-card {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+  padding: 25px;
+  height: 100%;
+}
+
+.grafica-titulo {
+  font-size: 20px;
+  font-weight: bold;
+  color: #fc4b08;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.grafica-titulo i {
+  font-size: 24px;
+}
+
+.grafica-container {
+  position: relative;
+  height: 300px;
+  padding: 10px;
+}
+
+.grafica-container canvas {
+  max-height: 280px;
+}
+
+/* === TABLA DE PRODUCTOS === */
+.tabla-card {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+  padding: 25px;
+  margin-bottom: 30px;
+}
+
+.tabla-titulo {
+  font-size: 22px;
+  font-weight: bold;
+  color: #fc4b08;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tabla-titulo i {
+  font-size: 26px;
+  color: #ffd700;
+}
+
+.tabla-productos {
+  margin: 0;
+}
+
+.tabla-productos thead {
+  background: linear-gradient(135deg, #fc4b08 0%, #f1a87e 100%);
+  color: white;
+}
+
+.tabla-productos thead th {
+  padding: 15px;
+  font-weight: bold;
+  border: none;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.tabla-productos tbody td {
+  padding: 12px;
+  vertical-align: middle;
+  text-align: center;
+  color: #333;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.tabla-productos tbody tr:hover {
+  background: #fff5ec;
+  transition: 0.3s;
+}
+
+.tabla-productos tbody tr:first-child {
+  background: #fff8f0;
+  font-weight: bold;
+}
+
+.badge-top {
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+  color: #fc4b08;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
 /* === RESPONSIVIDAD === */
 @media (max-width: 768px) {
   .tabs-usuario {
@@ -261,5 +362,23 @@ header nav {
 
   .metrica-valor {
     font-size: 28px;
+  }
+
+  .grafica-titulo {
+    font-size: 18px;
+  }
+
+  .grafica-container {
+    height: 250px;
+  }
+
+  .tabla-titulo {
+    font-size: 18px;
+  }
+
+  .tabla-productos thead th,
+  .tabla-productos tbody td {
+    font-size: 12px;
+    padding: 8px;
   }
 }
