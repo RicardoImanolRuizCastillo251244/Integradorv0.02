@@ -146,6 +146,197 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 
+// ========== FUNCIONES DE MODALES PERSONALIZADOS ==========
+
+function showModal(config) {
+    return new Promise((resolve) => {
+        const overlay = document.getElementById('modalOverlay');
+        const title = document.getElementById('modalTitle');
+        const message = document.getElementById('modalMessage');
+        const content = document.getElementById('modalContent');
+        const buttons = document.getElementById('modalButtons');
+
+        title.textContent = config.title || '';
+        
+        if (config.message) {
+            message.textContent = config.message;
+            message.style.display = 'block';
+        } else {
+            message.style.display = 'none';
+        }
+
+        content.innerHTML = config.content || '';
+        buttons.innerHTML = '';
+
+        // Crear botones
+        if (config.buttons) {
+            config.buttons.forEach(btn => {
+                const button = document.createElement('button');
+                button.className = `modal-btn ${btn.class || 'modal-btn-secondary'}`;
+                button.textContent = btn.text;
+                button.onclick = () => {
+                    overlay.classList.remove('show');
+                    if (btn.callback) btn.callback();
+                    resolve(btn.value);
+                };
+                buttons.appendChild(button);
+            });
+        }
+
+        overlay.classList.add('show');
+
+        // Cerrar al hacer clic fuera del modal
+        overlay.onclick = (e) => {
+            if (e.target === overlay) {
+                overlay.classList.remove('show');
+                resolve(null);
+            }
+        };
+    });
+}
+
+function showInputModal(title, label, defaultValue = '', type = 'text') {
+    return new Promise((resolve) => {
+        const inputId = 'modalInput_' + Date.now();
+        const content = `
+            <div class="modal-input-group">
+                <label class="modal-label" for="${inputId}">${label}</label>
+                <input type="${type}" id="${inputId}" class="modal-input" value="${defaultValue}" placeholder="${label}">
+            </div>
+        `;
+
+        showModal({
+            title: title,
+            content: content,
+            buttons: [
+                {
+                    text: 'Cancelar',
+                    class: 'modal-btn-secondary',
+                    callback: () => resolve(null)
+                },
+                {
+                    text: 'Aceptar',
+                    class: 'modal-btn-primary',
+                    callback: () => {
+                        const input = document.getElementById(inputId);
+                        resolve(input ? input.value : null);
+                    }
+                }
+            ]
+        });
+
+        // Focus en el input
+        setTimeout(() => {
+            const input = document.getElementById(inputId);
+            if (input) input.focus();
+        }, 100);
+    });
+}
+
+function showPasswordModal() {
+    return new Promise((resolve) => {
+        const passId = 'modalPass_' + Date.now();
+        const confirmId = 'modalConfirm_' + Date.now();
+        const strengthId = 'passStrength_' + Date.now();
+        
+        const content = `
+            <div class="modal-input-group">
+                <label class="modal-label" for="${passId}">
+                    <i class="fa-solid fa-lock"></i> Nueva contraseña
+                </label>
+                <input type="password" id="${passId}" class="modal-input" placeholder="Mínimo 8 caracteres">
+                <div id="${strengthId}" class="password-strength"></div>
+            </div>
+            <div class="modal-input-group">
+                <label class="modal-label" for="${confirmId}">
+                    <i class="fa-solid fa-lock-open"></i> Confirmar contraseña
+                </label>
+                <input type="password" id="${confirmId}" class="modal-input" placeholder="Confirma tu contraseña">
+            </div>
+        `;
+
+        showModal({
+            title: 'Cambiar Contraseña',
+            content: content,
+            buttons: [
+                {
+                    text: 'Cancelar',
+                    class: 'modal-btn-secondary',
+                    callback: () => resolve(null)
+                },
+                {
+                    text: 'Cambiar',
+                    class: 'modal-btn-primary',
+                    callback: () => {
+                        const pass = document.getElementById(passId).value;
+                        const confirm = document.getElementById(confirmId).value;
+                        resolve({ password: pass, confirm: confirm });
+                    }
+                }
+            ]
+        });
+
+        // Agregar validación de fuerza de contraseña
+        setTimeout(() => {
+            const passInput = document.getElementById(passId);
+            const strengthDiv = document.getElementById(strengthId);
+            
+            if (passInput && strengthDiv) {
+                passInput.focus();
+                passInput.addEventListener('input', () => {
+                    const password = passInput.value;
+                    const strength = checkPasswordStrength(password);
+                    strengthDiv.textContent = strength.text;
+                    strengthDiv.className = 'password-strength ' + strength.class;
+                });
+            }
+        }, 100);
+    });
+}
+
+function checkPasswordStrength(password) {
+    if (password.length === 0) {
+        return { text: '', class: '' };
+    }
+    if (password.length < 8) {
+        return { text: '⚠️ Muy débil - Necesitas al menos 8 caracteres', class: 'weak' };
+    }
+    
+    let strength = 0;
+    if (password.length >= 8) strength++;
+    if (password.length >= 12) strength++;
+    if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+    if (/\d/.test(password)) strength++;
+    if (/[^a-zA-Z0-9]/.test(password)) strength++;
+
+    if (strength <= 2) {
+        return { text: '⚠️ Débil', class: 'weak' };
+    } else if (strength <= 3) {
+        return { text: '✓ Media', class: 'medium' };
+    } else {
+        return { text: '✓✓ Fuerte', class: 'strong' };
+    }
+}
+
+function showAlert(title, message, type = 'info') {
+    const icon = type === 'success' ? '✓' : type === 'error' ? '✗' : 'ℹ';
+    
+    return showModal({
+        title: icon + ' ' + title,
+        message: message,
+        buttons: [
+            {
+                text: 'Entendido',
+                class: 'modal-btn-primary',
+                callback: () => {}
+            }
+        ]
+    });
+}
+
+
+// ========== FUNCIONES DE CONFIGURACIÓN ==========
+
 function configurarLogout() {
     const logoutButton = document.getElementById("logoutButton");
     
@@ -175,38 +366,46 @@ window.editarCampo = async function (tipoCampo, nombreCampo) {
     let nuevoValor;
     
     if (tipoCampo === 'password') {
-        // Para contraseña, usar un prompt más seguro
-        nuevoValor = prompt(`Ingresa tu nueva ${nombreCampo}:`);
+        // Usar modal personalizado para contraseña
+        const result = await showPasswordModal();
         
-        if (nuevoValor === null || nuevoValor.trim() === '') {
-            return; // Usuario canceló o no ingresó nada
+        if (!result || !result.password) {
+            return; // Usuario canceló
         }
         
-        if (nuevoValor.length < 8) {
-            alert('La contraseña debe tener al menos 8 caracteres.');
+        if (result.password.length < 8) {
+            await showAlert('Error', 'La contraseña debe tener al menos 8 caracteres.', 'error');
             return;
         }
         
-        // Confirmar contraseña
-        const confirmacion = prompt('Confirma tu nueva contraseña:');
-        if (confirmacion !== nuevoValor) {
-            alert('Las contraseñas no coinciden.');
+        if (result.password !== result.confirm) {
+            await showAlert('Error', 'Las contraseñas no coinciden.', 'error');
             return;
         }
+        
+        nuevoValor = result.password;
     } else {
-        // Para otros campos
+        // Para otros campos - usar modal de input
         let valorActual = '';
+        let labelText = nombreCampo;
+        
         if (tipoCampo === 'nombre') {
             valorActual = document.getElementById('campoNombre').textContent;
         } else if (tipoCampo === 'numero_cuenta') {
             valorActual = document.getElementById('campoNumCuenta').textContent;
             if (valorActual === 'No registrado') valorActual = '';
+            labelText = 'Ingresa tu número de cuenta';
         } else if (tipoCampo === 'titular') {
             valorActual = document.getElementById('campoTitular').textContent;
             if (valorActual === 'No registrado') valorActual = '';
+            labelText = 'Ingresa el nombre del titular';
         }
         
-        nuevoValor = prompt(`Editar ${nombreCampo}:`, valorActual);
+        nuevoValor = await showInputModal(
+            'Editar ' + nombreCampo,
+            labelText,
+            valorActual
+        );
         
         if (nuevoValor === null || nuevoValor.trim() === '') {
             return;
@@ -240,7 +439,6 @@ window.editarCampo = async function (tipoCampo, nombreCampo) {
         
         if (response.ok) {
             const data = await response.json();
-            alert(data.message || 'Actualización exitosa');
             
             // Actualizar la vista
             if (tipoCampo === 'nombre') {
@@ -249,20 +447,29 @@ window.editarCampo = async function (tipoCampo, nombreCampo) {
                 const iniciales = nuevoValor.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
                 document.getElementById('circleIniciales').textContent = iniciales;
                 if (usuarioActual) usuarioActual.nombre_usuario = nuevoValor;
+                
+                await showAlert('¡Éxito!', 'Nombre actualizado correctamente.', 'success');
             } else if (tipoCampo === 'password') {
-                alert('Contraseña actualizada correctamente. Se recomienda cerrar sesión y volver a iniciar.');
                 // Ocultar la contraseña si estaba visible
                 passwordVisible = false;
                 document.getElementById('campoPass').textContent = '●●●●●●';
                 const iconoVer = document.querySelector('.icono-ver');
-                iconoVer.classList.remove('fa-eye-slash');
-                iconoVer.classList.add('fa-eye');
+                if (iconoVer) {
+                    iconoVer.classList.remove('fa-eye-slash');
+                    iconoVer.classList.add('fa-eye');
+                }
+                
+                await showAlert('¡Éxito!', 'Contraseña actualizada correctamente. Se recomienda cerrar sesión y volver a iniciar.', 'success');
             } else if (tipoCampo === 'numero_cuenta') {
                 document.getElementById('campoNumCuenta').textContent = nuevoValor;
                 if (usuarioActual) usuarioActual.numero_cuenta = nuevoValor;
+                
+                await showAlert('¡Éxito!', 'Número de cuenta actualizado correctamente.', 'success');
             } else if (tipoCampo === 'titular') {
                 document.getElementById('campoTitular').textContent = nuevoValor;
                 if (usuarioActual) usuarioActual.titular_usuario = nuevoValor;
+                
+                await showAlert('¡Éxito!', 'Titular de cuenta actualizado correctamente.', 'success');
             }
         } else {
             const errorMsg = await response.text();
@@ -271,7 +478,7 @@ window.editarCampo = async function (tipoCampo, nombreCampo) {
         
     } catch (error) {
         console.error('Error en actualización:', error);
-        alert('Error al actualizar: ' + error.message);
+        await showAlert('Error', 'Error al actualizar: ' + error.message, 'error');
     }
 };
 
