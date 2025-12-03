@@ -88,9 +88,8 @@ loginForm.addEventListener('submit', async function (e) {
       body: JSON.stringify(credentials)
     });
 
-    const data = await response.json();
-
     if (response.ok) { // 200 OK
+      const data = await response.json();
       // Login exitoso
       console.log('Login exitoso');
       console.log(" json", response)
@@ -107,7 +106,20 @@ loginForm.addEventListener('submit', async function (e) {
       window.location.href = 'infousuario.html';
     } else {
       // Error de credenciales o servidor (401, 400, 500)
-      throw new Error(data.message || 'Credenciales inválidas');
+      const errorMessage = await response.text();
+      
+      if (response.status === 401) {
+        // Credenciales incorrectas
+        throw new Error('Correo electrónico o contraseña incorrectos. Por favor, verifica tus datos.');
+      } else if (response.status === 400) {
+        // Datos inválidos
+        throw new Error(errorMessage || 'Datos de inicio de sesión inválidos.');
+      } else if (response.status === 500) {
+        // Error del servidor
+        throw new Error('Error en el servidor. Por favor, intenta más tarde.');
+      } else {
+        throw new Error(errorMessage || 'Error al iniciar sesión.');
+      }
     }
 
   } catch (error) {
