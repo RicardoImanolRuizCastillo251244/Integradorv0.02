@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     </div>
 
                     <div class="col-12 d-flex justify-content-center mt-4 mb-4" id="containerPublicar">
-                    <button type="button" id="buttonPost" class="btn-publicar pb-2 pt-2">VENDER
+                    <button type="button" id="buttonPost" class="btn-publicar pb-2 pt-2">PUBLICAR PRODUCTO
                         <img class="img-btn-publicar mb-1" src="/images/editar.png" alt="">
                     </button>
                     </div>
@@ -91,20 +91,40 @@ document.addEventListener('DOMContentLoaded', async () => {
             const containerPublicar = document.getElementById('containerPublicar');
             const buttonPost = document.getElementById('buttonPost');
 
-            if (rol == 1) {
-                // Usuario consumidor
+            console.log('Rol actual:', rol, 'Tipo:', typeof rol);
+
+            if (rol == 1 || rol === '1') {
+                // Usuario consumidor - mostrar campos de cuenta para que los llene
                 if (membresia) membresia.style.display = 'none';
                 if (estadisticas) estadisticas.style.display = 'none';
-                if (containerNumCuenta) containerNumCuenta.style.display = 'none';
-                if (containerTitular) containerTitular.style.display = 'none';
+                // Mostrar campos de cuenta y titular para que el usuario los llene
+                if (containerNumCuenta) containerNumCuenta.style.display = 'flex';
+                if (containerTitular) containerTitular.style.display = 'flex';
+                if (containerPublicar) containerPublicar.style.display = 'flex';
                 
-                // Configurar botón VENDER para cambiar a vendedor
+                // Cambiar texto y acción del botón para consumidores
                 if (buttonPost) {
+                    buttonPost.textContent = 'VENDER';
                     buttonPost.addEventListener('click', () => cambiarARolVendedor());
                 }
             } else {
-                // Usuario vendedor
-                if (containerPublicar) containerPublicar.style.display = 'none';
+                // Usuario vendedor - botón publicar redirige a página de publicación
+                if (containerPublicar) containerPublicar.style.display = 'flex';
+                
+                if (buttonPost) {
+                    buttonPost.innerHTML = 'PUBLICAR PRODUCTO <img class="img-btn-publicar mb-1" src="/images/editar.png" alt="">';
+                    buttonPost.addEventListener('click', () => {
+                        window.location.href = '../vendedor/publicacion.html';
+                    });
+                }
+                
+                // Agregar botón para volver a consumidor dinámicamente
+                const volverBtn = document.createElement('div');
+                volverBtn.className = 'col-12 d-flex justify-content-center mt-3 mb-4';
+                volverBtn.innerHTML = '<button type="button" class="btn btn-secondary pb-2 pt-2" id="btnVolverConsumidor">VOLVER A CONSUMIDOR</button>';
+                containerPublicar.parentNode.insertBefore(volverBtn, containerPublicar.nextSibling);
+                
+                document.getElementById('btnVolverConsumidor').addEventListener('click', () => cambiarAConsumidor());
             }
             
             configurarLogout();
@@ -523,74 +543,93 @@ if (returnButton) {
 
 // Función para cambiar de consumidor a vendedor
 async function cambiarARolVendedor() {
+    const userId = localStorage.getItem('userId');
+    const authToken = localStorage.getItem('authToken');
+    
+    if (!userId || !authToken) {
+        alert('No se encontró sesión de usuario.');
+        return;
+    }
+    
+    // Obtener valores de los campos
+    const numCuenta = document.getElementById('campoNumCuenta').textContent.trim();
+    const titular = document.getElementById('campoTitular').textContent.trim();
+    
+    // Validar que estén llenos
+    if (numCuenta === 'No registrado' || numCuenta === '' || 
+        titular === 'No registrado' || titular === '') {
+        alert('Debes llenar tu número de cuenta y nombre del titular antes de ser vendedor.');
+        return;
+    }
+    
+    // Confirmar
+    if (!confirm('¿Quieres cambiar a vendedor? Podrás publicar y vender productos.')) {
+        return;
+    }
+    
     try {
-        const userId = localStorage.getItem('userId');
-        const authToken = localStorage.getItem('authToken');
-        
-        if (!userId || !authToken) {
-            await showAlert('Error', 'No se encontró sesión de usuario.', 'error');
-            return;
-        }
-        
-        // Verificar que tenga número de cuenta y titular registrados
-        if (!usuarioActual.numero_cuenta || !usuarioActual.titular_cuenta) {
-            // Mostrar los campos para que el usuario los registre
-            const containerNumCuenta = document.getElementById('containerNumCuenta');
-            const containerTitular = document.getElementById('containerTitular');
-            
-            if (containerNumCuenta) containerNumCuenta.style.display = 'flex';
-            if (containerTitular) containerTitular.style.display = 'flex';
-            
-            await showAlert(
-                'Información requerida',
-                'Para ser vendedor necesitas registrar tu número de cuenta y nombre del titular. Los campos ya están visibles en tu perfil.',
-                'warning'
-            );
-            return;
-        }
-        
-        // Mostrar modal de confirmación
-        const confirmacion = await showModal(
-            '¿Quieres ser vendedor?',
-            'Al cambiar a rol de vendedor podrás publicar productos y gestionar ventas. ¿Deseas continuar?',
-            true
-        );
-        
-        if (!confirmacion) return;
-        
-        // Actualizar el rol en la base de datos
-        const response = await fetch(`${BASE_URL}/usuario`, {
-            method: 'PUT',
+        // Actualizar rol con PATCH (más simple)
+        const response = await fetch(`${BASE_URL}usuario/${userId}`, {
+            method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
-                'User-Id': userId,
-                'Authorization': `Bearer ${authToken}`
+                'Authorization': authToken.startsWith('Bearer ') ? authToken : `Bearer ${authToken}`,
+                'User-Id': userId
             },
-            body: JSON.stringify({
-                id_rol: 2 // Cambiar a vendedor
-            })
+            body: JSON.stringify({ id_rol: 2 })
         });
         
         if (response.ok) {
-            // Actualizar rol en localStorage
             localStorage.setItem('rol', '2');
-            
-            await showAlert(
-                '¡Felicidades!',
-                'Ahora eres vendedor. Tu perfil se actualizará.',
-                'success'
-            );
-            
-            // Recargar la página para mostrar el panel de vendedor
-            setTimeout(() => {
-                window.location.reload();
-            }, 1500);
+            alert('¡Ahora eres vendedor!');
+            window.location.reload();
         } else {
-            const errorText = await response.text();
-            await showAlert('Error', `No se pudo cambiar el rol: ${errorText}`, 'error');
+            const error = await response.text();
+            alert('Error al cambiar el rol: ' + error);
         }
     } catch (error) {
-        console.error('Error al cambiar rol:', error);
-        await showAlert('Error', 'Ocurrió un error al intentar cambiar el rol.', 'error');
+        console.error('Error:', error);
+        alert('Error de conexión al cambiar el rol');
+    }
+}
+
+// Función para cambiar de vendedor a consumidor
+async function cambiarAConsumidor() {
+    const userId = localStorage.getItem('userId');
+    const authToken = localStorage.getItem('authToken');
+    
+    if (!userId || !authToken) {
+        alert('No se encontró sesión de usuario.');
+        return;
+    }
+    
+    // Confirmar
+    if (!confirm('¿Quieres volver a ser consumidor? Perderás acceso a publicar productos.')) {
+        return;
+    }
+    
+    try {
+        // Actualizar rol con PATCH
+        const response = await fetch(`${BASE_URL}usuario/${userId}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': authToken.startsWith('Bearer ') ? authToken : `Bearer ${authToken}`,
+                'User-Id': userId
+            },
+            body: JSON.stringify({ id_rol: 1 })
+        });
+        
+        if (response.ok) {
+            localStorage.setItem('rol', '1');
+            alert('Ahora eres consumidor.');
+            window.location.reload();
+        } else {
+            const error = await response.text();
+            alert('Error al cambiar el rol: ' + error);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error de conexión al cambiar el rol');
     }
 }
