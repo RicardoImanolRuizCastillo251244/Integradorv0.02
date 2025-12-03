@@ -81,6 +81,37 @@ header nav {
   color: white;
 }
 
+/* === SUBPESTAÑAS === */
+.subtabs {
+  display: flex;
+  justify-content: center;
+  background: #f7f7f7;
+  border-bottom: 2px solid #ddd;
+  padding: 5px 0;
+}
+
+.subtab {
+  background: transparent;
+  border: none;
+  font-weight: bold;
+  font-size: 15px;
+  color: #fc4b08;
+  padding: 12px 20px;
+  cursor: pointer;
+  transition: 0.3s;
+  border-radius: 8px;
+}
+
+.subtab.active {
+  background: #c00000;
+  color: white;
+}
+
+.subtab:hover {
+  background: #fc4b08;
+  color: white;
+}
+
 /* === CONTENIDO PRINCIPAL === */
 .contenido-quejas {
   min-height: 60vh;
