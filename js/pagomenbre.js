@@ -1,7 +1,29 @@
 import { BASE_URL } from "./api_url.js";
+
 document.addEventListener('DOMContentLoaded', async () => {
-    const contenedorMembresias = document.querySelector('.contenido');
-    const btnPagar = document.querySelector('.btn-pagar');
+    // ELEMENTOS DEL DOM
+    const vistaPlan = document.getElementById('vistaPlan');
+    const vistaPago = document.getElementById('vistaPago');
+    const btnContinuarPago = document.getElementById('btnContinuarPago');
+    const btnTransferencia = document.getElementById('btnTransferencia');
+    const btnEfectivo = document.getElementById('btnEfectivo');
+    const seccionTransferencia = document.getElementById('seccionTransferencia');
+    const seccionEfectivo = document.getElementById('seccionEfectivo');
+    const btnFinalizarCompra = document.getElementById('btnFinalizarCompra');
+    const inputEvidencia = document.getElementById('inputEvidencia');
+    const previewEvidencia = document.getElementById('previewEvidencia');
+    const errorEvidencia = document.getElementById('errorEvidencia');
+    const errorTipoPago = document.getElementById('errorTipoPago');
+    const modalExito = document.getElementById('modalExito');
+    const btnCerrarModal = document.getElementById('btnCerrarModal');
+    const totalPago = document.getElementById('totalPago');
+    const returnBtn = document.getElementById('return');
+
+    // VARIABLES DE ESTADO
+    let planSeleccionado = null;
+    let precioSeleccionado = 0;
+    let tipoPagoSeleccionado = null;
+    let archivoEvidencia = null;
 
     // Validar login
     const userId = localStorage.getItem('userId');
@@ -9,78 +31,141 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (!userId || !authToken) {
         alert('Debes iniciar sesión para ver los planes.');
-        window.location.href = 'login.html';
+        window.location.href = '../login.html';
         return;
     }
 
-    // Cargar planes
-    try {
-        const response = await fetch(BASE_URL+'membresia-tipo');
-        if (response.ok) {
-            const planes = await response.json();
-            console.log(planes)
-            renderPlanes(planes);
+    // Botón regresar
+    returnBtn.addEventListener('click', () => {
+        if (vistaPago.classList.contains('vista-activa')) {
+            // Si está en vista de pago, volver a vista de plan
+            vistaPago.classList.remove('vista-activa');
+            vistaPago.classList.add('vista-oculta');
+            vistaPlan.classList.remove('vista-oculta');
+            vistaPlan.classList.add('vista-activa');
+            resetearFormulario();
         } else {
-            contenedorMembresias.innerHTML = '<p>Error al cargar planes de membresía.</p>';
+            // Si está en vista de plan, volver al index
+            window.location.href = '../infousuario.html';
         }
-    } catch (error) {
-        console.error('Error:', error);
-        contenedorMembresias.innerHTML = '<p>Error de conexión al cargar planes.</p>';
-    }
+    });
 
-    function renderPlanes(planes) {
-        // Limpiar contenido actual (excepto título si está dentro)
-        // Mantenemos el título h2
-        const titulo = contenedorMembresias.querySelector('h2');
-        contenedorMembresias.innerHTML = '';
-        if (titulo) contenedorMembresias.appendChild(titulo);
-
-        if (planes.length === 0) {
-            contenedorMembresias.innerHTML += '<p>No hay planes disponibles.</p>';
-            return;
-        }
-
-        planes.forEach(plan => {
-            const card = document.createElement('div');
-            card.className = 'membresia-card';
-            card.innerHTML = `
-                
-                <div class="info-plan">
-                    <div class="precio">$${plan.precio}</div>
-                    <h3>${plan.nombreMembresia}</h3>
-                    <p class="descripcionPlan">${plan.descripcion}</p>
-                </div>
-                <input type="radio" name="membresia" value="${plan.id_membresia_tipo}">
-               
-            `;
-            contenedorMembresias.appendChild(card);
-        });
-
-        // Re-agregar el botón de pagar al final
-        contenedorMembresias.appendChild(btnPagar);
-    }
-
-    // Manejar click en pagar
-    btnPagar.addEventListener('click', async (e) => {
-        e.preventDefault();
-
-        const seleccionado = document.querySelector('input[name="membresia"]:checked');
-        if (!seleccionado) {
+    // CONTINUAR AL FORMULARIO DE PAGO
+    btnContinuarPago.addEventListener('click', () => {
+        const radioSeleccionado = document.querySelector('input[name="membresia"]:checked');
+        
+        if (!radioSeleccionado) {
             alert('Por favor selecciona un plan de membresía.');
             return;
         }
 
-        const idMembresiaTipo = seleccionado.value;
+        planSeleccionado = radioSeleccionado.value;
+        
+        // Definir precios según el plan
+        if (planSeleccionado === '1') {
+            precioSeleccionado = 3;
+        } else if (planSeleccionado === '2') {
+            precioSeleccionado = 5;
+        }
 
-        if (!confirm('¿Estás seguro de que deseas suscribirte a este plan?')) return;
+        totalPago.textContent = `$${precioSeleccionado}`;
+
+        // Cambiar a vista de pago
+        vistaPlan.classList.remove('vista-activa');
+        vistaPlan.classList.add('vista-oculta');
+        vistaPago.classList.remove('vista-oculta');
+        vistaPago.classList.add('vista-activa');
+    });
+
+    // SELECCIÓN DE TIPO DE PAGO
+    btnTransferencia.addEventListener('click', () => {
+        seleccionarTipoPago('transferencia');
+    });
+
+    btnEfectivo.addEventListener('click', () => {
+        seleccionarTipoPago('efectivo');
+    });
+
+    function seleccionarTipoPago(tipo) {
+        tipoPagoSeleccionado = tipo;
+
+        // Actualizar botones
+        btnTransferencia.classList.remove('activo');
+        btnEfectivo.classList.remove('activo');
+
+        if (tipo === 'transferencia') {
+            btnTransferencia.classList.add('activo');
+            seccionTransferencia.classList.remove('oculto');
+            seccionEfectivo.classList.add('oculto');
+            errorTipoPago.classList.add('oculto');
+        } else {
+            btnEfectivo.classList.add('activo');
+            seccionEfectivo.classList.remove('oculto');
+            seccionTransferencia.classList.add('oculto');
+            errorEvidencia.classList.add('oculto');
+        }
+    }
+
+    // MANEJO DE ARCHIVO
+    inputEvidencia.addEventListener('change', (e) => {
+        const archivo = e.target.files[0];
+        
+        if (archivo) {
+            // Validar que sea imagen
+            if (!archivo.type.startsWith('image/')) {
+                alert('Por favor selecciona un archivo de imagen válido.');
+                inputEvidencia.value = '';
+                return;
+            }
+
+            archivoEvidencia = archivo;
+            errorEvidencia.classList.add('oculto');
+
+            // Mostrar preview
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                previewEvidencia.innerHTML = `<img src="${e.target.result}" alt="Evidencia de pago">`;
+                previewEvidencia.classList.remove('oculto');
+            };
+            reader.readAsDataURL(archivo);
+        }
+    });
+
+    // FINALIZAR COMPRA
+    btnFinalizarCompra.addEventListener('click', async () => {
+        // Validar tipo de pago
+        if (!tipoPagoSeleccionado) {
+            if (!errorTipoPago.classList.contains('oculto')) {
+                errorTipoPago.classList.remove('oculto');
+            } else {
+                errorTipoPago.classList.remove('oculto');
+            }
+            return;
+        }
+
+        // Validar evidencia si es transferencia
+        if (tipoPagoSeleccionado === 'transferencia' && !archivoEvidencia) {
+            errorEvidencia.classList.remove('oculto');
+            return;
+        }
+
+        // Confirmar compra
+        if (!confirm('¿Estás seguro de que deseas finalizar la compra?')) {
+            return;
+        }
 
         try {
+            // Crear objeto con datos de la membresía
             const datos = {
                 id_usuario: parseInt(userId),
-                id_membresia_tipo: parseInt(idMembresiaTipo)
+                id_membresia_tipo: parseInt(planSeleccionado),
+                activa: false // Pendiente de aprobación
             };
 
-            const response = await fetch(BASE_URL+'usuario-membresia', {
+            console.log('Enviando datos:', datos);
+
+            // Enviar solicitud
+            const response = await fetch(BASE_URL + 'usuario-membresia', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -91,20 +176,39 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             if (response.ok) {
                 const data = await response.json();
-                alert(`¡Membresía activada con éxito! Expira el: ${new Date(data.fecha_expiracion).toLocaleDateString()}`);
-                window.location.href = 'infousuario.html'; // Redirigir a perfil
+                console.log('Membresía creada:', data);
+
+                // Mostrar modal de éxito
+                modalExito.classList.remove('oculto');
             } else {
                 const errorText = await response.text();
+                console.error('Error del servidor:', errorText);
                 alert(`Error al procesar el pago: ${errorText}`);
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('Error de conexión al procesar el pago.');
+            alert('Error de conexión al procesar el pago. Por favor, intenta de nuevo.');
         }
     });
 
-    const returnFunction = document.getElementById("return")
-    returnFunction.addEventListener("click", ()=>{
-    window.location.href = '../../index.html'; 
-    })
+    // CERRAR MODAL Y REDIRIGIR
+    btnCerrarModal.addEventListener('click', () => {
+        modalExito.classList.add('oculto');
+        window.location.href = '../infousuario.html';
+    });
+
+    // RESETEAR FORMULARIO
+    function resetearFormulario() {
+        tipoPagoSeleccionado = null;
+        archivoEvidencia = null;
+        btnTransferencia.classList.remove('activo');
+        btnEfectivo.classList.remove('activo');
+        seccionTransferencia.classList.add('oculto');
+        seccionEfectivo.classList.add('oculto');
+        errorEvidencia.classList.add('oculto');
+        errorTipoPago.classList.add('oculto');
+        inputEvidencia.value = '';
+        previewEvidencia.classList.add('oculto');
+        previewEvidencia.innerHTML = '';
+    }
 });

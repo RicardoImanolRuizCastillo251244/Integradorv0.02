@@ -18,6 +18,7 @@
   <!-- CSS -->
    <link rel="stylesheet" href="/style/style.css">
   <link rel="stylesheet" href="/style/pagomembre.css" />
+  <link rel="stylesheet" href="/style/pago-membresia.css" />
   <link rel="stylesheet" href="/style/main.css" />
  
   <link rel="stylesheet" href="/style/btnBack.css">
@@ -78,21 +79,131 @@
 
     <h2>Pago de membresía</h2>
 
-    <div class="membresia-card">
-      <div class="precio">$3</div>
-      <p>Publicar tres productos al día por una semana</p>
-      <input type="radio" name="membresia" value="3">
+    <!-- Vista de selección de plan -->
+    <div id="vistaPlan" class="vista-activa">
+      <div class="membresia-card">
+        <div class="precio">$3</div>
+        <div class="separador-vertical"></div>
+        <p>Publicar tres productos al día por una semana</p>
+        <div class="radio-wrapper">
+          <input type="radio" name="membresia" value="1" id="plan1">
+          <label for="plan1" class="radio-custom"></label>
+        </div>
+      </div>
+
+      <div class="membresia-card">
+        <div class="precio">$5</div>
+        <div class="separador-vertical"></div>
+        <p>Publicar ilimitadamente productos por una semana y si eres de las primeras cuatro personas en pagar tu publicación aparecerá en el carrusel de imágenes</p>
+        <div class="radio-wrapper">
+          <input type="radio" name="membresia" value="2" id="plan2">
+          <label for="plan2" class="radio-custom"></label>
+        </div>
+      </div>
+
+      <button class="btn-pagar" id="btnContinuarPago">Pagar membresía</button>
     </div>
 
-    <div class="membresia-card">
-      <div class="precio"></div>
-      <p></p>
-      <input type="radio" name="membresia" value="5">
-    </div>
+    <!-- Vista de formulario de pago -->
+    <div id="vistaPago" class="vista-oculta">
+      <div class="contenedor-pago">
+        <div class="fila-info">
+          <span class="label-info">Total:</span>
+          <span class="valor-info" id="totalPago">$00</span>
+        </div>
 
-    <a href="pago2.html" class="btn-pagar">Pagar membresía</a>
+        <hr class="separador">
+
+        <div class="fila-info">
+          <span class="label-info">Tipo de pago:</span>
+          <div class="botones-tipo-pago">
+            <button class="btn-tipo-pago" id="btnTransferencia" data-tipo="transferencia">
+              Transferencia
+              <div class="radio-wrapper">
+                <div class="radio-custom"></div>
+              </div>
+            </button>
+            <button class="btn-tipo-pago" id="btnEfectivo" data-tipo="efectivo">
+              Efectivo
+              <div class="radio-wrapper">
+                <div class="radio-custom"></div>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <hr class="separador">
+
+        <!-- Sección de transferencia -->
+        <div id="seccionTransferencia" class="seccion-pago oculto">
+          <div class="fila-info">
+            <span class="label-info">Titular de la cuenta:</span>
+            <span class="valor-info">Nombre</span>
+          </div>
+
+          <hr class="separador">
+
+          <div class="fila-info">
+            <span class="label-info">Número de cuenta:</span>
+            <span class="valor-info">00000000000</span>
+          </div>
+
+          <hr class="separador">
+
+          <div class="subir-evidencia">
+            <input type="file" id="inputEvidencia" accept="image/*" class="input-file-hidden">
+            <label for="inputEvidencia" class="label-subir-archivo">
+              <i class="fas fa-image fa-4x"></i>
+              <p>Adjuntar imagen de la transferencia</p>
+            </label>
+            <div id="previewEvidencia" class="preview-imagen oculto"></div>
+          </div>
+
+          <div id="errorEvidencia" class="mensaje-error oculto">
+            <i class="fas fa-exclamation-circle"></i>
+            <span>Campo obligatorio</span>
+          </div>
+        </div>
+
+        <!-- Sección de efectivo -->
+        <div id="seccionEfectivo" class="seccion-pago oculto">
+          <div class="fila-info">
+            <span class="label-info">Horario de pago:</span>
+            <span class="valor-info">00:00</span>
+          </div>
+
+          <hr class="separador">
+
+          <div class="fila-info">
+            <span class="label-info">Lugar de pago:</span>
+            <span class="valor-info">Exterior de la universidad</span>
+          </div>
+
+          <div id="errorTipoPago" class="mensaje-error oculto">
+            <i class="fas fa-exclamation-circle"></i>
+            <span>Campo obligatorio</span>
+          </div>
+        </div>
+
+        <hr class="separador">
+
+        <button class="btn-pagar" id="btnFinalizarCompra">Finalizar compra</button>
+      </div>
+    </div>
 
   </section>
+
+  <!-- Modal de éxito -->
+  <div id="modalExito" class="modal-overlay oculto">
+    <div class="modal-contenido">
+      <div class="icono-exito">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <h2>Pago exitoso</h2>
+      <p>Tu solicitud de membresía ha sido enviada. Espera la aprobación del administrador.</p>
+      <button class="btn-cerrar-modal" id="btnCerrarModal">Entendido</button>
+    </div>
+  </div>
 
   <!-- Footer -->
   <footer class="pie-pagina">
