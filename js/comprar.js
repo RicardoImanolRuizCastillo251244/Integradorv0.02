@@ -43,7 +43,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         const responseUser = await fetch(BASE_URL + 'usuario/' + productoActual.id_vendedor);
         vendedorActual = await responseUser.json();
 
-<<<<<<< HEAD
         const responseCalificacion = await fetch(BASE_URL + 'calificacion/promedio/' + productoActual.id_publicacion);
 
         if (!responseCalificacion.ok) {
@@ -61,11 +60,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         listaHorarios = await horarios.json()
         
         console.log(listaHorarios)
-=======
-        const responseCalificacion = await fetch(BASE_URL+'calificacion/promedio/'+productoActual.id_publicacion);
 
-        calificacion = await responseCalificacion.json()
->>>>>>> 360cc9d684137b5388400e5fd6af31bc3cccabe7
 
         console.log('✅ Producto cargado:', productoActual);
         console.log('✅ Vendedor cargado:', vendedorActual);
@@ -154,8 +149,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
 
 
-<<<<<<< HEAD
-=======
 cantidadInput.addEventListener("blur", () => {
     if (cantidadInput.value < 1 || cantidadInput.value === '') {
         cantidadInput.value = 1;
@@ -184,8 +177,6 @@ cantidadInput.addEventListener("blur", () => {
         }, 1500);
     }
 });
-
->>>>>>> 360cc9d684137b5388400e5fd6af31bc3cccabe7
         container.style.opacity = '0';
         container.style.transform = 'translateY(20px)';
         container.style.transition = 'all 0.5s ease';
