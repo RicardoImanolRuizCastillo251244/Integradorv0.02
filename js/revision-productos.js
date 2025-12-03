@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     try {
         // Endpoint para obtener todos los productos
-        const response = await fetch(BASE_URL + 'productos', {
+        const response = await fetch(BASE_URL + 'publicacion', {
             headers: {
                 'Authorization': authToken
             }
@@ -122,7 +122,7 @@ window.verDetalle = async (idProducto) => {
     productoActualId = idProducto;
 
     try {
-        const response = await fetch(BASE_URL + `productos/${idProducto}`, {
+        const response = await fetch(BASE_URL + `publicacion/${idProducto}`, {
             headers: {
                 'Authorization': authToken
             }
@@ -158,13 +158,13 @@ window.cambiarEstadoProducto = async (idProducto, accion) => {
     }
 
     try {
-        const response = await fetch(BASE_URL + `productos/${idProducto}/estado`, {
+        const response = await fetch(BASE_URL + `publicacion/${idProducto}/estado`, {
             method: 'PATCH',
             headers: {
                 'Authorization': authToken,
-                'Content-Type': 'application/json'
+                'Content-Type': 'text/plain'
             },
-            body: JSON.stringify({ estado: nuevoEstado })
+            body: nuevoEstado
         });
 
         if (response.ok) {
@@ -189,7 +189,7 @@ window.eliminarProducto = async (idProducto) => {
     }
 
     try {
-        const response = await fetch(BASE_URL + `productos/${idProducto}`, {
+        const response = await fetch(BASE_URL + `publicacion/${idProducto}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': authToken

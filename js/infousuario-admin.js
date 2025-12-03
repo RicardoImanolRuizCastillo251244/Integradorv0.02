@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 async function cargarInformacionUsuario(userId, authToken) {
     try {
-        const response = await fetch(BASE_URL + `usuarios/${userId}`, {
+        const response = await fetch(BASE_URL + `usuario/${userId}`, {
             headers: {
                 'Authorization': authToken
             }

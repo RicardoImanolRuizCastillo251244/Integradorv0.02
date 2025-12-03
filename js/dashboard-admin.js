@@ -20,9 +20,9 @@ async function cargarDashboard() {
     try {
         // Cargar métricas principales en paralelo
         const [usuarios, productos, ventas, membresias] = await Promise.all([
-            fetch(BASE_URL + 'usuarios', { headers: { 'Authorization': authToken } }).then(r => r.json()),
-            fetch(BASE_URL + 'productos', { headers: { 'Authorization': authToken } }).then(r => r.json()),
-            fetch(BASE_URL + 'estadisticas/ventas?periodo=30d', { headers: { 'Authorization': authToken } }).then(r => r.json()),
+            fetch(BASE_URL + 'usuario', { headers: { 'Authorization': authToken } }).then(r => r.json()),
+            fetch(BASE_URL + 'publicacion', { headers: { 'Authorization': authToken } }).then(r => r.json()),
+            fetch(BASE_URL + 'venta', { headers: { 'Authorization': authToken } }).then(r => r.json()),
             fetch(BASE_URL + 'usuario-membresia/all', { headers: { 'Authorization': authToken } }).then(r => r.json())
         ]);
 
@@ -58,9 +58,9 @@ async function cargarBadges() {
 
     try {
         // Productos en cuarentena
-        const cuarentena = await fetch(BASE_URL + 'productos/cuarentena', {
+        const cuarentena = await fetch(BASE_URL + 'publicacion', {
             headers: { 'Authorization': authToken }
-        }).then(r => r.json());
+        }).then(r => r.json()).then(pubs => pubs.filter(p => p.estado_publicacion === 'cuarentena'));
         document.getElementById('badgeCuarentena').innerText = cuarentena.length || 0;
 
         // Membresías pendientes
@@ -77,7 +77,7 @@ async function cargarBadges() {
         document.getElementById('badgeQuejas').innerText = quejasPendientes.length || 0;
 
         // Productos pendientes
-        const productos = await fetch(BASE_URL + 'productos', {
+        const productos = await fetch(BASE_URL + 'publicacion', {
             headers: { 'Authorization': authToken }
         }).then(r => r.json());
         const productosPendientes = productos.filter(p => p.estado === 'pendiente');

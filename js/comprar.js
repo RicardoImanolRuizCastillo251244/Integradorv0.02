@@ -41,9 +41,9 @@ document.addEventListener('DOMContentLoaded', async function (){
         const responseUser = await fetch(BASE_URL + 'usuario/' + productoActual.id_vendedor);
         vendedorActual = await responseUser.json();
 
-        const responseCalificacion = await fetch(BASE_URL+'calificacion/promedio/'+19);
+        const responseCalificacion = await fetch(BASE_URL+'calificacion/promedio/'+productoActual.id_publicacion);
 
-        calificacion = await responseCalificacion
+        calificacion = await responseCalificacion.json()
 
         console.log('✅ Producto cargado:', productoActual);
         console.log('✅ Vendedor cargado:', vendedorActual);
