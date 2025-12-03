@@ -89,6 +89,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const containerNumCuenta = document.getElementById('containerNumCuenta');
             const containerTitular = document.getElementById('containerTitular');
             const containerPublicar = document.getElementById('containerPublicar');
+            const buttonPost = document.getElementById('buttonPost');
 
             if (rol == 1) {
                 // Usuario consumidor
@@ -96,6 +97,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (estadisticas) estadisticas.style.display = 'none';
                 if (containerNumCuenta) containerNumCuenta.style.display = 'none';
                 if (containerTitular) containerTitular.style.display = 'none';
+                
+                // Configurar botón VENDER para cambiar a vendedor
+                if (buttonPost) {
+                    buttonPost.addEventListener('click', () => cambiarARolVendedor());
+                }
             } else {
                 // Usuario vendedor
                 if (containerPublicar) containerPublicar.style.display = 'none';
@@ -513,4 +519,78 @@ if (returnButton) {
     returnButton.addEventListener("click", () => {
         window.location.href = '../index.html';
     });
+}
+
+// Función para cambiar de consumidor a vendedor
+async function cambiarARolVendedor() {
+    try {
+        const userId = localStorage.getItem('userId');
+        const authToken = localStorage.getItem('authToken');
+        
+        if (!userId || !authToken) {
+            await showAlert('Error', 'No se encontró sesión de usuario.', 'error');
+            return;
+        }
+        
+        // Verificar que tenga número de cuenta y titular registrados
+        if (!usuarioActual.numero_cuenta || !usuarioActual.titular_cuenta) {
+            // Mostrar los campos para que el usuario los registre
+            const containerNumCuenta = document.getElementById('containerNumCuenta');
+            const containerTitular = document.getElementById('containerTitular');
+            
+            if (containerNumCuenta) containerNumCuenta.style.display = 'flex';
+            if (containerTitular) containerTitular.style.display = 'flex';
+            
+            await showAlert(
+                'Información requerida',
+                'Para ser vendedor necesitas registrar tu número de cuenta y nombre del titular. Los campos ya están visibles en tu perfil.',
+                'warning'
+            );
+            return;
+        }
+        
+        // Mostrar modal de confirmación
+        const confirmacion = await showModal(
+            '¿Quieres ser vendedor?',
+            'Al cambiar a rol de vendedor podrás publicar productos y gestionar ventas. ¿Deseas continuar?',
+            true
+        );
+        
+        if (!confirmacion) return;
+        
+        // Actualizar el rol en la base de datos
+        const response = await fetch(`${BASE_URL}/usuario`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'User-Id': userId,
+                'Authorization': `Bearer ${authToken}`
+            },
+            body: JSON.stringify({
+                id_rol: 2 // Cambiar a vendedor
+            })
+        });
+        
+        if (response.ok) {
+            // Actualizar rol en localStorage
+            localStorage.setItem('rol', '2');
+            
+            await showAlert(
+                '¡Felicidades!',
+                'Ahora eres vendedor. Tu perfil se actualizará.',
+                'success'
+            );
+            
+            // Recargar la página para mostrar el panel de vendedor
+            setTimeout(() => {
+                window.location.reload();
+            }, 1500);
+        } else {
+            const errorText = await response.text();
+            await showAlert('Error', `No se pudo cambiar el rol: ${errorText}`, 'error');
+        }
+    } catch (error) {
+        console.error('Error al cambiar rol:', error);
+        await showAlert('Error', 'Ocurrió un error al intentar cambiar el rol.', 'error');
+    }
 }
