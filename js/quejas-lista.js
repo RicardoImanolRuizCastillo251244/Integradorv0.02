@@ -188,7 +188,7 @@ window.enviarRespuesta = async () => {
         const updateData = {
             id_emisor: quejaData.id_emisor,
             descripcion_queja: quejaData.descripcion_queja,
-            estado_queja: 'respondida'
+            estado_queja: 'RESPONDIDA'
         };
 
         // Agregar campos específicos según el tipo
@@ -253,7 +253,7 @@ window.accionQueja = async (idQueja, accion, tipoQueja) => {
         const quejaData = await getResponse.json();
         
         // Actualizar la queja con el nuevo estado - usar los nombres de campo correctos del backend
-        const nuevoEstado = accion === 'aceptar' ? 'aceptada' : 'rechazada';
+        const nuevoEstado = accion === 'aceptar' ? 'ACEPTADA' : 'RECHAZADA';
         const updateData = {
             id_emisor: quejaData.id_emisor,
             descripcion_queja: quejaData.descripcion_queja,
