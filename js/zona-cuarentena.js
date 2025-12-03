@@ -3,7 +3,6 @@ import { BASE_URL } from "./api_url.js";
 let quejaActualId = null;
 
 document.addEventListener('DOMContentLoaded', async () => {
-    const tablaBody = document.getElementById('tablaBody');
     const tablaQuejasBody = document.getElementById('tablaQuejasBody');
     const authToken = localStorage.getItem('authToken');
 
@@ -13,26 +12,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   //  }
 
     try {
-        // Cargar productos en cuarentena y quejas de venta en paralelo
-        const [responsePublicaciones, responseQuejasVenta] = await Promise.all([
-            fetch(BASE_URL + 'publicacion', { headers: { 'Authorization': authToken } }),
-            fetch(BASE_URL + 'queja-venta', { headers: { 'Authorization': authToken } })
-        ]);
-
-        // Procesar productos en cuarentena
-        if (responsePublicaciones.ok) {
-            const todasPublicaciones = await responsePublicaciones.json();
-            // Filtrar publicaciones en cuarentena o pendientes de revisión
-            const productos = todasPublicaciones.filter(p => 
-                p.estado_publicacion === 'EN_REVISION' || 
-                p.estado_publicacion === 'CUARENTENA' ||
-                p.estado_publicacion === 'PENDIENTE'
-            );
-            renderTabla(productos);
-        } else {
-            console.error('Error al cargar productos:', responsePublicaciones.status);
-            tablaBody.innerHTML = '<tr><td colspan="6" class="text-center">Error al cargar datos.</td></tr>';
-        }
+        // Cargar solo quejas de venta
+        const responseQuejasVenta = await fetch(BASE_URL + 'queja-venta', { 
+            headers: { 'Authorization': authToken } 
+        });
 
         // Procesar quejas de venta
         if (responseQuejasVenta.ok) {
@@ -45,142 +28,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     } catch (error) {
         console.error('Error de red:', error);
-        tablaBody.innerHTML = '<tr><td colspan="6" class="text-center">Error de conexión.</td></tr>';
         tablaQuejasBody.innerHTML = '<tr><td colspan="6" class="text-center">Error de conexión.</td></tr>';
     }
-
-    function renderTabla(productos) {
-        tablaBody.innerHTML = '';
-
-        if (productos.length === 0) {
-            tablaBody.innerHTML = '<tr><td colspan="6" class="text-center">No hay productos en cuarentena.</td></tr>';
-            return;
-        }
-
-        productos.forEach(p => {
-            const row = document.createElement('tr');
-
-            // Datos del producto - adaptado a los campos de Publicacion
-            const nombreUsuario = p.nombre_vendedor || 'Vendedor desconocido';
-            const correoUsuario = p.correo_vendedor || 'N/A';
-            const titulo = p.titulo_publicacion || 'Sin título';
-            const queja = p.motivo_revision || 'Sin motivo registrado';
-            
-            // Procesar imagen de la publicación
-            let imageSrc = '/images/productos/default.jpg';
-            if (p.foto_publicacion) {
-                if (Array.isArray(p.foto_publicacion)) {
-                    const base64String = btoa(String.fromCharCode.apply(null, p.foto_publicacion));
-                    imageSrc = `data:image/jpeg;base64,${base64String}`;
-                } else if (typeof p.foto_publicacion === 'string') {
-                    if (p.foto_publicacion.startsWith('data:image')) {
-                        imageSrc = p.foto_publicacion;
-                    } else {
-                        imageSrc = `data:image/jpeg;base64,${p.foto_publicacion}`;
-                    }
-                }
-            }
-            
-            const imagenes = [imageSrc]; // Array con la imagen de la publicación
-
-            row.innerHTML = `
-                <td>${nombreUsuario}</td>
-                <td>${correoUsuario}</td>
-                <td>${titulo}</td>
-                <td class="text-center">
-                    <button class="btn-ver-imagen" onclick="window.verImagenes(${p.id_publicacion}, ${JSON.stringify(imagenes).replace(/"/g, '&quot;')})">
-                        <i class="fa-solid fa-image"></i> Ver fotos
-                    </button>
-                </td>
-                <td class="text-center">
-                    <button class="btn-ver-queja" onclick="window.verQueja('${queja.replace(/'/g, "\\'")}')">
-                        <i class="fa-solid fa-comment"></i> Ver motivo
-                    </button>
-                </td>
-                <td class="text-center">
-                    <button class="btn-aceptar" onclick="window.accionProducto(${p.id_publicacion}, 'aceptar')">
-                        Aceptar
-                    </button>
-                    <button class="btn-declinar" onclick="window.accionProducto(${p.id_publicacion}, 'declinar')">
-                        Declinar
-                    </button>
-                </td>
-            `;
-            tablaBody.appendChild(row);
-        });
-    }
-
-    // Función para ver imágenes en modal
-    window.verImagenes = (idProducto, imagenes) => {
-        const carouselInner = document.getElementById('imagenesCarousel');
-        carouselInner.innerHTML = '';
-
-        if (imagenes.length === 0) {
-            carouselInner.innerHTML = '<div class="carousel-item active"><p class="text-center">No hay imágenes disponibles</p></div>';
-        } else {
-            imagenes.forEach((img, index) => {
-                const item = document.createElement('div');
-                item.className = index === 0 ? 'carousel-item active' : 'carousel-item';
-                item.innerHTML = `<img src="${img}" class="d-block w-100" alt="Imagen ${index + 1}" style="max-height: 500px; object-fit: contain;">`;
-                carouselInner.appendChild(item);
-            });
-        }
-
-        const modal = new bootstrap.Modal(document.getElementById('modalImagen'));
-        modal.show();
-    };
-
-    // Función para ver queja en modal
-    window.verQueja = (queja) => {
-        document.getElementById('quejaTexto').innerText = queja;
-        const modal = new bootstrap.Modal(document.getElementById('modalQueja'));
-        modal.show();
-    };
-
-    // Función para aceptar o declinar producto
-    window.accionProducto = async (idProducto, accion) => {
-        if (!confirm(`¿Estás seguro de que deseas ${accion === 'aceptar' ? 'aceptar' : 'declinar'} este producto?`)) {
-            return;
-        }
-
-        try {
-            // Primero obtener los datos actuales de la publicación
-            const getResponse = await fetch(BASE_URL + `publicacion/${idProducto}`, {
-                headers: { 'Authorization': authToken }
-            });
-            
-            if (!getResponse.ok) {
-                throw new Error('No se pudo obtener los datos de la publicación');
-            }
-            
-            const publicacionData = await getResponse.json();
-            
-            // Actualizar el estado de la publicación
-            const nuevoEstado = accion === 'aceptar' ? 'ACTIVA' : 'RECHAZADA';
-            const response = await fetch(BASE_URL + `publicacion/${idProducto}`, {
-                method: 'PUT',
-                headers: {
-                    'Authorization': authToken,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    ...publicacionData,
-                    estado_publicacion: nuevoEstado
-                })
-            });
-
-            if (response.ok) {
-                alert(`Producto ${accion === 'aceptar' ? 'aceptado' : 'declinado'} correctamente.`);
-                location.reload();
-            } else {
-                const error = await response.json().catch(() => ({}));
-                alert(`Error: ${error.message || 'No se pudo procesar la acción.'}`);
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('Error de conexión.');
-        }
-    };
 });
 
 // Función para renderizar quejas de publicación
@@ -225,11 +74,11 @@ function renderQuejasPublicacion(quejas) {
                 </button>
             </td>
             <td class="text-center">
-                <button class="btn-aceptar" onclick="window.accionQuejaVenta(${idQueja}, 'aceptar')">
-                    Aceptar
+                <button class="btn-descartar" onclick="window.descartarQuejaVenta(${idQueja})">
+                    <i class="fa-solid fa-times"></i> Descartar
                 </button>
-                <button class="btn-declinar" onclick="window.accionQuejaVenta(${idQueja}, 'declinar')">
-                    Declinar
+                <button class="btn-eliminar" onclick="window.eliminarPublicacionYQueja(${idQueja})">
+                    <i class="fa-solid fa-trash"></i> Eliminar publicación
                 </button>
             </td>
         `;
@@ -284,6 +133,176 @@ window.verDetalleQuejaVenta = async (idQueja) => {
     } catch (error) {
         console.error('Error:', error);
         alert('Error de conexión.');
+    }
+};
+
+// Eliminar publicación y queja (con notificaciones)
+window.eliminarPublicacionYQueja = async (idQueja) => {
+    if (!confirm('¿Estás seguro de que deseas eliminar la publicación? Se notificará al vendedor y al comprador.')) {
+        return;
+    }
+
+    const authToken = localStorage.getItem('authToken');
+
+    try {
+        // 1. Obtener datos de la queja para saber qué publicación eliminar
+        console.log(`Obteniendo datos de queja: ${BASE_URL}queja-venta/${idQueja}`);
+        const quejaResponse = await fetch(BASE_URL + `queja-venta/${idQueja}`, {
+            headers: { 'Authorization': authToken }
+        });
+
+        if (!quejaResponse.ok) {
+            const errorText = await quejaResponse.text();
+            alert('Error al obtener información de la queja: ' + errorText);
+            console.error('Error quejaResponse:', errorText);
+            return;
+        }
+
+        const quejaData = await quejaResponse.json();
+        console.log('Datos de la queja:', quejaData);
+
+        // Validar que tenga id_venta
+        if (!quejaData.id_venta) {
+            alert('Error: La queja no tiene una venta asociada.');
+            return;
+        }
+
+        const idVenta = quejaData.id_venta;
+        
+        // 2. Obtener datos de la venta para saber el id_publicacion
+        console.log(`Obteniendo datos de venta: ${BASE_URL}venta/${idVenta}`);
+        const ventaResponse = await fetch(BASE_URL + `venta/${idVenta}`, {
+            headers: { 'Authorization': authToken }
+        });
+
+        if (!ventaResponse.ok) {
+            const errorText = await ventaResponse.text();
+            alert('Error al obtener información de la venta: ' + errorText);
+            console.error('Error ventaResponse:', errorText);
+            return;
+        }
+
+        const ventaData = await ventaResponse.json();
+        console.log('Datos de la venta:', ventaData);
+        
+        // Validar campos de la venta
+        if (!ventaData.id_publicacion || !ventaData.id_comprador) {
+            alert('Error: Datos incompletos en la venta.');
+            return;
+        }
+        
+        const idPublicacion = ventaData.id_publicacion;
+        const idComprador = ventaData.id_comprador;
+
+        // 3. Obtener datos de la publicación para saber el id_vendedor
+        console.log(`Obteniendo datos de publicación: ${BASE_URL}publicacion/${idPublicacion}`);
+        const publicacionResponse = await fetch(BASE_URL + `publicacion/${idPublicacion}`, {
+            headers: { 'Authorization': authToken }
+        });
+
+        if (!publicacionResponse.ok) {
+            const errorText = await publicacionResponse.text();
+            alert('Error al obtener información de la publicación: ' + errorText);
+            console.error('Error publicacionResponse:', errorText);
+            return;
+        }
+
+        const publicacionData = await publicacionResponse.json();
+        console.log('Datos de la publicación:', publicacionData);
+        
+        // Validar que tenga id_vendedor
+        if (!publicacionData.id_vendedor) {
+            alert('Error: La publicación no tiene vendedor asociado.');
+            return;
+        }
+        
+        const idVendedor = publicacionData.id_vendedor;
+
+        console.log('ID Publicación:', idPublicacion, 'Vendedor:', idVendedor, 'Comprador:', idComprador);
+
+        // 4. Eliminar la publicación
+        console.log(`Eliminando publicación: ${BASE_URL}publicacion/${idPublicacion}`);
+        const deletePublicacionResponse = await fetch(BASE_URL + `publicacion/${idPublicacion}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': authToken }
+        });
+
+        if (!deletePublicacionResponse.ok) {
+            const errorText = await deletePublicacionResponse.text();
+            alert('Error al eliminar la publicación: ' + errorText);
+            console.error('Error deletePublicacionResponse:', errorText);
+            return;
+        }
+
+        console.log('Publicación eliminada exitosamente');
+
+        // 5. Crear notificaciones para vendedor y comprador
+        const mensajeVendedor = 'Una de tus publicaciones ha sido eliminada por el administrador debido a una queja.';
+        const mensajeComprador = 'Una publicación relacionada con tu compra ha sido eliminada por el administrador.';
+        
+        // Notificación para el vendedor
+        console.log('Enviando notificación al vendedor:', idVendedor);
+        const notifVendedorResponse = await fetch(BASE_URL + 'notificacion', {
+            method: 'POST',
+            headers: {
+                'Authorization': authToken,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id_usuario: idVendedor,
+                mensaje: mensajeVendedor,
+                tipo: 'SISTEMA',
+                leida: false
+            })
+        });
+
+        if (!notifVendedorResponse.ok) {
+            console.warn('No se pudo enviar notificación al vendedor');
+        } else {
+            console.log('Notificación enviada al vendedor');
+        }
+
+        // Notificación para el comprador
+        console.log('Enviando notificación al comprador:', idComprador);
+        const notifCompradorResponse = await fetch(BASE_URL + 'notificacion', {
+            method: 'POST',
+            headers: {
+                'Authorization': authToken,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id_usuario: idComprador,
+                mensaje: mensajeComprador,
+                tipo: 'SISTEMA',
+                leida: false
+            })
+        });
+
+        if (!notifCompradorResponse.ok) {
+            console.warn('No se pudo enviar notificación al comprador');
+        } else {
+            console.log('Notificación enviada al comprador');
+        }
+
+        // 6. Eliminar la queja
+        console.log(`Eliminando queja: ${BASE_URL}queja-venta/${idQueja}`);
+        const deleteQuejaResponse = await fetch(BASE_URL + `queja-venta/${idQueja}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': authToken }
+        });
+
+        if (!deleteQuejaResponse.ok) {
+            console.warn('No se pudo eliminar la queja, pero la publicación ya fue eliminada');
+        } else {
+            console.log('Queja eliminada exitosamente');
+        }
+
+        alert('Publicación eliminada correctamente. Se han enviado notificaciones a los usuarios.');
+        location.reload();
+
+    } catch (error) {
+        console.error('Error completo:', error);
+        alert('Error de conexión: ' + error.message);
     }
 };
 
@@ -360,55 +379,28 @@ window.enviarRespuestaQueja = async () => {
     }
 };
 
-// Aceptar o declinar queja de venta
-window.accionQuejaVenta = async (idQueja, accion) => {
-    if (!confirm(`¿Estás seguro de que deseas ${accion === 'aceptar' ? 'aceptar' : 'declinar'} esta queja?`)) {
+// Descartar queja de venta (solo elimina la queja)
+window.descartarQuejaVenta = async (idQueja) => {
+    if (!confirm('¿Estás seguro de que deseas descartar esta queja?')) {
         return;
     }
 
     const authToken = localStorage.getItem('authToken');
 
     try {
-        const getResponse = await fetch(BASE_URL + `queja-venta/${idQueja}`, {
-            headers: { 'Authorization': authToken }
-        });
-        
-        if (!getResponse.ok) {
-            const errorText = await getResponse.text();
-            console.error('Error al obtener queja:', getResponse.status, errorText);
-            alert(`Error al obtener la queja (${getResponse.status}): ${errorText}`);
-            return;
-        }
-        
-        const quejaData = await getResponse.json();
-        console.log('Datos de la queja obtenidos:', quejaData);
-        
-        const updateData = {
-            id_emisor: quejaData.id_emisor,
-            descripcion_queja: quejaData.descripcion_queja,
-            estado_queja: quejaData.estado_queja || 'ABIERTA',
-            id_venta: quejaData.id_venta
-        };
-
-        if (quejaData.tipo_problema) {
-            updateData.tipo_problema = quejaData.tipo_problema;
-        }
-
-        console.log('Datos a enviar:', updateData);
+        console.log(`Descartando queja: ${BASE_URL}queja-venta/${idQueja}`);
         
         const response = await fetch(BASE_URL + `queja-venta/${idQueja}`, {
-            method: 'PUT',
+            method: 'DELETE',
             headers: {
-                'Authorization': authToken,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(updateData)
+                'Authorization': authToken
+            }
         });
 
         console.log('Respuesta del servidor:', response.status);
 
         if (response.ok || response.status === 204) {
-            alert(`Queja ${accion === 'aceptar' ? 'aceptada' : 'declinada'} correctamente.`);
+            alert('Queja descartada correctamente.');
             location.reload();
         } else {
             const errorText = await response.text();

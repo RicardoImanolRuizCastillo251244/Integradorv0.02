@@ -177,35 +177,24 @@ header nav {
   margin-right: 5px;
 }
 
-.btn-aceptar {
-  background: #4d9d30;
-  color: white;
-  border: none;
-  padding: 8px 20px;
-  border-radius: 5px;
-  font-weight: bold;
-  margin-right: 8px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.btn-aceptar:hover {
-  background: #3d7d20;
-}
-
-.btn-declinar {
+.btn-eliminar {
   background: #c00000;
   color: white;
   border: none;
-  padding: 8px 20px;
+  padding: 10px 25px;
   border-radius: 5px;
   font-weight: bold;
   cursor: pointer;
   transition: 0.3s;
 }
 
-.btn-declinar:hover {
+.btn-eliminar:hover {
   background: #a00000;
+  transform: scale(1.05);
+}
+
+.btn-eliminar i {
+  margin-right: 5px;
 }
 
 /* === MODAL DETALLE === */
