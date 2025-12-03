@@ -116,6 +116,29 @@
         </tbody>
       </table>
     </div>
+
+    <!-- SECCIÓN DE QUEJAS DE PUBLICACIONES -->
+    <h3 class="text-center mb-4 mt-5" style="color: #fc4b08; font-weight: bold;">Quejas de Publicaciones</h3>
+    
+    <div class="tabla-productos">
+      <table class="table table-bordered">
+        <thead class="tabla-header">
+          <tr>
+            <th>Usuario</th>
+            <th>Correo</th>
+            <th>Título de publicación</th>
+            <th>Fotos</th>
+            <th>Queja</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tablaQuejasBody">
+          <tr>
+            <td colspan="6" class="text-center">Cargando...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </section>
 
   <!-- MODAL PARA VER IMÁGENES -->
@@ -181,6 +204,49 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL PARA VER DETALLE DE QUEJA -->
+  <div class="modal fade" id="modalDetalleQueja" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Detalle de la Queja</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <p><strong>Usuario:</strong> <span id="quejaUsuario">-</span></p>
+          <p><strong>Correo:</strong> <span id="quejaCorreo">-</span></p>
+          <p><strong>Publicación:</strong> <span id="quejaTitulo">-</span></p>
+          <p><strong>Tipo de problema:</strong> <span id="quejaTipoProblema">-</span></p>
+          <p><strong>Descripción:</strong></p>
+          <div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px; min-height: 100px;" id="quejaDescripcion">-</div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-primary" onclick="window.abrirModalRespuesta()">Responder</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL PARA RESPONDER QUEJA -->
+  <div class="modal fade" id="modalResponderQueja" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Responder Queja</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <textarea id="respuestaTexto" class="form-control" rows="5" placeholder="Escribe tu respuesta aquí..."></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" onclick="window.enviarRespuestaQueja()">Enviar</button>
         </div>
       </div>
     </div>

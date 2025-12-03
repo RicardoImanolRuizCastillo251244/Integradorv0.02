@@ -12,27 +12,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     try {
-        // Cargar tanto quejas de usuario como de venta
-        const [responseUsuario, responseVenta] = await Promise.all([
-            fetch(BASE_URL + 'queja-usuario', { headers: { 'Authorization': authToken } }),
-            fetch(BASE_URL + 'queja-venta', { headers: { 'Authorization': authToken } })
-        ]);
+        // Cargar solo quejas de usuario (quejas personales)
+        const response = await fetch(BASE_URL + 'queja-usuario', {
+            headers: { 'Authorization': authToken }
+        });
 
-        let quejas = [];
-        
-        if (responseUsuario.ok) {
-            const quejasUsuario = await responseUsuario.json();
-            quejas = [...quejas, ...quejasUsuario.map(q => ({ ...q, tipo: 'usuario' }))];
-        }
-        
-        if (responseVenta.ok) {
-            const quejasVenta = await responseVenta.json();
-            quejas = [...quejas, ...quejasVenta.map(q => ({ ...q, tipo: 'venta' }))];
-        }
-        if (quejas.length > 0) {
-            renderTabla(quejas);
+        if (response.ok) {
+            const quejas = await response.json();
+            renderTabla(quejas.map(q => ({ ...q, tipo: 'usuario' })));
         } else {
-            console.error('No se pudieron cargar las quejas');
+            console.error('Error al cargar quejas:', response.status);
             tablaBody.innerHTML = '<tr><td colspan="6" class="text-center">Error al cargar datos.</td></tr>';
         }
     } catch (error) {
@@ -184,20 +173,24 @@ window.enviarRespuesta = async () => {
         
         const quejaData = await getResponse.json();
         
-        // Actualizar la queja con la respuesta - usar los nombres de campo correctos del backend
+        // Actualizar la queja con la respuesta - NO cambiamos estado_queja porque la BD solo acepta "ABIERTA"
         const updateData = {
             id_emisor: quejaData.id_emisor,
             descripcion_queja: quejaData.descripcion_queja,
-            estado_queja: 'RESPONDIDA'
+            estado_queja: quejaData.estado_queja || 'ABIERTA'
         };
 
         // Agregar campos específicos según el tipo
         if (tipoQuejaActual === 'usuario') {
             updateData.id_receptor = quejaData.id_receptor;
-            updateData.motivo_queja = quejaData.motivo_queja;
+            if (quejaData.motivo_queja) {
+                updateData.motivo_queja = quejaData.motivo_queja;
+            }
         } else {
             updateData.id_venta = quejaData.id_venta;
-            updateData.tipo_problema = quejaData.tipo_problema;
+            if (quejaData.tipo_problema) {
+                updateData.tipo_problema = quejaData.tipo_problema;
+            }
         }
         
         const response = await fetch(BASE_URL + `${endpoint}/${quejaActualId}`, {
@@ -242,32 +235,44 @@ window.accionQueja = async (idQueja, accion, tipoQueja) => {
     try {
         // Primero obtener los datos actuales de la queja
         const endpoint = tipoQueja === 'usuario' ? 'queja-usuario' : 'queja-venta';
+        console.log(`Obteniendo queja: ${BASE_URL}${endpoint}/${idQueja}`);
+        
         const getResponse = await fetch(BASE_URL + `${endpoint}/${idQueja}`, {
             headers: { 'Authorization': authToken }
         });
         
         if (!getResponse.ok) {
-            throw new Error('No se pudo obtener los datos de la queja');
+            const errorText = await getResponse.text();
+            console.error('Error al obtener queja:', getResponse.status, errorText);
+            alert(`Error al obtener la queja (${getResponse.status}): ${errorText}`);
+            return;
         }
         
         const quejaData = await getResponse.json();
+        console.log('Datos de la queja obtenidos:', quejaData);
         
-        // Actualizar la queja con el nuevo estado - usar los nombres de campo correctos del backend
-        const nuevoEstado = accion === 'aceptar' ? 'ACEPTADA' : 'RECHAZADA';
+        // Actualizar la queja - NO cambiamos estado_queja porque la BD solo acepta "ABIERTA"
+        // La acción de aceptar/declinar solo eliminará la queja o la marcará como respondida
         const updateData = {
             id_emisor: quejaData.id_emisor,
             descripcion_queja: quejaData.descripcion_queja,
-            estado_queja: nuevoEstado
+            estado_queja: quejaData.estado_queja  // Mantener el estado actual (ABIERTA)
         };
 
         // Agregar campos específicos según el tipo
         if (tipoQueja === 'usuario') {
             updateData.id_receptor = quejaData.id_receptor;
-            updateData.motivo_queja = quejaData.motivo_queja;
+            if (quejaData.motivo_queja) {
+                updateData.motivo_queja = quejaData.motivo_queja;
+            }
         } else {
             updateData.id_venta = quejaData.id_venta;
-            updateData.tipo_problema = quejaData.tipo_problema;
+            if (quejaData.tipo_problema) {
+                updateData.tipo_problema = quejaData.tipo_problema;
+            }
         }
+        
+        console.log('Datos a enviar:', updateData);
         
         const response = await fetch(BASE_URL + `${endpoint}/${idQueja}`, {
             method: 'PUT',
@@ -283,7 +288,8 @@ window.accionQueja = async (idQueja, accion, tipoQueja) => {
             location.reload();
         } else {
             const errorText = await response.text();
-            alert(`Error: ${errorText || 'No se pudo procesar la acción.'}`);
+            console.error('Error al actualizar:', response.status, errorText);
+            alert(`Error al actualizar (${response.status}): ${errorText}`);
         }
     } catch (error) {
         console.error('Error:', error);
