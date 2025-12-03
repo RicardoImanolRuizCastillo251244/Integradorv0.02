@@ -1,8 +1,5 @@
 import { BASE_URL } from "./api_url.js";
 
-let graficoCategoriasInstance = null;
-let graficoVentasInstance = null;
-
 document.addEventListener('DOMContentLoaded', async () => {
     const authToken = localStorage.getItem('authToken');
 
@@ -19,295 +16,49 @@ async function cargarDashboard() {
 
     try {
         // Cargar métricas principales en paralelo
-        const [usuarios, productos, ventas, membresias] = await Promise.all([
+        const [usuarios, ventas, membresias] = await Promise.all([
             fetch(BASE_URL + 'usuario', { headers: { 'Authorization': authToken } }).then(r => r.json()),
-            fetch(BASE_URL + 'publicacion', { headers: { 'Authorization': authToken } }).then(r => r.json()),
             fetch(BASE_URL + 'venta', { headers: { 'Authorization': authToken } }).then(r => r.json()),
             fetch(BASE_URL + 'usuario-membresia', { headers: { 'Authorization': authToken } }).then(r => r.json())
         ]);
 
         // Actualizar métricas
         document.getElementById('totalUsuarios').innerText = usuarios.length || 0;
-        
-        const productosActivos = productos.filter(p => p.estado_publicacion === 'activo' || p.activo);
-        document.getElementById('totalProductos').innerText = productosActivos.length || 0;
-        
-        // Calcular el monto total de ventas
-        let montoVentas = 0;
+
+        // Calcular el monto total de ventas del mes actual
+        let montoVentasMes = 0;
         if (Array.isArray(ventas)) {
-            montoVentas = ventas.reduce((sum, venta) => {
-                const monto = venta.monto_total || venta.montoTotal || venta.total || 0;
+            const fechaActual = new Date();
+            const mesActual = fechaActual.getMonth();
+            const anioActual = fechaActual.getFullYear();
+
+            const ventasMes = ventas.filter(venta => {
+                let fechaVenta;
+
+                // Convertir array de fecha [año, mes, día] a Date
+                if (Array.isArray(venta.fecha_venta)) {
+                    fechaVenta = new Date(venta.fecha_venta[0], venta.fecha_venta[1] - 1, venta.fecha_venta[2]);
+                } else if (Array.isArray(venta.fecha)) {
+                    fechaVenta = new Date(venta.fecha[0], venta.fecha[1] - 1, venta.fecha[2]);
+                } else {
+                    fechaVenta = new Date(venta.fecha_venta || venta.fecha);
+                }
+
+                return fechaVenta.getMonth() === mesActual && fechaVenta.getFullYear() === anioActual;
+            });
+
+            montoVentasMes = ventasMes.reduce((sum, venta) => {
+                const monto = venta.precio_total || venta.monto_total || venta.total || 0;
                 return sum + parseFloat(monto);
             }, 0);
         }
-        document.getElementById('ventasMes').innerText = `$${montoVentas.toLocaleString('es-MX', { minimumFractionDigits: 2 })}`;
+        document.getElementById('ventasMes').innerText = `$${montoVentasMes.toLocaleString('es-MX', { minimumFractionDigits: 2 })}`;
 
         // Filtrar membresías activas usando el campo correcto
         const membresiasActivas = Array.isArray(membresias) ? membresias.filter(m => m.activa === true) : [];
         document.getElementById('totalMembresias').innerText = membresiasActivas.length || 0;
 
-        // Cargar badges de acciones rápidas
-        await cargarBadges();
-
-        // Cargar actividad reciente
-        await cargarActividad();
-
-        // Cargar gráficas
-        await cargarGraficoCategorias(productos);
-        await cargarGraficoVentas();
-
     } catch (error) {
         console.error('Error al cargar dashboard:', error);
-    }
-}
-
-async function cargarBadges() {
-    const authToken = localStorage.getItem('authToken');
-
-    try {
-        // Productos en cuarentena
-        const cuarentena = await fetch(BASE_URL + 'publicacion', {
-            headers: { 'Authorization': authToken }
-        }).then(r => r.json()).then(pubs => pubs.filter(p => p.estado_publicacion === 'cuarentena'));
-        document.getElementById('badgeCuarentena').innerText = cuarentena.length || 0;
-
-        // Membresías pendientes (inactivas)
-        const membresias = await fetch(BASE_URL + 'usuario-membresia', {
-            headers: { 'Authorization': authToken }
-        }).then(r => r.json());
-        const membresiasPendientes = membresias.filter(m => m.activa === false);
-        document.getElementById('badgeMembresias').innerText = membresiasPendientes.length || 0;
-
-        // Quejas pendientes
-        const quejas = await fetch(BASE_URL + 'quejas', {
-            headers: { 'Authorization': authToken }
-        }).then(r => r.json());
-        const quejasPendientes = quejas.filter(q => q.estado === 'pendiente' || !q.estado);
-        document.getElementById('badgeQuejas').innerText = quejasPendientes.length || 0;
-
-        // Productos pendientes
-        const productos = await fetch(BASE_URL + 'publicacion', {
-            headers: { 'Authorization': authToken }
-        }).then(r => r.json());
-        const productosPendientes = productos.filter(p => p.estado === 'pendiente');
-        document.getElementById('badgeProductos').innerText = productosPendientes.length || 0;
-
-    } catch (error) {
-        console.error('Error al cargar badges:', error);
-    }
-}
-
-async function cargarActividad() {
-    const authToken = localStorage.getItem('authToken');
-    const userId = localStorage.getItem('userId');
-
-    try {
-        const response = await fetch(BASE_URL + `notificacion/usuario/${userId}`, {
-            headers: { 'Authorization': authToken }
-        });
-
-        if (response.ok) {
-            const notificaciones = await response.json();
-            renderizarActividad(notificaciones);
-        } else {
-            document.getElementById('actividadReciente').innerHTML = '<div class="actividad-item"><p class="text-center text-muted">No hay actividad reciente.</p></div>';
-        }
-    } catch (error) {
-        console.error('Error al cargar actividad:', error);
-        document.getElementById('actividadReciente').innerHTML = '<div class="actividad-item"><p class="text-center text-muted">Error al cargar actividad.</p></div>';
-    }
-}
-
-function renderizarActividad(notificaciones) {
-    const container = document.getElementById('actividadReciente');
-    container.innerHTML = '';
-
-    if (notificaciones.length === 0) {
-        container.innerHTML = '<div class="actividad-item"><p class="text-center text-muted">No hay actividad reciente.</p></div>';
-        return;
-    }
-
-    notificaciones.slice(0, 5).forEach(n => {
-        const fecha = new Date(n.fecha_creacion || n.fecha);
-        const fechaFormato = fecha.toLocaleString('es-ES', {
-            day: '2-digit',
-            month: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
-
-        let icono = 'fa-bell';
-        let color = '#fc4b08';
-        
-        if (n.tipo === 'queja') {
-            icono = 'fa-exclamation-triangle';
-            color = '#c00000';
-        } else if (n.tipo === 'membresia') {
-            icono = 'fa-crown';
-            color = '#FFD700';
-        } else if (n.tipo === 'producto') {
-            icono = 'fa-box';
-            color = '#4d9d30';
-        }
-
-        const item = document.createElement('div');
-        item.className = 'actividad-item';
-        item.innerHTML = `
-            <div class="actividad-icono" style="background: ${color};">
-                <i class="fa-solid ${icono}"></i>
-            </div>
-            <div class="actividad-detalle">
-                <p class="actividad-texto">${n.titulo || n.mensaje || 'Actividad sin título'}</p>
-                <p class="actividad-fecha">${fechaFormato}</p>
-            </div>
-        `;
-        container.appendChild(item);
-    });
-}
-
-async function cargarGraficoCategorias(productos) {
-    const categorias = {};
-    
-    productos.forEach(p => {
-        const cat = p.categoria || p.tipo_producto || 'Sin categoría';
-        categorias[cat] = (categorias[cat] || 0) + 1;
-    });
-
-    const labels = Object.keys(categorias);
-    const data = Object.values(categorias);
-
-    const colores = [
-        '#fc4b08', '#c00000', '#4d9d30', '#FFD700', '#051bb2',
-        '#ff9800', '#9c27b0', '#00bcd4', '#e91e63', '#795548'
-    ];
-
-    const ctx = document.getElementById('graficoCategorias');
-    
-    if (graficoCategoriasInstance) {
-        graficoCategoriasInstance.destroy();
-    }
-
-    graficoCategoriasInstance = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: labels,
-            datasets: [{
-                data: data,
-                backgroundColor: colores.slice(0, labels.length),
-                borderWidth: 2,
-                borderColor: '#fff'
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: true,
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        font: { size: 12 },
-                        padding: 15
-                    }
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            const label = context.label || '';
-                            const value = context.parsed || 0;
-                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                            const porcentaje = ((value / total) * 100).toFixed(1);
-                            return `${label}: ${value} (${porcentaje}%)`;
-                        }
-                    }
-                }
-            }
-        }
-    });
-}
-
-async function cargarGraficoVentas() {
-    const authToken = localStorage.getItem('authToken');
-
-    try {
-        const response = await fetch(BASE_URL + 'estadisticas/ventas-diarias?dias=7', {
-            headers: { 'Authorization': authToken }
-        });
-
-        let labels = [];
-        let data = [];
-
-        if (response.ok) {
-            const ventas = await response.json();
-            labels = ventas.map(v => {
-                const fecha = new Date(v.fecha);
-                return fecha.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' });
-            });
-            data = ventas.map(v => v.monto || v.total || 0);
-        } else {
-            // Datos de ejemplo si el endpoint no existe
-            const hoy = new Date();
-            for (let i = 6; i >= 0; i--) {
-                const fecha = new Date(hoy);
-                fecha.setDate(fecha.getDate() - i);
-                labels.push(fecha.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' }));
-                data.push(Math.floor(Math.random() * 10000) + 5000);
-            }
-        }
-
-        const ctx = document.getElementById('graficoVentas');
-        
-        if (graficoVentasInstance) {
-            graficoVentasInstance.destroy();
-        }
-
-        graficoVentasInstance = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Ventas ($)',
-                    data: data,
-                    borderColor: '#fc4b08',
-                    backgroundColor: 'rgba(252, 75, 8, 0.1)',
-                    borderWidth: 3,
-                    fill: true,
-                    tension: 0.4,
-                    pointRadius: 5,
-                    pointBackgroundColor: '#fc4b08',
-                    pointBorderColor: '#fff',
-                    pointBorderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top'
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return `Ventas: $${context.parsed.y.toLocaleString('es-MX')}`;
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            callback: function(value) {
-                                return '$' + value.toLocaleString('es-MX');
-                            }
-                        }
-                    }
-                }
-            }
-        });
-
-    } catch (error) {
-        console.error('Error al cargar gráfico de ventas:', error);
     }
 }

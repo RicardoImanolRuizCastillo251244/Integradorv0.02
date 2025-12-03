@@ -68,10 +68,10 @@
     <h2 class="text-center mb-4" style="color: #fc4b08; font-weight: bold;">Dashboard Administrativo</h2>
 
     <!-- MÉTRICAS PRINCIPALES -->
-    <div class="row metricas-principales mb-4">
-      
+    <div class="row metricas-principales mb-4 justify-content-center">
+
       <!-- USUARIOS TOTALES -->
-      <div class="col-md-3">
+      <div class="col-md-4">
         <div class="metrica-card card-azul">
           <div class="metrica-icono">
             <i class="fa-solid fa-users"></i>
@@ -83,21 +83,8 @@
         </div>
       </div>
 
-      <!-- PRODUCTOS ACTIVOS -->
-      <div class="col-md-3">
-        <div class="metrica-card card-verde">
-          <div class="metrica-icono">
-            <i class="fa-solid fa-box"></i>
-          </div>
-          <div class="metrica-info">
-            <p class="metrica-label">Productos Activos</p>
-            <p class="metrica-valor" id="totalProductos">0</p>
-          </div>
-        </div>
-      </div>
-
       <!-- VENTAS DEL MES -->
-      <div class="col-md-3">
+      <div class="col-md-4">
         <div class="metrica-card card-naranja">
           <div class="metrica-icono">
             <i class="fa-solid fa-dollar-sign"></i>
@@ -110,7 +97,7 @@
       </div>
 
       <!-- MEMBRESÍAS ACTIVAS -->
-      <div class="col-md-3">
+      <div class="col-md-4">
         <div class="metrica-card card-dorado">
           <div class="metrica-icono">
             <i class="fa-solid fa-crown"></i>
@@ -124,11 +111,11 @@
 
     </div>
 
-    <!-- SECCIÓN DE ACCIONES RÁPIDAS Y ACTIVIDAD -->
-    <div class="row">
+    <!-- SECCIÓN DE ACCIONES RÁPIDAS -->
+    <div class="row justify-content-center">
 
       <!-- ACCIONES RÁPIDAS -->
-      <div class="col-md-4">
+      <div class="col-md-6">
         <div class="seccion-card">
           <h5 class="seccion-titulo">
             <i class="fa-solid fa-bolt"></i> Acciones Rápidas
@@ -137,60 +124,15 @@
             <button class="accion-btn" onclick="window.location.href='revisonmembrecia.html'">
               <i class="fa-solid fa-crown"></i>
               <span>Aprobar Membresías</span>
-              <span class="badge-count" id="badgeMembresias">0</span>
             </button>
             <button class="accion-btn" onclick="window.location.href='quejas-lista.html'">
               <i class="fa-solid fa-exclamation-triangle"></i>
               <span>Atender Quejas</span>
-              <span class="badge-count" id="badgeQuejas">0</span>
             </button>
             <button class="accion-btn" onclick="window.location.href='gestion-usuarios.html'">
               <i class="fa-solid fa-users-gear"></i>
               <span>Gestionar Usuarios</span>
             </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- ACTIVIDAD RECIENTE -->
-      <div class="col-md-8">
-        <div class="seccion-card">
-          <h5 class="seccion-titulo">
-            <i class="fa-solid fa-clock-rotate-left"></i> Actividad Reciente
-          </h5>
-          <div class="actividad-lista" id="actividadReciente">
-            <div class="actividad-item">
-              <p class="text-center text-muted">Cargando actividad...</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- SECCIÓN DE GRÁFICAS -->
-    <div class="row mt-4">
-
-      <!-- PRODUCTOS POR CATEGORÍA -->
-      <div class="col-md-6">
-        <div class="seccion-card">
-          <h5 class="seccion-titulo">
-            <i class="fa-solid fa-chart-pie"></i> Productos por Categoría
-          </h5>
-          <div class="grafica-container">
-            <canvas id="graficoCategorias"></canvas>
-          </div>
-        </div>
-      </div>
-
-      <!-- TENDENCIA DE VENTAS -->
-      <div class="col-md-6">
-        <div class="seccion-card">
-          <h5 class="seccion-titulo">
-            <i class="fa-solid fa-chart-line"></i> Tendencia de Ventas (7 días)
-          </h5>
-          <div class="grafica-container">
-            <canvas id="graficoVentas"></canvas>
           </div>
         </div>
       </div>
@@ -214,7 +156,6 @@
 
   <!-- SCRIPTS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <script type="module" src="../../js/dashboard-admin.js"></script>
 
 </body>
