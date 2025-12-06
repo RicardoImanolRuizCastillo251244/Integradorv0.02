@@ -25,7 +25,7 @@ function configurarNavegacionTabs(rol) {
         // Usuario VENDEDOR - este archivo NO debería ser accesible
         console.warn('Un vendedor está accediendo a compraconcretadas.html - redirigiendo a ventas');
         // Redirigir a ventas
-        window.location.href = '../vendedor/ventas.html';
+        window.location.href = './vendedor/ventas.html';
         return;
         
     } else if (rol == "1" || rol === 1) {

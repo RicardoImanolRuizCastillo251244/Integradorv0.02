@@ -53,7 +53,7 @@ function configurarNavegacionTabs(rol) {
     } else if (rol == "1" || rol === 1) {
         // Usuario CONSUMIDOR - NO debería estar aquí
         console.warn('Un consumidor está accediendo a ventas.html - redirigiendo a compras');
-        window.location.href = '../pages/compraconcretadas.html';
+        window.location.href = '../compraconcretadas.html';
         return;
     }
 }
