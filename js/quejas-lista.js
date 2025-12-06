@@ -118,6 +118,21 @@ window.verDetalleQueja = async (idQueja, tipoQueja) => {
             const fecha = new Date(queja.fecha_emision || queja.fecha_creacion);
             document.getElementById('detalleFecha').innerText = fecha.toLocaleString('es-ES');
             
+            // Mostrar tipo de problema si existe (solo para quejas de venta)
+            const tipoProblemaElement = document.getElementById('detalleTipoProblema');
+            if (tipoQueja === 'venta' && queja.tipo_problema) {
+                tipoProblemaElement.innerText = queja.tipo_problema;
+                tipoProblemaElement.style.display = 'block';
+                // Cambiar color según tipo
+                if (queja.tipo_problema.includes('Efectivo') || queja.tipo_problema.includes('no se presentó')) {
+                    tipoProblemaElement.className = 'alert alert-danger';
+                } else {
+                    tipoProblemaElement.className = 'alert alert-warning';
+                }
+            } else {
+                tipoProblemaElement.style.display = 'none';
+            }
+            
             document.getElementById('detalleDescripcion').innerText = queja.descripcion_queja || queja.descripcion || 'Sin descripción';
 
             const modal = new bootstrap.Modal(document.getElementById('modalDetalleQuejaUsuario'));

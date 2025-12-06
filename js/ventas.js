@@ -130,12 +130,10 @@ function mostrarVentas(ventas) {
                </button>`
             : '<span class="text-muted">N/A</span>';
         
-        // Botón de reportar solo si hay comprobante sospechoso
-        const btnReportar = tieneComprobante
-            ? `<button class="btn btn-sm btn-warning" onclick="abrirModalReporte(${venta.id_venta}, '${compradorNombre}')">
+        // Botón de reportar SIEMPRE disponible (tanto para Transferencia como Efectivo)
+        const btnReportar = `<button class="btn btn-sm btn-warning" onclick="abrirModalReporte(${venta.id_venta}, '${compradorNombre}', '${tipoPago}')">
                  <i class="fas fa-exclamation-triangle"></i> Reportar
-               </button>`
-            : '';
+               </button>`;
 
         return `
             <tr>
@@ -186,12 +184,34 @@ window.verComprobante = function(imagenBase64) {
 }
 
 // Función para abrir modal de reporte
-window.abrirModalReporte = function(idVenta, nombreComprador) {
+window.abrirModalReporte = function(idVenta, nombreComprador, tipoPago) {
     ventaActual = idVenta;
     document.getElementById('modal-venta-id').textContent = idVenta;
     document.getElementById('modal-comprador').textContent = nombreComprador;
+    document.getElementById('modal-tipo-pago-venta').textContent = tipoPago;
+    document.getElementById('modal-tipo-problema').value = '';
     document.getElementById('modal-descripcion').value = '';
     document.getElementById('modal-evidencia').value = '';
+    
+    // Configurar opciones del selector según el tipo de pago
+    const selectorProblema = document.getElementById('modal-tipo-problema');
+    if (tipoPago === 'Efectivo') {
+        selectorProblema.innerHTML = `
+            <option value="">-- Selecciona el problema --</option>
+            <option value="Comprador no se presentó">Comprador no se presentó (Ghosting)</option>
+            <option value="Intento de fraude (Dijo efectivo y pide envío)">Intento de fraude (Dijo efectivo y pide envío)</option>
+            <option value="Comprador canceló sin avisar">Comprador canceló sin avisar</option>
+            <option value="Otro problema">Otro problema</option>
+        `;
+    } else {
+        selectorProblema.innerHTML = `
+            <option value="">-- Selecciona el problema --</option>
+            <option value="Comprobante de pago falso">Comprobante de pago falso</option>
+            <option value="No recibí el depósito">No recibí el depósito</option>
+            <option value="Comprobante editado/alterado">Comprobante editado/alterado</option>
+            <option value="Otro problema">Otro problema</option>
+        `;
+    }
     
     const modal = new bootstrap.Modal(document.getElementById('modalReportarPago'));
     modal.show();
@@ -201,8 +221,14 @@ window.abrirModalReporte = function(idVenta, nombreComprador) {
 window.enviarQuejaVenta = async function() {
     const token = localStorage.getItem('authToken');
     const userId = localStorage.getItem('userId');
+    const tipoProblema = document.getElementById('modal-tipo-problema').value;
     const descripcion = document.getElementById('modal-descripcion').value.trim();
     const evidenciaFile = document.getElementById('modal-evidencia').files[0];
+    
+    if (!tipoProblema) {
+        alert('Por favor selecciona el tipo de problema');
+        return;
+    }
     
     if (!descripcion) {
         alert('Por favor describe el problema');
@@ -212,7 +238,7 @@ window.enviarQuejaVenta = async function() {
     const formData = new FormData();
     formData.append('id_usuario', userId);
     formData.append('id_venta', ventaActual);
-    formData.append('tipo_problema', 'Comprobante de pago falso');
+    formData.append('tipo_problema', tipoProblema);
     formData.append('descripcion_queja', descripcion);
     
     if (evidenciaFile) {
