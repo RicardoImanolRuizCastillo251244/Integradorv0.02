@@ -157,40 +157,38 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Reportar Problema con Compra</h5>
+          <h5 class="modal-title">Si tienes alguna queja o sugerencia puedes escribirlo en el siguiente apartado</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
-          <p><strong>Compra ID:</strong> <span id="modal-id-venta"></span></p>
-          <p><strong>Vendedor:</strong> <span id="modal-vendedor"></span></p>
-          <p><strong>Producto:</strong> <span id="modal-producto"></span></p>
+          <div id="modal-info-contexto" class="mb-3 text-muted"></div>
           
           <div class="mb-3">
-            <label class="form-label">Tipo de problema:</label>
-            <select id="modal-tipo-problema" class="form-select">
-              <option value="">-- Selecciona --</option>
-              <option value="Producto no entregado">Producto no entregado</option>
-              <option value="Producto defectuoso">Producto defectuoso</option>
-              <option value="Vendedor no apareció">Vendedor no apareció</option>
-              <option value="Otro">Otro</option>
-            </select>
+            <label for="modal-tipo-problema" class="form-label fw-semibold">Motivo</label>
+            <input type="text" class="form-control" id="modal-tipo-problema" 
+                   placeholder="Ej: Comportamiento ofensivo">
           </div>
           
           <div class="mb-3">
-            <label class="form-label">Describe el problema:</label>
-            <textarea id="modal-descripcion-problema" class="form-control" rows="4" 
-                      placeholder="Explica detalladamente qué sucedió..."></textarea>
+            <label for="modal-descripcion-problema" class="form-label fw-semibold">Describe el problema (mín. 20 caracteres)</label>
+            <textarea id="modal-descripcion-problema" class="form-control" rows="8" 
+                      placeholder="Escribe tu problema aquí..." required minlength="20"></textarea>
+            <div class="form-text text-end" id="modal-char-count">0 caracteres</div>
           </div>
           
           <div class="mb-3">
-            <label class="form-label">Evidencia (opcional):</label>
+            <label for="modal-evidencia-problema" class="form-label fw-semibold">Evidencia (Opcional, máx 5MB)</label>
             <input type="file" id="modal-evidencia-problema" class="form-control" accept="image/*">
-            <small class="text-muted">Puedes subir fotos del problema</small>
+            <div class="mt-2">
+              <img id="modal-preview" src="#" alt="Vista previa" style="max-width: 200px; display: none;" class="img-thumbnail">
+            </div>
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-danger" onclick="enviarQuejaCompra()">Enviar Reporte</button>
+          <button type="button" class="btn btn-danger" onclick="enviarQuejaCompra()">
+            Enviar <i class="fa-solid fa-paper-plane ms-1"></i>
+          </button>
         </div>
       </div>
     </div>

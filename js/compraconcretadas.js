@@ -145,6 +145,10 @@ function mostrarTabla(compras) {
     tbody.innerHTML = '';
 
     compras.forEach((compra) => {
+        // DEBUG: Ver qué propiedades tiene cada compra
+        console.log('Propiedades de compra:', Object.keys(compra));
+        console.log('Compra completa:', compra);
+        
         // Formatear Fecha
         let fechaStr = "Fecha desconocida";
         if (compra.fechaVenta && Array.isArray(compra.fechaVenta)) {
@@ -202,12 +206,15 @@ function mostrarTabla(compras) {
             
             console.log('Click en reportar, idVenta:', idVentaActual);
             
-            document.getElementById('modal-id-venta').textContent = idVentaActual;
-            document.getElementById('modal-vendedor').textContent = vendedor;
-            document.getElementById('modal-producto').textContent = producto;
+            // Mostrar información de contexto como en Queja.html
+            const infoContexto = document.getElementById('modal-info-contexto');
+            infoContexto.innerHTML = `Reportando compra de "<strong>${producto}</strong>" al vendedor <strong>${vendedor}</strong>`;
+            
             document.getElementById('modal-tipo-problema').value = '';
             document.getElementById('modal-descripcion-problema').value = '';
             document.getElementById('modal-evidencia-problema').value = '';
+            const preview = document.getElementById('modal-preview');
+            if (preview) preview.style.display = 'none';
         }
     });
     
@@ -266,23 +273,66 @@ window.abrirModalReporteCompra = function(idVenta, vendedor, producto) {
     modal.show();
 }
 
+// Manejo de contador de caracteres y vista previa de imagen
+document.addEventListener('DOMContentLoaded', () => {
+    // Contador de caracteres
+    const descripcionTextarea = document.getElementById('modal-descripcion-problema');
+    const charCount = document.getElementById('modal-char-count');
+    
+    if (descripcionTextarea && charCount) {
+        descripcionTextarea.addEventListener('input', () => {
+            const count = descripcionTextarea.value.length;
+            charCount.textContent = `${count} caracteres`;
+            charCount.classList.toggle('text-danger', count > 0 && count < 20);
+            charCount.classList.toggle('text-success', count >= 20);
+        });
+    }
+    
+    // Vista previa de imagen
+    const evidenciaInput = document.getElementById('modal-evidencia-problema');
+    const preview = document.getElementById('modal-preview');
+    
+    if (evidenciaInput && preview) {
+        evidenciaInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('La imagen es muy grande. Máximo 5MB.');
+                    evidenciaInput.value = '';
+                    preview.style.display = 'none';
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                preview.style.display = 'none';
+            }
+        });
+    }
+});
+
 // Funci�n para enviar queja de compra
 window.enviarQuejaCompra = async function() {
     const token = localStorage.getItem('authToken');
     const userId = localStorage.getItem('userId');
-    const tipoProblema = document.getElementById('modal-tipo-problema').value;
+    const tipoProblema = document.getElementById('modal-tipo-problema').value.trim();
     const descripcion = document.getElementById('modal-descripcion-problema').value.trim();
     const evidenciaFile = document.getElementById('modal-evidencia-problema').files[0];
     
     console.log('Enviando queja con idVentaActual:', idVentaActual);
     
     if (!tipoProblema) {
-        alert('Por favor selecciona el tipo de problema');
+        alert('Por favor escribe el motivo de tu queja');
         return;
     }
     
-    if (!descripcion) {
-        alert('Por favor describe el problema');
+    if (descripcion.length < 20) {
+        alert('La descripción debe tener al menos 20 caracteres');
         return;
     }
     
