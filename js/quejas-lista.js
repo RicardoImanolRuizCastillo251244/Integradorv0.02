@@ -120,7 +120,7 @@ window.verDetalleQueja = async (idQueja, tipoQueja) => {
             
             document.getElementById('detalleDescripcion').innerText = queja.descripcion_queja || queja.descripcion || 'Sin descripción';
 
-            const modal = new bootstrap.Modal(document.getElementById('modalDetalleQueja'));
+            const modal = new bootstrap.Modal(document.getElementById('modalDetalleQuejaUsuario'));
             modal.show();
         } else {
             alert('Error al cargar detalle de queja.');
@@ -134,7 +134,7 @@ window.verDetalleQueja = async (idQueja, tipoQueja) => {
 // Abrir modal de respuesta
 window.abrirModalRespuesta = () => {
     // Cerrar modal de detalle
-    const modalDetalle = bootstrap.Modal.getInstance(document.getElementById('modalDetalleQueja'));
+    const modalDetalle = bootstrap.Modal.getInstance(document.getElementById('modalDetalleQuejaUsuario'));
     modalDetalle.hide();
 
     // Abrir modal de respuesta

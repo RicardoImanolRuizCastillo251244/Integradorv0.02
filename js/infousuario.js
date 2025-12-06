@@ -4,11 +4,77 @@ import { BASE_URL } from "./api_url.js";
 let usuarioActual = null;
 let passwordVisible = false;
 
+// Función para configurar la navegación de los tabs según el rol
+function configurarNavegacionTabs(rol) {
+    console.log('Configurando tabs para rol:', rol);
+    
+    const comprasTab = document.getElementById('compras');
+    const estadisticasTab = document.getElementById('estadisticas');
+    const membresiaTab = document.getElementById('membresia');
+    
+    if (rol == "2" || rol === 2) {
+        // Usuario VENDEDOR
+        console.log('Configurando vista para VENDEDOR');
+        
+        // Cambiar el texto del tab "Compras" a "Ventas"
+        if (comprasTab) {
+            comprasTab.textContent = 'Ventas';
+            comprasTab.onclick = null; // Remover onclick del HTML
+            comprasTab.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.location.href = './vendedor/ventas.html';
+            });
+        }
+        
+        // Configurar tab de estadísticas
+        if (estadisticasTab) {
+            estadisticasTab.style.display = 'block';
+            estadisticasTab.onclick = null;
+            estadisticasTab.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.location.href = './vendedor/estadistica.html';
+            });
+        }
+        
+        // Configurar tab de membresía
+        if (membresiaTab) {
+            membresiaTab.style.display = 'block';
+            membresiaTab.onclick = null;
+            membresiaTab.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.location.href = './vendedor/pagomenbre.html';
+            });
+        }
+        
+    } else if (rol == "1" || rol === 1) {
+        // Usuario CONSUMIDOR
+        console.log('Configurando vista para CONSUMIDOR');
+        
+        // Tab "Compras" redirige a compraconcretadas.html
+        if (comprasTab) {
+            comprasTab.textContent = 'Compras';
+            comprasTab.onclick = null;
+            comprasTab.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.location.href = 'compraconcretadas.html';
+            });
+        }
+        
+        // Ocultar tabs de vendedor
+        if (estadisticasTab) estadisticasTab.style.display = 'none';
+        if (membresiaTab) membresiaTab.style.display = 'none';
+    }
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
     const infousuario = document.getElementById('contenedor-global');
     const userId = localStorage.getItem('userId');
     const authToken = localStorage.getItem('authToken');
     const rol = localStorage.getItem("rol");
+    
+    // Configurar navegación de tabs según el rol
+    configurarNavegacionTabs(rol);
+    
     // Mostrar loader mientras carga
     mostrarLoader();
 

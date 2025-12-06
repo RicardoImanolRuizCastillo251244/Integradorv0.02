@@ -1,6 +1,54 @@
 import { BASE_URL } from "./api_url.js";
 
+// Variable global para almacenar la compra actual que se va a reportar
+let compraActual = null;
+
+// Función para configurar la navegación de los tabs según el rol
+function configurarNavegacionTabs(rol) {
+    console.log('Configurando tabs en compraconcretadas para rol:', rol);
+    
+    const comprasTab = document.getElementById('compras');
+    const estadisticasTab = document.getElementById('estadisticas');
+    const membresiaTab = document.getElementById('membresia');
+    const informacionTab = document.getElementById('informacion');
+    
+    // Configurar tab de información (siempre igual para todos)
+    if (informacionTab) {
+        informacionTab.onclick = null;
+        informacionTab.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = 'infousuario.html';
+        });
+    }
+    
+    if (rol == "2" || rol === 2) {
+        // Usuario VENDEDOR - este archivo NO debería ser accesible
+        console.warn('Un vendedor está accediendo a compraconcretadas.html - redirigiendo a ventas');
+        // Redirigir a ventas
+        window.location.href = '../vendedor/ventas.html';
+        return;
+        
+    } else if (rol == "1" || rol === 1) {
+        // Usuario CONSUMIDOR
+        console.log('Vista correcta: CONSUMIDOR viendo sus compras');
+        
+        // Ocultar tabs de vendedor
+        if (estadisticasTab) estadisticasTab.style.display = 'none';
+        if (membresiaTab) membresiaTab.style.display = 'none';
+        
+        // El tab "Compras" ya está en la página actual, solo marcarlo como activo
+        if (comprasTab) {
+            comprasTab.classList.add('active');
+        }
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+    const rol = localStorage.getItem("rol");
+    
+    // Configurar navegación de tabs según el rol
+    configurarNavegacionTabs(rol);
+    
     // 1. Configuración de UI según rol
     configurarVistaPorRol();
 
@@ -18,17 +66,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function configurarVistaPorRol() {
     const rol = localStorage.getItem("rol");
+    console.log('Rol del usuario:', rol); // Debug
+    
     const membresia = document.getElementById('membresia');
     const estadisticas = document.getElementById('estadisticas');
-    
-    // CORRECCIÓN: Validamos que el botón exista antes de ocultarlo
-    // (En compraconcretadas.html NO existe el botón de publicar, por eso fallaba tu código anterior)
     const btnPublicar = document.getElementById('buttonPost'); 
 
-    if (rol == 1) { // Consumidor
-        if (membresia) membresia.style.display = 'none';
-        if (estadisticas) estadisticas.style.display = 'none';
-    } else { // Vendedor
+    if (rol == "1") { // Consumidor (comparación con string)
+        console.log('Usuario es CONSUMIDOR - ocultando membresía y estadísticas');
+        if (membresia) {
+            membresia.style.display = 'none';
+            console.log('Membresía ocultada');
+        }
+        if (estadisticas) {
+            estadisticas.style.display = 'none';
+            console.log('Estadísticas ocultadas');
+        }
+    } else if (rol == "2") { // Vendedor
+        console.log('Usuario es VENDEDOR');
         if (btnPublicar) btnPublicar.style.display = 'none';
     }
 }
@@ -101,6 +156,9 @@ function mostrarTabla(compras) {
 
         // Procesar Imagen
         const imageSrc = procesarImagen(compra.fotoPublicacion);
+        
+        // Tipo de pago
+        const tipoPago = compra.tipoPago || 'No especificado';
 
         const fila = document.createElement('tr');
         fila.innerHTML = `
@@ -109,12 +167,22 @@ function mostrarTabla(compras) {
             <td><h3 class="fuenteTabla text-success">$${compra.precioTotal}</h3></td>
             <td><h3 class="fuenteTabla">${compra.cantidadVendida}</h3></td>
             <td>
+                <span class="badge ${tipoPago === 'Transferencia' ? 'bg-primary' : 'bg-success'}">
+                    ${tipoPago}
+                </span>
+            </td>
+            <td>
                 <a href="/pages/comprar.html?id=${compra.idPublicacion}">    
                     <img src="${imageSrc}" class="img-tabla rounded" alt="Producto" style="width: 60px; height: 60px; object-fit: cover;">
                 </a>
             </td>
             <td><h3 class="fuenteTabla">${fechaStr}</h3></td>
-
+            <td>
+                <button class="btn btn-sm btn-warning" 
+                        onclick="abrirModalReporteCompra(${compra.idVenta}, '${compra.vendedorNombre}', '${compra.tituloPublicacion}')">
+                    <i class="fas fa-exclamation-triangle"></i> Reportar
+                </button>
+            </td>
         `;
         
         tbody.appendChild(fila);
@@ -154,5 +222,66 @@ function mostrarError(msg) {
                 <button class="btn btn-primary mt-3" onclick="location.reload()">Reintentar</button>
             </div>
         `;
+    }
+}
+// Funci�n para abrir modal de reporte de compra
+window.abrirModalReporteCompra = function(idVenta, vendedor, producto) {
+    compraActual = idVenta;
+    document.getElementById('modal-id-venta').textContent = idVenta;
+    document.getElementById('modal-vendedor').textContent = vendedor;
+    document.getElementById('modal-producto').textContent = producto;
+    document.getElementById('modal-tipo-problema').value = '';
+    document.getElementById('modal-descripcion-problema').value = '';
+    document.getElementById('modal-evidencia-problema').value = '';
+    
+    const modal = new bootstrap.Modal(document.getElementById('modalReportarCompra'));
+    modal.show();
+}
+
+// Funci�n para enviar queja de compra
+window.enviarQuejaCompra = async function() {
+    const token = localStorage.getItem('authToken');
+    const userId = localStorage.getItem('userId');
+    const tipoProblema = document.getElementById('modal-tipo-problema').value;
+    const descripcion = document.getElementById('modal-descripcion-problema').value.trim();
+    const evidenciaFile = document.getElementById('modal-evidencia-problema').files[0];
+    
+    if (!tipoProblema) {
+        alert('Por favor selecciona el tipo de problema');
+        return;
+    }
+    
+    if (!descripcion) {
+        alert('Por favor describe el problema');
+        return;
+    }
+    
+    const formData = new FormData();
+    formData.append('id_usuario', userId);
+    formData.append('id_venta', compraActual);
+    formData.append('tipo_problema', tipoProblema);
+    formData.append('descripcion_queja', descripcion);
+    
+    if (evidenciaFile) {
+        formData.append('imagen', evidenciaFile);
+    }
+    
+    try {
+        const response = await fetch(`${BASE_URL}queja-venta`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            body: formData
+        });
+        
+        if (!response.ok) throw new Error('Error al enviar queja');
+        
+        alert('Reporte enviado exitosamente. Los administradores lo revisarán.');
+        bootstrap.Modal.getInstance(document.getElementById('modalReportarCompra')).hide();
+        fetchVenta();
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error al enviar el reporte. Intenta de nuevo.');
     }
 }
