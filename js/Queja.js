@@ -147,6 +147,10 @@ document.addEventListener('DOMContentLoaded', () => {
             // 5. Respuesta
             if (response.ok) {
                 const data = await response.json();
+
+                // Crear notificación para el administrador
+                await crearNotificacionAdmin(data.id, 'QUEJA_USUARIO', authToken);
+
                 alert(`Queja de usuario enviada exitosamente. ID: ${data.id}`);
                 formQueja.reset();
                 preview.style.display = 'none';
@@ -219,6 +223,10 @@ document.addEventListener('DOMContentLoaded', () => {
             // 5. Respuesta
             if (response.ok) {
                 const data = await response.json();
+
+                // Crear notificación para el administrador
+                await crearNotificacionAdmin(data.id, 'QUEJA_VENTA', authToken);
+
                 alert(`Queja de venta enviada exitosamente. ID: ${data.id}`);
                 formQueja.reset();
                 preview.style.display = 'none';
@@ -233,6 +241,39 @@ document.addEventListener('DOMContentLoaded', () => {
         } finally {
             btnEnviar.disabled = false;
             btnEnviar.innerHTML = 'Enviar <i class="fa-solid fa-paper-plane ms-1"></i>';
+        }
+    }
+
+    // Función auxiliar para crear notificación para el administrador
+    async function crearNotificacionAdmin(idQueja, tipoQueja, authToken) {
+        try {
+            const idAdmin = '1'; // ID del administrador
+
+            const notificacionData = {
+                id_usuario: idAdmin,
+                tipo: tipoQueja, // 'QUEJA_USUARIO' o 'QUEJA_VENTA'
+                mensaje: tipoQueja === 'QUEJA_USUARIO'
+                    ? `Nueva queja de usuario reportada (ID: ${idQueja})`
+                    : `Nueva queja de venta reportada (ID: ${idQueja})`,
+                leida: false
+            };
+
+            const response = await fetch(BASE_URL + 'notificacion', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${authToken}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(notificacionData)
+            });
+
+            if (response.ok) {
+                console.log('Notificación creada para el administrador');
+            } else {
+                console.warn('No se pudo crear notificación para el admin:', await response.text());
+            }
+        } catch (error) {
+            console.error('Error al crear notificación:', error);
         }
     }
 });
