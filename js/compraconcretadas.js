@@ -1,7 +1,9 @@
 import { BASE_URL } from "./api_url.js";
 
-// Variable global SIMPLE para almacenar el ID de venta actual
-let idVentaActual = null;
+// Variables globales para almacenar datos del reporte
+let idVendedorActual = null;
+let vendedorNombreActual = null;
+let productoNombreActual = null;
 
 // Función para configurar la navegación de los tabs según el rol
 function configurarNavegacionTabs(rol) {
@@ -183,7 +185,7 @@ function mostrarTabla(compras) {
             <td><h3 class="fuenteTabla">${fechaStr}</h3></td>
             <td>
                 <button class="btn btn-sm btn-warning btn-reportar-compra" 
-                        data-id-venta="${compra.idVenta}" 
+                        data-id-publicacion="${compra.idPublicacion}"
                         data-vendedor="${compra.vendedorNombre}" 
                         data-producto="${compra.tituloPublicacion}"
                         data-bs-toggle="modal" 
@@ -196,29 +198,71 @@ function mostrarTabla(compras) {
         tbody.appendChild(fila);
     });
     
-    // Delegación de eventos: escuchar clicks en TODOS los botones de reportar
-    tbody.addEventListener('click', function(e) {
-        const btn = e.target.closest('.btn-reportar-compra');
-        if (btn) {
-            idVentaActual = btn.getAttribute('data-id-venta');
-            const vendedor = btn.getAttribute('data-vendedor');
-            const producto = btn.getAttribute('data-producto');
-            
-            console.log('Click en reportar, idVenta:', idVentaActual);
-            
-            // Mostrar información de contexto como en Queja.html
-            const infoContexto = document.getElementById('modal-info-contexto');
-            infoContexto.innerHTML = `Reportando compra de "<strong>${producto}</strong>" al vendedor <strong>${vendedor}</strong>`;
-            
-            document.getElementById('modal-tipo-problema').value = '';
-            document.getElementById('modal-descripcion-problema').value = '';
-            document.getElementById('modal-evidencia-problema').value = '';
-            const preview = document.getElementById('modal-preview');
-            if (preview) preview.style.display = 'none';
-        }
-    });
-    
     tablaContainer.classList.remove('d-none');
+}
+
+// Delegación de eventos para los botones de reportar
+// Se ejecuta FUERA de mostrarTabla para que siempre esté activo
+document.addEventListener('click', async function(e) {
+    const btn = e.target.closest('.btn-reportar-compra');
+    if (btn) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const idPublicacion = btn.getAttribute('data-id-publicacion');
+        vendedorNombreActual = btn.getAttribute('data-vendedor');
+        productoNombreActual = btn.getAttribute('data-producto');
+        
+        console.log('✅ Click en reportar detectado');
+        console.log('ID Publicación:', idPublicacion);
+        console.log('Vendedor:', vendedorNombreActual);
+        console.log('Producto:', productoNombreActual);
+        
+        // Obtener el ID del vendedor desde la publicación
+        try {
+            const response = await fetch(`${BASE_URL}publicacion/${idPublicacion}`);
+            if (response.ok) {
+                const publicacion = await response.json();
+                idVendedorActual = publicacion.id_vendedor;
+                console.log('✅ ID Vendedor obtenido:', idVendedorActual);
+                
+                // Ahora sí, abrir el modal
+                abrirModalReporte();
+            } else {
+                console.error('❌ Error al obtener publicación');
+                alert('No se pudo obtener la información del vendedor. Intenta de nuevo.');
+            }
+        } catch (error) {
+            console.error('❌ Error:', error);
+            alert('Error de conexión. Intenta de nuevo.');
+        }
+    }
+});
+
+// Función para abrir y configurar el modal
+function abrirModalReporte() {
+    // Limpiar y actualizar el modal
+    document.getElementById('modal-tipo-problema').value = '';
+    document.getElementById('modal-descripcion-problema').value = '';
+    document.getElementById('modal-evidencia-problema').value = '';
+    
+    const preview = document.getElementById('modal-preview');
+    if (preview) preview.style.display = 'none';
+    
+    const infoContexto = document.getElementById('modal-info-contexto');
+    if (infoContexto) {
+        infoContexto.innerHTML = `Reportando compra de "<strong>${productoNombreActual}</strong>" al vendedor <strong>${vendedorNombreActual}</strong>`;
+    }
+    
+    // Abrir el modal manualmente
+    const modalElement = document.getElementById('modalReportarCompra');
+    if (modalElement) {
+        const modal = new bootstrap.Modal(modalElement);
+        modal.show();
+        console.log('✅ Modal abierto');
+    } else {
+        console.error('❌ No se encontró el modal #modalReportarCompra');
+    }
 }
 
 function procesarImagen(foto) {
@@ -253,24 +297,6 @@ function mostrarError(msg) {
             </div>
         `;
     }
-}
-// Funci�n para abrir modal de reporte de compra
-window.abrirModalReporteCompra = function(idVenta, vendedor, producto) {
-    console.log('abrirModalReporteCompra llamada con idVenta:', idVenta);
-    
-    // Guardar en el modal como atributo data
-    const modalElement = document.getElementById('modalReportarCompra');
-    modalElement.setAttribute('data-id-venta-actual', idVenta);
-    
-    document.getElementById('modal-id-venta').textContent = idVenta;
-    document.getElementById('modal-vendedor').textContent = vendedor;
-    document.getElementById('modal-producto').textContent = producto;
-    document.getElementById('modal-tipo-problema').value = '';
-    document.getElementById('modal-descripcion-problema').value = '';
-    document.getElementById('modal-evidencia-problema').value = '';
-    
-    const modal = new bootstrap.Modal(modalElement);
-    modal.show();
 }
 
 // Manejo de contador de caracteres y vista previa de imagen
@@ -316,17 +342,32 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Funci�n para enviar queja de compra
+// Función para enviar queja de usuario (reportar al vendedor)
 window.enviarQuejaCompra = async function() {
+    console.log('🚀 Iniciando envío de queja de usuario');
+    
     const token = localStorage.getItem('authToken');
     const userId = localStorage.getItem('userId');
-    const tipoProblema = document.getElementById('modal-tipo-problema').value.trim();
+    
+    if (!token || !userId) {
+        alert('Debes iniciar sesión para enviar un reporte.');
+        window.location.href = '../pages/login.html';
+        return;
+    }
+    
+    const motivo = document.getElementById('modal-tipo-problema').value.trim();
     const descripcion = document.getElementById('modal-descripcion-problema').value.trim();
     const evidenciaFile = document.getElementById('modal-evidencia-problema').files[0];
     
-    console.log('Enviando queja con idVentaActual:', idVentaActual);
+    console.log('Valores obtenidos:');
+    console.log('- idVendedorActual (id_receptor):', idVendedorActual);
+    console.log('- userId (id_emisor):', userId);
+    console.log('- motivo:', motivo);
+    console.log('- descripcion length:', descripcion.length);
+    console.log('- evidenciaFile:', evidenciaFile ? evidenciaFile.name : 'sin archivo');
     
-    if (!tipoProblema) {
+    // Validaciones
+    if (!motivo) {
         alert('Por favor escribe el motivo de tu queja');
         return;
     }
@@ -336,23 +377,37 @@ window.enviarQuejaCompra = async function() {
         return;
     }
     
-    if (!idVentaActual) {
-        alert('Error: No se pudo identificar la compra. Intenta de nuevo.');
+    if (!idVendedorActual) {
+        alert('Error: No se pudo identificar al vendedor. Intenta de nuevo.');
+        console.error('❌ idVendedorActual está vacío');
         return;
     }
     
+    // Construir FormData para queja-usuario
     const formData = new FormData();
     formData.append('id_emisor', userId);
-    formData.append('id_venta', idVentaActual);
-    formData.append('tipo_problema', tipoProblema);
+    formData.append('id_receptor', idVendedorActual);  // El vendedor es el receptor
     formData.append('descripcion_queja', descripcion);
+    formData.append('motivo_queja', motivo);
     
     if (evidenciaFile) {
+        // Validar tamaño de archivo
+        if (evidenciaFile.size > 5 * 1024 * 1024) {
+            alert('La imagen es muy grande. Máximo 5MB.');
+            return;
+        }
         formData.append('imagen', evidenciaFile);
     }
     
+    // Mostrar loading en el botón
+    const btnEnviar = document.querySelector('#modalReportarCompra .btn-danger');
+    const textoOriginal = btnEnviar.innerHTML;
+    btnEnviar.disabled = true;
+    btnEnviar.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Enviando...';
+    
     try {
-        const response = await fetch(`${BASE_URL}queja-venta`, {
+        console.log('📤 Enviando petición a queja-usuario...');
+        const response = await fetch(`${BASE_URL}queja-usuario`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -361,17 +416,76 @@ window.enviarQuejaCompra = async function() {
             body: formData
         });
         
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error('Error del servidor:', errorText);
-            throw new Error(`Error al enviar queja: ${errorText}`);
-        }
+        console.log('📥 Respuesta recibida. Status:', response.status);
         
-        alert('Reporte enviado exitosamente. Los administradores lo revisarán.');
-        bootstrap.Modal.getInstance(document.getElementById('modalReportarCompra')).hide();
-        fetchVenta();
+        if (response.ok) {
+            const data = await response.json();
+            console.log('✅ Queja enviada exitosamente:', data);
+            
+            // Crear notificación para el administrador
+            await crearNotificacionAdmin(data.id, token, userId);
+            
+            alert('✅ Reporte enviado exitosamente. Los administradores lo revisarán.');
+            
+            // Cerrar modal
+            const modalElement = document.getElementById('modalReportarCompra');
+            const modal = bootstrap.Modal.getInstance(modalElement);
+            if (modal) {
+                modal.hide();
+            }
+            
+            // Limpiar formulario
+            document.getElementById('modal-tipo-problema').value = '';
+            document.getElementById('modal-descripcion-problema').value = '';
+            document.getElementById('modal-evidencia-problema').value = '';
+            const preview = document.getElementById('modal-preview');
+            if (preview) preview.style.display = 'none';
+            
+            // Recargar la tabla
+            fetchVenta();
+        } else {
+            const errorText = await response.text();
+            console.error('❌ Error del servidor:', errorText);
+            alert(`Error al enviar el reporte: ${errorText}`);
+        }
     } catch (error) {
-        console.error('Error:', error);
-        alert('Error al enviar el reporte: ' + error.message);
+        console.error('❌ Error de conexión:', error);
+        alert('Error de conexión al enviar el reporte. Verifica tu conexión a internet.');
+    } finally {
+        btnEnviar.disabled = false;
+        btnEnviar.innerHTML = textoOriginal;
     }
 }
+
+// Función auxiliar para crear notificación para el administrador
+async function crearNotificacionAdmin(idQueja, authToken, userId) {
+    try {
+        const idAdmin = '1'; // ID del administrador
+
+        const notificacionData = {
+            id_usuario: idAdmin,
+            tipo: 'QUEJA_USUARIO',
+            mensaje: `Nueva queja de usuario reportada (ID: ${idQueja})`,
+            leida: false
+        };
+
+        const response = await fetch(BASE_URL + 'notificacion', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${authToken}`,
+                'Content-Type': 'application/json',
+                'User-Id': userId
+            },
+            body: JSON.stringify(notificacionData)
+        });
+
+        if (response.ok) {
+            console.log('✅ Notificación creada para el administrador');
+        } else {
+            console.warn('⚠️ No se pudo crear notificación para el admin:', await response.text());
+        }
+    } catch (error) {
+        console.error('❌ Error al crear notificación:', error);
+    }
+}
+
