@@ -102,11 +102,12 @@ document.addEventListener('DOMContentLoaded', async function () {
             const userId = localStorage.getItem('userId');
 
             if (userId) {
-                // Guardar ID del producto para la queja
-                if (productoActual && productoActual.id) {
-                    localStorage.setItem('productoQuejaId', productoActual.id);
+                // Redirigir a Queja.html con el ID del vendedor
+                if (vendedorActual && vendedorActual.id_usuario) {
+                    window.location.href = `/pages/Queja.html?tipo=usuario&id=${vendedorActual.id_usuario}`;
+                } else {
+                    mostrarAlerta('No se pudo identificar al vendedor', 'warning');
                 }
-                window.location.href = '/pages/Queja.html';
             } else {
                 mostrarAlerta('Debes iniciar sesión para reportar', 'warning');
                 setTimeout(() => {

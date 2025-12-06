@@ -138,7 +138,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch(BASE_URL+'queja-usuario', {
                 method: 'POST',
                 headers: {
-                    'Authorization': authToken
+                    'Authorization': `Bearer ${authToken}`,
+                    'User-Id': idEmisor
                 },
                 body: formData
             });
@@ -209,7 +210,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch(BASE_URL+'queja-venta', {
                 method: 'POST',
                 headers: {
-                    'Authorization': authToken
+                    'Authorization': `Bearer ${authToken}`,
+                    'User-Id': idEmisor
                 },
                 body: formData
             });

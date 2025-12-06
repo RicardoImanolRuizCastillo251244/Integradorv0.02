@@ -2,7 +2,7 @@
 import { BASE_URL } from './api_url.js';
 
 // Variables globales
-let ventaActual = null;
+window.ventaActual = null;
 
 // Función para configurar la navegación de los tabs según el rol
 function configurarNavegacionTabs(rol) {
@@ -125,13 +125,16 @@ function mostrarVentas(ventas) {
         // Determinar si tiene comprobante
         const tieneComprobante = venta.imagen && venta.imagen.length > 0;
         const btnComprobante = tieneComprobante 
-            ? `<button class="btn btn-sm btn-info" onclick="verComprobante('${venta.imagen}')">
+            ? `<button class="btn btn-sm btn-info" data-imagen="${venta.imagen}" class="btn-ver-comprobante">
                  <i class="fas fa-file-image"></i> Ver
                </button>`
             : '<span class="text-muted">N/A</span>';
         
         // Botón de reportar SIEMPRE disponible (tanto para Transferencia como Efectivo)
-        const btnReportar = `<button class="btn btn-sm btn-warning" onclick="abrirModalReporte(${venta.id_venta}, '${compradorNombre}', '${tipoPago}')">
+        const btnReportar = `<button class="btn btn-sm btn-warning btn-reportar-venta" 
+                                     data-id-venta="${venta.id_venta}" 
+                                     data-comprador="${compradorNombre}" 
+                                     data-tipo-pago="${tipoPago}">
                  <i class="fas fa-exclamation-triangle"></i> Reportar
                </button>`;
 
@@ -152,6 +155,24 @@ function mostrarVentas(ventas) {
             </tr>
         `;
     }).join('');
+    
+    // Agregar event listeners a los botones de reportar
+    document.querySelectorAll('.btn-reportar-venta').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const idVenta = this.getAttribute('data-id-venta');
+            const comprador = this.getAttribute('data-comprador');
+            const tipoPago = this.getAttribute('data-tipo-pago');
+            window.abrirModalReporte(idVenta, comprador, tipoPago);
+        });
+    });
+    
+    // Agregar event listeners a los botones de ver comprobante
+    document.querySelectorAll('.btn-ver-comprobante').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const imagen = this.getAttribute('data-imagen');
+            window.verComprobante(imagen);
+        });
+    });
 }
 
 // Función para actualizar estadísticas
@@ -185,7 +206,12 @@ window.verComprobante = function(imagenBase64) {
 
 // Función para abrir modal de reporte
 window.abrirModalReporte = function(idVenta, nombreComprador, tipoPago) {
-    ventaActual = idVenta;
+    console.log('abrirModalReporte llamada con idVenta:', idVenta);
+    
+    // Guardar en el modal como atributo data
+    const modalElement = document.getElementById('modalReportarPago');
+    modalElement.setAttribute('data-id-venta-actual', idVenta);
+    
     document.getElementById('modal-venta-id').textContent = idVenta;
     document.getElementById('modal-comprador').textContent = nombreComprador;
     document.getElementById('modal-tipo-pago-venta').textContent = tipoPago;
@@ -225,6 +251,10 @@ window.enviarQuejaVenta = async function() {
     const descripcion = document.getElementById('modal-descripcion').value.trim();
     const evidenciaFile = document.getElementById('modal-evidencia').files[0];
     
+    // Obtener idVenta del atributo data del modal
+    const modalElement = document.getElementById('modalReportarPago');
+    const idVenta = modalElement.getAttribute('data-id-venta-actual');
+    
     if (!tipoProblema) {
         alert('Por favor selecciona el tipo de problema');
         return;
@@ -236,8 +266,8 @@ window.enviarQuejaVenta = async function() {
     }
     
     const formData = new FormData();
-    formData.append('id_usuario', userId);
-    formData.append('id_venta', ventaActual);
+    formData.append('id_emisor', userId);
+    formData.append('id_venta', idVenta);
     formData.append('tipo_problema', tipoProblema);
     formData.append('descripcion_queja', descripcion);
     
@@ -249,7 +279,8 @@ window.enviarQuejaVenta = async function() {
         const response = await fetch(`${BASE_URL}queja-venta`, {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${token}`,
+                'User-Id': userId
             },
             body: formData
         });

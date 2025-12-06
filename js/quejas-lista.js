@@ -5,6 +5,7 @@ let quejaActualId = null;
 document.addEventListener('DOMContentLoaded', async () => {
     const tablaBody = document.getElementById('tablaBody');
     const authToken = localStorage.getItem('authToken');
+    const userId = localStorage.getItem('userId');
 
     if (!authToken) {
         window.location.href = '../pages/login.html';
@@ -12,18 +13,32 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     try {
-        // Cargar solo quejas de usuario (quejas personales)
-        const response = await fetch(BASE_URL + 'queja-usuario', {
-            headers: { 'Authorization': authToken }
-        });
+        // Cargar AMBOS tipos de quejas
+        const [responseUsuario, responseVenta] = await Promise.all([
+            fetch(BASE_URL + 'queja-usuario', {
+                headers: { 
+                    'Authorization': `Bearer ${authToken}`,
+                    'User-Id': userId
+                }
+            }),
+            fetch(BASE_URL + 'queja-venta', {
+                headers: { 
+                    'Authorization': `Bearer ${authToken}`,
+                    'User-Id': userId
+                }
+            })
+        ]);
 
-        if (response.ok) {
-            const quejas = await response.json();
-            renderTabla(quejas.map(q => ({ ...q, tipo: 'usuario' })));
-        } else {
-            console.error('Error al cargar quejas:', response.status);
-            tablaBody.innerHTML = '<tr><td colspan="6" class="text-center">Error al cargar datos.</td></tr>';
-        }
+        const quejasUsuario = responseUsuario.ok ? await responseUsuario.json() : [];
+        const quejasVenta = responseVenta.ok ? await responseVenta.json() : [];
+
+        // Combinar y marcar tipo
+        const todasQuejas = [
+            ...quejasUsuario.map(q => ({ ...q, tipo: 'usuario' })),
+            ...quejasVenta.map(q => ({ ...q, tipo: 'venta' }))
+        ];
+
+        renderTabla(todasQuejas);
     } catch (error) {
         console.error('Error de red:', error);
         tablaBody.innerHTML = '<tr><td colspan="6" class="text-center">Error de conexión.</td></tr>';
@@ -97,6 +112,7 @@ let tipoQuejaActual = null;
 
 window.verDetalleQueja = async (idQueja, tipoQueja) => {
     const authToken = localStorage.getItem('authToken');
+    const userId = localStorage.getItem('userId');
     quejaActualId = idQueja;
     tipoQuejaActual = tipoQueja;
 
@@ -104,7 +120,8 @@ window.verDetalleQueja = async (idQueja, tipoQueja) => {
         const endpoint = tipoQueja === 'usuario' ? 'queja-usuario' : 'queja-venta';
         const response = await fetch(BASE_URL + `${endpoint}/${idQueja}`, {
             headers: {
-                'Authorization': authToken
+                'Authorization': `Bearer ${authToken}`,
+                'User-Id': userId
             }
         });
 
@@ -174,9 +191,14 @@ window.enviarRespuesta = async () => {
 
     try {
         // Primero obtener los datos actuales de la queja
+        const authToken = localStorage.getItem('authToken');
+        const userId = localStorage.getItem('userId');
         const endpoint = tipoQuejaActual === 'usuario' ? 'queja-usuario' : 'queja-venta';
         const getResponse = await fetch(BASE_URL + `${endpoint}/${quejaActualId}`, {
-            headers: { 'Authorization': authToken }
+            headers: { 
+                'Authorization': `Bearer ${authToken}`,
+                'User-Id': userId
+            }
         });
         
         if (!getResponse.ok) {
@@ -208,7 +230,8 @@ window.enviarRespuesta = async () => {
         const response = await fetch(BASE_URL + `${endpoint}/${quejaActualId}`, {
             method: 'PUT',
             headers: {
-                'Authorization': authToken,
+                'Authorization': `Bearer ${authToken}`,
+                'User-Id': userId,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(updateData)
@@ -243,6 +266,7 @@ window.eliminarQueja = async (idQueja, tipoQueja) => {
     }
 
     const authToken = localStorage.getItem('authToken');
+    const userId = localStorage.getItem('userId');
 
     try {
         const endpoint = tipoQueja === 'usuario' ? 'queja-usuario' : 'queja-venta';
@@ -251,7 +275,8 @@ window.eliminarQueja = async (idQueja, tipoQueja) => {
         const response = await fetch(BASE_URL + `${endpoint}/${idQueja}`, {
             method: 'DELETE',
             headers: {
-                'Authorization': authToken
+                'Authorization': `Bearer ${authToken}`,
+                'User-Id': userId
             }
         });
 
