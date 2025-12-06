@@ -77,6 +77,8 @@ function renderizarNotificaciones() {
         let icono = 'fa-bell';
         if (notif.tipo === 'VENTA') {
             icono = 'fa-shopping-cart';
+        } else if (notif.tipo === 'QUEJA_USUARIO' || notif.tipo === 'QUEJA_VENTA') {
+            icono = 'fa-exclamation-circle';
         } else if (notif.tipo === 'MENSAJE') {
             icono = 'fa-envelope';
         } else if (notif.tipo === 'SISTEMA') {

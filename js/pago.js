@@ -121,6 +121,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             formData.append('cantidad_vendida', compraData.cantidad);
             formData.append('precio_total', compraData.total);
             formData.append('id_comprador', userId);
+            formData.append('tipo_pago', metodoPago); // Agregar tipo de pago
 
             // Si es transferencia y hay archivo, lo enviamos
             if (metodoPago === 'transferencia' && uploadInput.files[0]) {
