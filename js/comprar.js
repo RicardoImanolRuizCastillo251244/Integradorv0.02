@@ -3,7 +3,6 @@ const userId = localStorage.getItem("userId");
 const token = localStorage.getItem("authToken");
 let productoActual = null;
 let vendedorActual = null;
-let calificacion = null;
 let listaHorarios = null
 document.addEventListener('DOMContentLoaded', async function () {
 
@@ -43,16 +42,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         const responseUser = await fetch(BASE_URL + 'usuario/' + productoActual.id_vendedor);
         vendedorActual = await responseUser.json();
 
-        const responseCalificacion = await fetch(BASE_URL + 'calificacion/promedio/' + productoActual.id_publicacion);
-
-        if (!responseCalificacion.ok) {
-            const errorCalificacion = await responseCalificacion.text()
-            console.error(errorCalificacion)
-
-        }
-
-        calificacion = await responseCalificacion.json()
-
         const horarios = await fetch(`${BASE_URL}horaEntrega/${productoActual.id_vendedor}`, {
             headers: { "Authorization": `Bearer ${token}` }
         });
@@ -64,7 +53,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         console.log('✅ Producto cargado:', productoActual);
         console.log('✅ Vendedor cargado:', vendedorActual);
-        console.log("Calificacion cargada:", calificacion)
 
         container.innerHTML = contenidoOriginal;
         let existencia = ''
@@ -77,7 +65,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 
         renderProducto(productoActual);
-        renderDetallesVendedor(vendedorActual, existencia, calificacion);
+        renderDetallesVendedor(vendedorActual, existencia);
         renderHorarios()
 
         const btncomprar = document.getElementById('btn_comprar');
@@ -200,7 +188,6 @@ function renderProducto(producto) {
     const precio = document.getElementById('precio');
     const img = document.getElementById('productoPublicado');
 
-
     titulo.textContent = producto.titulo_publicacion || 'Producto sin título';
     descripcion.textContent = producto.descripcion_publicacion || 'Sin descripción disponible';
 
@@ -216,52 +203,45 @@ function renderProducto(producto) {
 
 
     img.onerror = function () {
-        this.src = 'https://via.placeholder.com/450x450/fc4b08/ffffff?text=Sin+Imagen';
+        // Si falla cargar la imagen, usar la imagen por defecto
+        this.src = '/images/productos/4-razones-por-las-que-la-comida-mexicana-es-tan-unica.jpg';
     };
 }
 
 function procesarImagen(fotoPublicacion) {
-    let imageSrc = "";
-
-    if (fotoPublicacion) {
-        if (Array.isArray(fotoPublicacion)) {
-
-            const base64String = btoa(String.fromCharCode.apply(null, fotoPublicacion));
-            imageSrc = `data:image/jpeg;base64,${base64String}`;
-        } else if (typeof fotoPublicacion === 'string') {
-
-            if (fotoPublicacion.startsWith('data:image')) {
-                imageSrc = fotoPublicacion;
-            } else {
-                imageSrc = `data:image/jpeg;base64,${fotoPublicacion}`;
-            }
-        }
-    } else {
-
-        imageSrc = 'https://via.placeholder.com/450x450/fc4b08/ffffff?text=Sin+Imagen';
+    // Imagen por defecto si no hay foto
+    const imagenPorDefecto = '/images/productos/4-razones-por-las-que-la-comida-mexicana-es-tan-unica.jpg';
+    
+    if (!fotoPublicacion) {
+        return imagenPorDefecto;
     }
 
-    return imageSrc;
+    // Si es un array de bytes (viene del backend antiguo o algunos endpoints)
+    if (Array.isArray(fotoPublicacion)) {
+        const base64String = btoa(String.fromCharCode.apply(null, fotoPublicacion));
+        return `data:image/jpeg;base64,${base64String}`;
+    }
+    
+    // Si es un string, puede ser base64 directo o con prefijo data:image
+    if (typeof fotoPublicacion === 'string') {
+        if (fotoPublicacion.startsWith('data:image')) {
+            return fotoPublicacion;
+        }
+        // Asumimos que es base64 sin prefijo
+        return `data:image/jpeg;base64,${fotoPublicacion}`;
+    }
+
+    return imagenPorDefecto;
 }
 
-function renderDetallesVendedor(vendedor, existencia, calificacion) {
+function renderDetallesVendedor(vendedor, existencia) {
     const infor = document.getElementById('contenedorDetalles');
-    let calificacionTransformada = 0
-    if (calificacion.promedio !== null) {
-        calificacionTransformada = calificacion.promedio
-    }
-    const estrellasHTML = generarEstrellas(calificacionTransformada);
 
     infor.innerHTML = `
         <h5><i class="fa-solid fa-store"></i> Información de publicacion</h5>
         <p>
             <i class="fa-solid fa-user"></i> 
             <strong>${vendedor.nombre_usuario || 'Vendedor'}</strong>
-        </p>
-        <p>
-            <i class="fa-solid fa-star"></i> 
-            ${estrellasHTML} 
-            <span style="color: #666;">(${calificacionTransformada.toFixed(1)})</span>
         </p>
         <div id="horarios_container">
         <p>
@@ -278,27 +258,6 @@ function renderDetallesVendedor(vendedor, existencia, calificacion) {
             <strong>Envío disponible</strong>
         </p>
     `;
-}
-
-function generarEstrellas(calificacion) {
-    const estrellasCompletas = Math.floor(calificacion);
-    const tieneMedia = (calificacion % 1) >= 0.5;
-    let html = '';
-
-    for (let i = 0; i < estrellasCompletas; i++) {
-        html += '<i class="fa-solid fa-star" style="color: #ffc107;"></i>';
-    }
-
-    if (tieneMedia) {
-        html += '<i class="fa-solid fa-star-half-stroke" style="color: #ffc107;"></i>';
-    }
-
-    const estrellasVacias = 5 - estrellasCompletas - (tieneMedia ? 1 : 0);
-    for (let i = 0; i < estrellasVacias; i++) {
-        html += '<i class="fa-regular fa-star" style="color: #ffc107;"></i>';
-    }
-
-    return html;
 }
 
 

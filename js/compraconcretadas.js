@@ -99,20 +99,8 @@ function mostrarTabla(compras) {
             fechaStr = `${dia}/${mes}/${anio} <br> <small>${hora}:${minStr} hrs</small>`;
         }
 
-        // Procesar Imagen del Producto
+        // Procesar Imagen
         const imageSrc = procesarImagen(compra.fotoPublicacion);
-
-        // Procesar Tipo de Pago
-        const tipoPagoStr = compra.tipoPago ? compra.tipoPago.charAt(0).toUpperCase() + compra.tipoPago.slice(1) : 'No especificado';
-
-        // Procesar Imagen de Transferencia (si existe)
-        let imagenTransferenciaHtml = '';
-        if (compra.tipoPago === 'transferencia' && compra.imagenTransferencia) {
-            const imagenTransfSrc = procesarImagen(compra.imagenTransferencia);
-            imagenTransferenciaHtml = `<br><a href="${imagenTransfSrc}" target="_blank" class="btn btn-sm btn-outline-primary mt-1">
-                <i class="fas fa-receipt"></i> Ver comprobante
-            </a>`;
-        }
 
         const fila = document.createElement('tr');
         fila.innerHTML = `
@@ -126,7 +114,7 @@ function mostrarTabla(compras) {
                 </a>
             </td>
             <td><h3 class="fuenteTabla">${fechaStr}</h3></td>
-            <td><h3 class="fuenteTabla">${tipoPagoStr}${imagenTransferenciaHtml}</h3></td>
+
         `;
         
         tbody.appendChild(fila);
