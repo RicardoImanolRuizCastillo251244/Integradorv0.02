@@ -316,6 +316,40 @@ header nav {
   margin: 0 10px;
 }
 
+/* === BOTÓN DE NOTIFICACIONES (HEADER) === */
+#btn-notificaciones {
+  position: relative;
+  transition: transform 0.2s ease;
+}
+
+#btn-notificaciones:hover {
+  transform: scale(1.1);
+}
+
+#badge-notificaciones {
+  animation: pulse-badge 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-badge {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+}
+
+/* Animación de shake para alertas críticas */
+@keyframes shake {
+  0%, 100% { transform: rotate(0deg); }
+  10%, 30%, 50%, 70%, 90% { transform: rotate(-10deg); }
+  20%, 40%, 60%, 80% { transform: rotate(10deg); }
+}
+
+.fa-shake {
+  animation: shake 0.5s ease-in-out infinite;
+}
+
 /* === RESPONSIVIDAD === */
 @media (max-width: 768px) {
   .tabs-usuario {
