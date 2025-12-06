@@ -69,11 +69,22 @@ function renderizarNotificaciones() {
             minute: '2-digit'
         });
 
-        // Icono según tipo
+        // Icono según tipo - Según documentación de seguridad
         let icono = 'fa-bell';
         let colorIcono = '#fc4b08';
-        
-        if (n.tipo === 'queja' || n.tipo === 'alerta') {
+        let urlDestino = null;
+
+        if (n.tipo === 'QUEJA_VENTA') {
+            // 🔴 Rojo - Posible Fraude en Venta
+            icono = 'fa-money-bill-wave';
+            colorIcono = '#c00000';
+            urlDestino = 'quejas-lista.html'; // Navegar a la pestaña de quejas de venta
+        } else if (n.tipo === 'QUEJA_USUARIO') {
+            // 🟠 Naranja - Reporte de Contenido Inapropiado
+            icono = 'fa-user-slash';
+            colorIcono = '#ff8c00';
+            urlDestino = 'quejas-lista.html'; // Navegar a la pestaña de quejas de usuario
+        } else if (n.tipo === 'queja' || n.tipo === 'alerta') {
             icono = 'fa-exclamation-triangle';
             colorIcono = '#c00000';
         } else if (n.tipo === 'membresia' || n.tipo === 'compra') {
@@ -99,10 +110,16 @@ function renderizarNotificaciones() {
                 <p class="notificacion-mensaje">${n.mensaje || n.descripcion || 'Sin mensaje'}</p>
             </div>
             <div class="notificacion-acciones">
-                ${!n.leida ? 
+                ${urlDestino ?
+                    `<button class="btn btn-primary btn-sm" onclick="navegarAQueja('${urlDestino}', '${n.tipo}')">
+                        <i class="fa-solid fa-eye"></i> Ver Queja
+                    </button>` :
+                    ''
+                }
+                ${!n.leida ?
                     `<button class="btn-marcar-leida" onclick="marcarLeida(${n.id_notificacion || n.id})">
                         <i class="fa-solid fa-check"></i> Marcar como leída
-                    </button>` : 
+                    </button>` :
                     '<span class="texto-leida"><i class="fa-solid fa-check"></i> Leída</span>'
                 }
                 <button class="btn-eliminar-notif" onclick="eliminarNotificacion(${n.id_notificacion || n.id})">
@@ -233,3 +250,10 @@ function mostrarError() {
     const lista = document.getElementById('listaNotificaciones');
     lista.innerHTML = '<div class="notificacion-item"><p class="text-center text-danger">Error al cargar notificaciones.</p></div>';
 }
+
+// Función para navegar a la página de quejas correspondiente
+window.navegarAQueja = (url, tipoQueja) => {
+    // Guardar en localStorage qué pestaña debe activarse
+    localStorage.setItem('quejaTabActiva', tipoQueja);
+    window.location.href = url;
+};

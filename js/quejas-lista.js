@@ -11,6 +11,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
+    // Verificar si hay una pestaña activa guardada desde notificaciones
+    const quejaTabActiva = localStorage.getItem('quejaTabActiva');
+    if (quejaTabActiva === 'QUEJA_USUARIO') {
+        // Mantener activa la pestaña de quejas de usuario (ya está activa por defecto)
+        localStorage.removeItem('quejaTabActiva');
+    }
+
     try {
         // Cargar solo quejas de usuario (quejas personales)
         const response = await fetch(BASE_URL + 'queja-usuario', {
@@ -110,14 +117,14 @@ window.verDetalleQueja = async (idQueja, tipoQueja) => {
 
         if (response.ok) {
             const queja = await response.json();
-            
-            // Llenar modal con datos
+
+            // Llenar modal con datos básicos
             document.getElementById('detalleIdUsuario').innerText = `#${queja.id_emisor || queja.id_usuario || '0'}`;
             document.getElementById('detalleUsuario').innerText = queja.nombre_usuario || 'Usuario desconocido';
-            
+
             const fecha = new Date(queja.fecha_emision || queja.fecha_creacion);
             document.getElementById('detalleFecha').innerText = fecha.toLocaleString('es-ES');
-            
+
             // Mostrar tipo de problema si existe (solo para quejas de venta)
             const tipoProblemaElement = document.getElementById('detalleTipoProblema');
             if (tipoQueja === 'venta' && queja.tipo_problema) {
@@ -132,8 +139,13 @@ window.verDetalleQueja = async (idQueja, tipoQueja) => {
             } else {
                 tipoProblemaElement.style.display = 'none';
             }
-            
+
             document.getElementById('detalleDescripcion').innerText = queja.descripcion_queja || queja.descripcion || 'Sin descripción';
+
+            // Si es queja de usuario y tiene id_publicacion, cargar info de la publicación
+            if (tipoQueja === 'usuario' && queja.id_publicacion) {
+                await cargarInfoPublicacion(queja.id_publicacion, queja.id_receptor);
+            }
 
             const modal = new bootstrap.Modal(document.getElementById('modalDetalleQuejaUsuario'));
             modal.show();
@@ -145,6 +157,152 @@ window.verDetalleQueja = async (idQueja, tipoQueja) => {
         alert('Error de conexión.');
     }
 };
+
+// Función para cargar información de la publicación reportada
+async function cargarInfoPublicacion(idPublicacion, idReceptor) {
+    const authToken = localStorage.getItem('authToken');
+
+    try {
+        const response = await fetch(BASE_URL + `publicacion/${idPublicacion}`, {
+            headers: { 'Authorization': authToken }
+        });
+
+        if (response.ok) {
+            const publicacion = await response.json();
+
+            // Crear o actualizar sección de información de publicación en el modal
+            let seccionPublicacion = document.getElementById('seccion-publicacion-reportada');
+            if (!seccionPublicacion) {
+                seccionPublicacion = document.createElement('div');
+                seccionPublicacion.id = 'seccion-publicacion-reportada';
+                seccionPublicacion.className = 'mt-4 p-3 border rounded bg-light';
+
+                const descripcionQueja = document.querySelector('.descripcion-queja');
+                if (descripcionQueja) {
+                    descripcionQueja.insertAdjacentElement('afterend', seccionPublicacion);
+                }
+            }
+
+            seccionPublicacion.innerHTML = `
+                <h6 class="mb-3" style="color: #c00000; font-weight: bold;">
+                    <i class="fas fa-ban"></i> Publicación Reportada
+                </h6>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Título:</strong> ${publicacion.titulo || 'Sin título'}</p>
+                        <p><strong>Descripción:</strong> ${publicacion.descripcion || 'Sin descripción'}</p>
+                        <p><strong>Precio:</strong> $${publicacion.precio || '0'}</p>
+                        <p><strong>ID Vendedor:</strong> ${idReceptor || publicacion.id_usuario}</p>
+                    </div>
+                    <div class="col-md-6">
+                        ${publicacion.imagenes && publicacion.imagenes.length > 0 ?
+                            `<img src="${publicacion.imagenes[0]}"
+                                 class="img-fluid border rounded"
+                                 alt="Producto reportado"
+                                 style="max-height: 200px; object-fit: cover;">` :
+                            '<p class="text-muted">Sin imagen</p>'
+                        }
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <button class="btn btn-danger btn-sm" onclick="banearUsuarioPorPublicacion(${idReceptor || publicacion.id_usuario})">
+                        <i class="fas fa-ban"></i> Banear Usuario por Contenido Inapropiado
+                    </button>
+                </div>
+            `;
+        }
+    } catch (error) {
+        console.error('Error al cargar publicación:', error);
+    }
+}
+
+// Función para banear usuario desde queja de publicación
+window.banearUsuarioPorPublicacion = async (idUsuario) => {
+    const authToken = localStorage.getItem('authToken');
+
+    const confirmacion = confirm(
+        `⚠️ ¿ESTÁS SEGURO DE BANEAR A ESTE USUARIO?\n\n` +
+        `ID del usuario: ${idUsuario}\n\n` +
+        `Esta acción suspenderá permanentemente al usuario por publicar contenido inapropiado.`
+    );
+
+    if (!confirmacion) return;
+
+    const motivo = prompt('Motivo del baneo (obligatorio):');
+
+    if (!motivo || motivo.trim() === '') {
+        alert('Debes proporcionar un motivo para el baneo');
+        return;
+    }
+
+    try {
+        const response = await fetch(BASE_URL + 'usuario-baneado', {
+            method: 'POST',
+            headers: {
+                'Authorization': authToken,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id_usuario: idUsuario,
+                motivo: motivo.trim()
+            })
+        });
+
+        if (response.ok || response.status === 201) {
+            alert(`🔨 Usuario bloqueado exitosamente.\n\nMotivo: ${motivo}`);
+            bootstrap.Modal.getInstance(document.getElementById('modalDetalleQuejaUsuario')).hide();
+
+            // Marcar la queja como cerrada
+            if (quejaActualId && tipoQuejaActual) {
+                await cerrarQuejaUsuario();
+            }
+        } else {
+            const errorText = await response.text();
+            alert(`Error al banear usuario: ${errorText}`);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error de conexión al banear usuario');
+    }
+};
+
+// Función para cerrar queja de usuario
+async function cerrarQuejaUsuario() {
+    const authToken = localStorage.getItem('authToken');
+
+    try {
+        const getResponse = await fetch(BASE_URL + `queja-usuario/${quejaActualId}`, {
+            headers: { 'Authorization': authToken }
+        });
+
+        if (getResponse.ok) {
+            const quejaData = await getResponse.json();
+
+            const updateData = {
+                id_emisor: quejaData.id_emisor,
+                id_receptor: quejaData.id_receptor,
+                descripcion_queja: quejaData.descripcion_queja,
+                estado_queja: 'CERRADA',
+                motivo_queja: quejaData.motivo_queja
+            };
+
+            if (quejaData.id_publicacion) {
+                updateData.id_publicacion = quejaData.id_publicacion;
+            }
+
+            await fetch(BASE_URL + `queja-usuario/${quejaActualId}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': authToken,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updateData)
+            });
+        }
+    } catch (error) {
+        console.error('Error al cerrar queja:', error);
+    }
+}
 
 // Abrir modal de respuesta
 window.abrirModalRespuesta = () => {
