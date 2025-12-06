@@ -59,10 +59,11 @@ function renderTablaQuejas(quejas) {
         const fecha = new Date(queja.fecha_emision || queja.fecha_creacion).toLocaleDateString('es-MX');
         const estadoBadge = obtenerBadgeEstado(queja.estado_queja || queja.estado);
         const tieneEvidencias = queja.imagen;
+        const idQueja = queja.id_queja || queja.id; // Usar id_queja o id
 
         return `
             <tr>
-                <td>${queja.id}</td>
+                <td>${idQueja}</td>
                 <td>${queja.id_venta || 'N/A'}</td>
                 <td><strong>ID: ${queja.id_emisor}</strong></td>
                 <td>
@@ -79,13 +80,13 @@ function renderTablaQuejas(quejas) {
                     ${estadoBadge}
                     <br>
                     ${tieneEvidencias ?
-                        `<button class="btn btn-sm btn-warning mt-1" onclick="verEvidencias(${queja.id}, '${procesarImagenBase64(queja.imagen)}')">
+                        `<button class="btn btn-sm btn-warning mt-1" onclick="verEvidencias(${idQueja}, '${procesarImagenBase64(queja.imagen)}')">
                             <i class="fas fa-image"></i> Ver Evidencias
                         </button>
                         <br>` :
                         ''
                     }
-                    <button class="btn btn-sm btn-primary mt-1" onclick="verDetalleQuejaCompleto(${queja.id})">
+                    <button class="btn btn-sm btn-primary mt-1" onclick="verDetalleQuejaCompleto(${idQueja})">
                         <i class="fas fa-gavel"></i> Sala de Arbitraje
                     </button>
                 </td>
