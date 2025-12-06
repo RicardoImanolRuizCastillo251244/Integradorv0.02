@@ -78,12 +78,13 @@ loginForm.addEventListener('submit', async function (e) {
     if (emailValue === '000000@ADMIN.upchiapas.edu.mx' && passwordValue === '12345678') {
       // Login como admin sin hacer petición a la API
       console.log('Login como administrador');
-      
+
       // Guardar datos de admin en localStorage
       localStorage.setItem('authToken', 'admin-token-' + Date.now());
-      localStorage.setItem('userId', 'admin');
+      localStorage.setItem('userId', '1'); // ID numérico para admin
+      localStorage.setItem('id_usuario', '1'); // También guardar como id_usuario
       localStorage.setItem('rol', '3'); // Rol 3 para admin
-      
+
       // Redirigir al panel de admin
       window.location.href = 'admin/dashboard-admin.html';
       return;

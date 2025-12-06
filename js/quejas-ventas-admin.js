@@ -78,6 +78,13 @@ function renderTablaQuejas(quejas) {
                 <td>
                     ${estadoBadge}
                     <br>
+                    ${tieneEvidencias ?
+                        `<button class="btn btn-sm btn-warning mt-1" onclick="verEvidencias(${queja.id}, '${procesarImagenBase64(queja.imagen)}')">
+                            <i class="fas fa-image"></i> Ver Evidencias
+                        </button>
+                        <br>` :
+                        ''
+                    }
                     <button class="btn btn-sm btn-primary mt-1" onclick="verDetalleQuejaCompleto(${queja.id})">
                         <i class="fas fa-gavel"></i> Sala de Arbitraje
                     </button>
@@ -381,5 +388,26 @@ function procesarImagenBase64(img) {
     if (!img) return '';
     if (img.startsWith('data:image')) return img;
     return `data:image/jpeg;base64,${img}`;
+}
+
+// ========== VER EVIDENCIAS EN MODAL ==========
+window.verEvidencias = function(idQueja, imagenBase64) {
+    const modalBody = document.getElementById('modal-evidencias-body');
+
+    modalBody.innerHTML = `
+        <div class="text-center">
+            <h6 class="mb-3">Evidencia de Queja #${idQueja}</h6>
+            <img src="${imagenBase64}"
+                 class="img-fluid border rounded"
+                 alt="Evidencia de la queja"
+                 style="max-height: 600px; object-fit: contain;">
+            <p class="text-muted mt-3">
+                <i class="fas fa-info-circle"></i> Imagen adjuntada por quien reportó la queja
+            </p>
+        </div>
+    `;
+
+    const modal = new bootstrap.Modal(document.getElementById('modalEvidencias'));
+    modal.show();
 }
 

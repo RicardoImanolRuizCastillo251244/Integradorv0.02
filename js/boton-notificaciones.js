@@ -38,9 +38,17 @@ function renderizarBotonNotificaciones(container) {
 // Cargar el contador de notificaciones no leídas
 async function cargarContadorNotificaciones() {
     const authToken = localStorage.getItem('authToken');
-    const userId = localStorage.getItem('userId');
+    let userId = localStorage.getItem('userId');
 
-    if (!authToken || !userId) return;
+    // Validar que userId sea un número, si no, intentar obtener id_usuario
+    if (userId === 'admin' || isNaN(userId)) {
+        userId = localStorage.getItem('id_usuario');
+    }
+
+    if (!authToken || !userId || userId === 'admin') {
+        console.warn('No se puede cargar notificaciones: userId no válido');
+        return;
+    }
 
     try {
         const response = await fetch(BASE_URL + `notificacion/usuario/${userId}`, {
@@ -57,6 +65,8 @@ async function cargarContadorNotificaciones() {
 
             contadorNoLeidas = alertasSeguridad.length;
             actualizarBadge();
+        } else {
+            console.error('Error al cargar notificaciones:', response.status);
         }
     } catch (error) {
         console.error('Error al cargar contador de notificaciones:', error);
