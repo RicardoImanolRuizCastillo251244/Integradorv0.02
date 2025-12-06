@@ -117,22 +117,31 @@ function mostrarVentas(ventas) {
     }
 
     tbody.innerHTML = ventas.map(venta => {
-        const compradorNombre = venta.comprador_nombre || 'Comprador desconocido';
-        const tipoPago = venta.tipo_pago || 'No especificado';
-        const fecha = new Date(venta.fecha_venta).toLocaleDateString('es-MX');
-        const monto = parseFloat(venta.precio_total || 0).toFixed(2);
+        const compradorNombre = venta.compradorNombre || 'Comprador desconocido';
+        const tipoPago = venta.tipoPago || 'No especificado';
+        const fechaVenta = venta.fechaVenta;
+        let fechaStr = 'Invalid Date';
+        
+        // Formatear fecha desde LocalDateTime
+        if (fechaVenta && Array.isArray(fechaVenta)) {
+            const [anio, mes, dia, hora, min] = fechaVenta;
+            const minStr = min < 10 ? '0' + min : min;
+            fechaStr = `${dia}/${mes}/${anio}`;
+        }
+        
+        const monto = parseFloat(venta.precioTotal || 0).toFixed(2);
         
         // Determinar si tiene comprobante
-        const tieneComprobante = venta.imagen && venta.imagen.length > 0;
+        const tieneComprobante = venta.imagenTransferencia && venta.imagenTransferencia.length > 0;
         const btnComprobante = tieneComprobante 
-            ? `<button class="btn btn-sm btn-info" data-imagen="${venta.imagen}" class="btn-ver-comprobante">
+            ? `<button class="btn btn-sm btn-info btn-ver-comprobante" data-imagen="${venta.imagenTransferencia}">
                  <i class="fas fa-file-image"></i> Ver
                </button>`
             : '<span class="text-muted">N/A</span>';
         
-        // Botón de reportar SIEMPRE disponible (tanto para Transferencia como Efectivo)
+        // Botón de reportar SIEMPRE disponible
         const btnReportar = `<button class="btn btn-sm btn-warning btn-reportar-venta" 
-                                     data-id-venta="${venta.id_venta}" 
+                                     data-id-venta="${venta.idCompra}" 
                                      data-comprador="${compradorNombre}" 
                                      data-tipo-pago="${tipoPago}">
                  <i class="fas fa-exclamation-triangle"></i> Reportar
@@ -141,8 +150,8 @@ function mostrarVentas(ventas) {
         return `
             <tr>
                 <td>${compradorNombre}</td>
-                <td>${venta.titulo_publicacion || 'Producto'}</td>
-                <td>${venta.cantidad_vendida || 1}</td>
+                <td>${venta.tituloPublicacion || 'Producto'}</td>
+                <td>${venta.cantidadVendida || 1}</td>
                 <td>$${monto}</td>
                 <td>
                     <span class="badge ${tipoPago === 'Transferencia' ? 'bg-primary' : 'bg-success'}">
@@ -150,7 +159,7 @@ function mostrarVentas(ventas) {
                     </span>
                 </td>
                 <td>${btnComprobante}</td>
-                <td>${fecha}</td>
+                <td>${fechaStr}</td>
                 <td>${btnReportar}</td>
             </tr>
         `;
@@ -178,7 +187,7 @@ function mostrarVentas(ventas) {
 // Función para actualizar estadísticas
 function actualizarEstadisticas(ventas) {
     const totalVentas = ventas.length;
-    const montoTotal = ventas.reduce((sum, v) => sum + parseFloat(v.precio_total || 0), 0);
+    const montoTotal = ventas.reduce((sum, v) => sum + parseFloat(v.precioTotal || 0), 0);
     
     document.getElementById('total-ventas').textContent = totalVentas;
     document.getElementById('monto-total').textContent = `$${montoTotal.toFixed(2)}`;
@@ -212,31 +221,22 @@ window.abrirModalReporte = function(idVenta, nombreComprador, tipoPago) {
     const modalElement = document.getElementById('modalReportarPago');
     modalElement.setAttribute('data-id-venta-actual', idVenta);
     
-    document.getElementById('modal-venta-id').textContent = idVenta;
-    document.getElementById('modal-comprador').textContent = nombreComprador;
-    document.getElementById('modal-tipo-pago-venta').textContent = tipoPago;
+    // Mostrar información de contexto
+    const infoContexto = document.getElementById('modal-info-contexto');
+    infoContexto.innerHTML = `Reportando venta al comprador <strong>${nombreComprador}</strong> (Tipo de pago: <strong>${tipoPago}</strong>)`;
+    
     document.getElementById('modal-tipo-problema').value = '';
     document.getElementById('modal-descripcion').value = '';
     document.getElementById('modal-evidencia').value = '';
+    const preview = document.getElementById('modal-preview');
+    if (preview) preview.style.display = 'none';
     
-    // Configurar opciones del selector según el tipo de pago
-    const selectorProblema = document.getElementById('modal-tipo-problema');
+    // Configurar placeholder según el tipo de pago
+    const inputProblema = document.getElementById('modal-tipo-problema');
     if (tipoPago === 'Efectivo') {
-        selectorProblema.innerHTML = `
-            <option value="">-- Selecciona el problema --</option>
-            <option value="Comprador no se presentó">Comprador no se presentó (Ghosting)</option>
-            <option value="Intento de fraude (Dijo efectivo y pide envío)">Intento de fraude (Dijo efectivo y pide envío)</option>
-            <option value="Comprador canceló sin avisar">Comprador canceló sin avisar</option>
-            <option value="Otro problema">Otro problema</option>
-        `;
+        inputProblema.placeholder = 'Ej: Comprador no se presentó (Ghosting)';
     } else {
-        selectorProblema.innerHTML = `
-            <option value="">-- Selecciona el problema --</option>
-            <option value="Comprobante de pago falso">Comprobante de pago falso</option>
-            <option value="No recibí el depósito">No recibí el depósito</option>
-            <option value="Comprobante editado/alterado">Comprobante editado/alterado</option>
-            <option value="Otro problema">Otro problema</option>
-        `;
+        inputProblema.placeholder = 'Ej: Comprobante de pago falso';
     }
     
     const modal = new bootstrap.Modal(document.getElementById('modalReportarPago'));
@@ -245,25 +245,36 @@ window.abrirModalReporte = function(idVenta, nombreComprador, tipoPago) {
 
 // Función para enviar queja de venta
 window.enviarQuejaVenta = async function() {
+    console.log('=== INICIANDO enviarQuejaVenta ===');
+    
     const token = localStorage.getItem('authToken');
     const userId = localStorage.getItem('userId');
-    const tipoProblema = document.getElementById('modal-tipo-problema').value;
+    const tipoProblema = document.getElementById('modal-tipo-problema').value.trim();
     const descripcion = document.getElementById('modal-descripcion').value.trim();
     const evidenciaFile = document.getElementById('modal-evidencia').files[0];
+    
+    console.log('Token:', token ? 'Existe' : 'NO EXISTE');
+    console.log('UserId:', userId);
+    console.log('Tipo Problema:', tipoProblema);
+    console.log('Descripción length:', descripcion.length);
     
     // Obtener idVenta del atributo data del modal
     const modalElement = document.getElementById('modalReportarPago');
     const idVenta = modalElement.getAttribute('data-id-venta-actual');
     
+    console.log('ID Venta desde modal:', idVenta);
+    
     if (!tipoProblema) {
-        alert('Por favor selecciona el tipo de problema');
+        alert('Por favor escribe el motivo de tu queja');
         return;
     }
     
-    if (!descripcion) {
-        alert('Por favor describe el problema');
+    if (descripcion.length < 20) {
+        alert('La descripción debe tener al menos 20 caracteres');
         return;
     }
+    
+    console.log('Validaciones pasadas, creando FormData...');
     
     const formData = new FormData();
     formData.append('id_emisor', userId);
@@ -272,8 +283,11 @@ window.enviarQuejaVenta = async function() {
     formData.append('descripcion_queja', descripcion);
     
     if (evidenciaFile) {
+        console.log('Agregando imagen:', evidenciaFile.name);
         formData.append('imagen', evidenciaFile);
     }
+    
+    console.log('Enviando POST a:', `${BASE_URL}queja-venta`);
     
     try {
         const response = await fetch(`${BASE_URL}queja-venta`, {
@@ -285,8 +299,15 @@ window.enviarQuejaVenta = async function() {
             body: formData
         });
         
-        if (!response.ok) throw new Error('Error al enviar queja');
+        console.log('Response status:', response.status);
         
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Error del servidor:', errorText);
+            throw new Error('Error al enviar queja');
+        }
+        
+        console.log('Queja enviada exitosamente');
         alert('Reporte enviado exitosamente. Los administradores lo revisarán.');
         bootstrap.Modal.getInstance(document.getElementById('modalReportarPago')).hide();
         cargarVentas(); // Recargar tabla
@@ -295,3 +316,46 @@ window.enviarQuejaVenta = async function() {
         alert('Error al enviar el reporte. Intenta de nuevo.');
     }
 }
+
+// Manejo de contador de caracteres y vista previa de imagen
+document.addEventListener('DOMContentLoaded', () => {
+    // Contador de caracteres
+    const descripcionTextarea = document.getElementById('modal-descripcion');
+    const charCount = document.getElementById('modal-char-count');
+    
+    if (descripcionTextarea && charCount) {
+        descripcionTextarea.addEventListener('input', () => {
+            const count = descripcionTextarea.value.length;
+            charCount.textContent = `${count} caracteres`;
+            charCount.classList.toggle('text-danger', count > 0 && count < 20);
+            charCount.classList.toggle('text-success', count >= 20);
+        });
+    }
+    
+    // Vista previa de imagen
+    const evidenciaInput = document.getElementById('modal-evidencia');
+    const preview = document.getElementById('modal-preview');
+    
+    if (evidenciaInput && preview) {
+        evidenciaInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('La imagen es muy grande. Máximo 5MB.');
+                    evidenciaInput.value = '';
+                    preview.style.display = 'none';
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                preview.style.display = 'none';
+            }
+        });
+    }
+});

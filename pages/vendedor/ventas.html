@@ -120,36 +120,38 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Reportar Problema con Venta</h5>
+          <h5 class="modal-title">Si tienes alguna queja o sugerencia puedes escribirlo en el siguiente apartado</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
-          <p><strong>Venta ID:</strong> <span id="modal-venta-id"></span></p>
-          <p><strong>Comprador:</strong> <span id="modal-comprador"></span></p>
-          <p><strong>Tipo de pago:</strong> <span id="modal-tipo-pago-venta" class="badge bg-info"></span></p>
+          <div id="modal-info-contexto" class="mb-3 text-muted"></div>
           
           <div class="mb-3">
-            <label class="form-label">Tipo de problema: <span class="text-danger">*</span></label>
-            <select id="modal-tipo-problema" class="form-select">
-              <option value="">-- Selecciona el problema --</option>
-            </select>
+            <label for="modal-tipo-problema" class="form-label fw-semibold">Motivo</label>
+            <input type="text" class="form-control" id="modal-tipo-problema" 
+                   placeholder="Ej: Comprobante falso">
           </div>
           
           <div class="mb-3">
-            <label class="form-label">Describe el problema detalladamente: <span class="text-danger">*</span></label>
-            <textarea id="modal-descripcion" class="form-control" rows="4" 
-                      placeholder="Ej: El comprobante es falso, no recibí el depósito... / El comprador dijo efectivo pero nunca se presentó..."></textarea>
+            <label for="modal-descripcion" class="form-label fw-semibold">Describe el problema (mín. 20 caracteres)</label>
+            <textarea id="modal-descripcion" class="form-control" rows="8" 
+                      placeholder="Escribe tu problema aquí..." required minlength="20"></textarea>
+            <div class="form-text text-end" id="modal-char-count">0 caracteres</div>
           </div>
           
           <div class="mb-3">
-            <label class="form-label">Evidencia (opcional):</label>
+            <label for="modal-evidencia" class="form-label fw-semibold">Evidencia (Opcional, máx 5MB)</label>
             <input type="file" id="modal-evidencia" class="form-control" accept="image/*">
-            <small class="text-muted">Puedes subir captura de tu banco, mensajes del comprador, etc.</small>
+            <div class="mt-2">
+              <img id="modal-preview" src="#" alt="Vista previa" style="max-width: 200px; display: none;" class="img-thumbnail">
+            </div>
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-danger" onclick="enviarQuejaVenta()">Enviar Reporte</button>
+          <button type="button" class="btn btn-danger" onclick="enviarQuejaVenta()">
+            Enviar <i class="fa-solid fa-paper-plane ms-1"></i>
+          </button>
         </div>
       </div>
     </div>
